@@ -9,7 +9,7 @@ dependencies:
 id: plantilla_web_mensajes
 theme: plantilla_web
 region: content
-weight: -5
+weight: -9
 provider: null
 plugin: system_messages_block
 settings:

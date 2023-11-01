@@ -7,7 +7,7 @@ dependencies:
 id: plantilla_web_accionesprincipalesdeadministracion
 theme: plantilla_web
 region: content
-weight: -1
+weight: -4
 provider: null
 plugin: local_actions_block
 settings:

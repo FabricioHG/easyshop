@@ -9,7 +9,7 @@ dependencies:
 id: plantilla_web_whatsappcontacto
 theme: plantilla_web
 region: content
-weight: 0
+weight: -2
 provider: null
 plugin: webs_systems_watsapp_contacto
 settings:

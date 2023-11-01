@@ -11,7 +11,7 @@ _core:
 id: plantilla_web_content
 theme: plantilla_web
 region: content
-weight: 0
+weight: -3
 provider: null
 plugin: system_main_block
 settings:

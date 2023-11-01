@@ -9,7 +9,7 @@ dependencies:
 id: plantilla_web_ayuda
 theme: plantilla_web
 region: content
-weight: -2
+weight: -6
 provider: null
 plugin: help_block
 settings:

@@ -4,10 +4,16 @@ global:
   css:
     theme:
       css/estilos.css: {}
+      https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css: { type: external, minified: true }
   js:
       js/plantilla-web.js: {}
+      js/wow.min.js: {} 
   dependencies: 
     - core/jquery
     - core/drupal
     - core/once
+
+
+
+
 
