@@ -1,4 +1,9 @@
 <?php
+if (class_exists('Kint')) {
+  // Change the maximum depth to prevent out-of-memory errors.
+  \Kint::$depth_limit= 4;
+}
+
 
 // phpcs:ignoreFile
 
@@ -265,7 +270,7 @@ $databases = [];
  *   $settings['hash_salt'] = file_get_contents('/home/example/salt.txt');
  * @endcode
  */
-$settings['hash_salt'] = '0gjwcIU-eO6OD6vmO4pPtyMJjZLNDk_zxvE7KSxUpzNki35XV7asciIutnDuwOxc3jk2JhyTaA';
+$settings['hash_salt'] = 'yv858i0oDbCPUD-_ktmAwrGtuta7CAkRKjkh44ycUbOzPUlyPqtaDYUfnuj4nrwO4tqlkqchBQ';
 
 /**
  * Deployment identifier.
@@ -590,7 +595,7 @@ $settings['update_free_access'] = FALSE;
  * See https://www.drupal.org/documentation/modules/file for more information
  * about securing private files.
  */
-# $settings['file_private_path'] = '';
+ $settings['file_private_path'] = '../private';
 
 /**
  * Temporary file path:
@@ -872,4 +877,4 @@ $databases['default']['default'] = array (
   'driver' => 'mysql',
   'autoload' => 'core/modules/mysql/src/Driver/Database/mysql/',
 );
-$settings['config_sync_directory'] = 'sites/default/files/config_El-gMwRMr6VamjmCsJQ4FWYWe4i9zqqA8G5PaIatBOkoRYiBsjDgui_omrFWmSjeZNYUWs519A/sync';
+$settings['config_sync_directory'] = 'sites/default/files/config_fPdGAD8RAZv8lRbDCy8Mhhorfp8sRlxFf7izKfoYPVk4nfyDNajoj8ZccwGDpceTt6tfdZCXvQ/sync';

@@ -1,0 +1,46 @@
+<?php
+
+function encuesta_ws_forms_schema() {
+	$schema['encuesta_ws'] = [
+		'description' => 'Stores Encuesta form data',
+		'fields' => [
+			'id' => [
+				'type' => 'serial',
+				'not null' => TRUE,
+				'unsigned' => TRUE,
+				'description' => "ID autoincrement",
+			],
+			'num_celular' => [
+				'type' => 'varchar', 
+				'length' => 20,
+				'not null' => TRUE, 
+				'default' => '', 
+				'description' => 'Número de celular',
+      ],
+      'codigo_verificacion' => [
+				'type' => 'varchar', 
+				'length' => 20,
+				'not null' => TRUE, 
+				'default' => '', 
+				'description' => 'Código de veificación',
+      ],
+      'voto' => [
+				'type' => 'varchar', 
+				'length' => 50,
+				'not null' => TRUE, 
+				'default' => '', 
+				'description' => 'Voto',
+      ],
+      'timestamp' => [
+				'type' => 'int',
+				'not null' => TRUE,
+				'default' => 0,
+				'description' => 'Unix timestamp indicating when the form was submitted.',
+			],
+		],
+		'primary key' => ['id'],
+	];
+
+	return $schema;
+	
+}

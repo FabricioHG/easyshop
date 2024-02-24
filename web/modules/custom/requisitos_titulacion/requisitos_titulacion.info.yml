@@ -1,0 +1,5 @@
+name: 'Requisitos titulacion'
+type: module
+description: 'Renderizar tabla de requisitos (objetos)'
+package: WS
+core_version_requirement: ^10

@@ -1,0 +1,9 @@
+uuid: edc6d0fe-0f5e-482c-91e7-427a406f8feb
+langcode: es
+status: true
+dependencies: {  }
+currencyCode: MXN
+name: 'peso mexicano'
+numericCode: '484'
+symbol: MXN
+fractionDigits: 2

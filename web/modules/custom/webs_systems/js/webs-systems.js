@@ -8,12 +8,13 @@
 
   Drupal.behaviors.moduloWs = {
     attach: function (context, settings) {
-    	
-	      console.log('prueba modulo');
-	   
+    	once('com_custom', 'html', context).forEach(function (element) {
+            console.log('prueba modulo...');
+          }); 
+	      
     	
     }
   };
 	
 
-} (Drupal,jQuery));
+})(Drupal,jQuery);

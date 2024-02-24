@@ -1,0 +1,6 @@
+tabla-requisitos:
+  version: 1.x
+  css:
+    layout:
+      css/estilos.css: {}
+    

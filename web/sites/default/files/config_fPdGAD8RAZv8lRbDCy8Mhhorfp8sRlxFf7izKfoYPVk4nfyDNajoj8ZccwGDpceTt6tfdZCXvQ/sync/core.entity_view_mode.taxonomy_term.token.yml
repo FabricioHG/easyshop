@@ -1,0 +1,11 @@
+uuid: f0d1e604-29a1-4056-b089-c8f795daec88
+langcode: es
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.token
+label: Comodín
+description: ''
+targetEntityType: taxonomy_term
+cache: true

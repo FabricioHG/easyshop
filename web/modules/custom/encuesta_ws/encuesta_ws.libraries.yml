@@ -1,0 +1,11 @@
+# Custom module library for general purposes.
+encuesta_ws:
+  js:
+    js/encuesta_js.js: {}
+  css:
+    component:
+      css/encuesta-ws.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    

@@ -1,0 +1,4 @@
+administer encuesta_ws configuration:
+  title: 'Administer encuesta_ws configuration'
+  description: 'Optional description.'
+  restrict access: true

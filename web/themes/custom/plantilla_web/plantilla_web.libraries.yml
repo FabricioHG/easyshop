@@ -9,10 +9,9 @@ global:
       js/plantilla-web.js: {}
       js/wow.min.js: {} 
   dependencies: 
-    - core/jquery
     - core/drupal
+    - core/jquery
     - core/once
-
 
 
 

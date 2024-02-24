@@ -1,0 +1,20 @@
+uuid: 29a4843c-8f9d-4408-a8ac-4f99fa9af2f8
+langcode: es
+status: true
+dependencies:
+  module:
+    - pasarela_de_pago_ws
+id: pago_ws
+label: 'Pago ws'
+weight: null
+plugin: pago_stripe_ws
+configuration:
+  display_label: 'Pago con ws'
+  mode: test
+  payment_method_types:
+    - credit_card
+  collect_billing_information: true
+  private_key: pk_test_51JfENbLqOkP3SGVAZngORcfd1Aq1KPfvQGGrXmZUZhGkNf2rpMdVKuT2FMYbj5GIts6LATR4IFj3aOy2tiYzrYVE00n7BynUAs
+  api_key: sk_test_51JfENbLqOkP3SGVAApLmsGvGV5Ko3FfeFPQxKtZCno9aT7ePguYAs4wdbDsDVcw6fpWJwo83ComXAgtfBGC24C6800zgAt2Nz3
+conditions: {  }
+conditionOperator: AND
