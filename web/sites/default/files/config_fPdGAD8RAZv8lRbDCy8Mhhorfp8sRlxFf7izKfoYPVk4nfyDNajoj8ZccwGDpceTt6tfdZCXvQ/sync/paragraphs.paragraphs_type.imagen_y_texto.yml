@@ -1,0 +1,15 @@
+uuid: 77d7f052-2229-4460-b954-2675c22743a2
+langcode: es
+status: true
+dependencies:
+  module:
+    - paragraphs_library
+third_party_settings:
+  paragraphs_library:
+    allow_library_conversion: true
+id: imagen_y_texto
+label: 'Imagen izq y texto der'
+icon_uuid: null
+icon_default: null
+description: ''
+behavior_plugins: {  }

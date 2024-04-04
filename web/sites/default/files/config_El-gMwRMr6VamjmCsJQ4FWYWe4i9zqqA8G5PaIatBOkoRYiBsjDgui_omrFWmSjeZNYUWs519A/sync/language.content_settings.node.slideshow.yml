@@ -1,0 +1,11 @@
+uuid: 2bea39db-a5b6-4a60-8605-8e83ac357bf1
+langcode: es
+status: true
+dependencies:
+  config:
+    - node.type.slideshow
+id: node.slideshow
+target_entity_type_id: node
+target_bundle: slideshow
+default_langcode: site_default
+language_alterable: false

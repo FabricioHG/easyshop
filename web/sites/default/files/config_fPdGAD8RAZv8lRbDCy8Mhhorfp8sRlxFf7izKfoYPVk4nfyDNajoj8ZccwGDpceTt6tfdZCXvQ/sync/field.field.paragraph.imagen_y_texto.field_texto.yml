@@ -1,0 +1,21 @@
+uuid: 99544f3f-3412-42ee-aa72-673ccbf481d1
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_texto
+    - paragraphs.paragraphs_type.imagen_y_texto
+id: paragraph.imagen_y_texto.field_texto
+field_name: field_texto
+entity_type: paragraph
+bundle: imagen_y_texto
+label: Texto
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+default_value_callback: ''
+settings: {  }
+field_type: string_long

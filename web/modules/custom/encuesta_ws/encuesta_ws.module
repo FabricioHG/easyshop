@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Encuesta WS module.
+ */
+
+function encuesta_ws_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+	if ($form_id == "encuesta_ws_encuesta") {
+		//dpm($form);
+	}
+}

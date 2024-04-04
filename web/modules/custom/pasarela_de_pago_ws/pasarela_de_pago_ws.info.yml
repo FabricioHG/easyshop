@@ -1,0 +1,7 @@
+name: Pasarela de pago WS
+type: module
+description: Crea una pasarela de pago con stripe
+package: Webs_systems
+core_version_requirement: ^9 || ^10
+dependencies:
+  - commerce:commerce_payment

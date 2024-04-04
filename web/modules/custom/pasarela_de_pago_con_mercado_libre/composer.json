@@ -1,0 +1,10 @@
+{
+  "name": "drupal/pasarela_de_pago_con_mercado_libre",
+  "description": "Proporciona pago con stripe",
+  "type": "drupal-module",
+  "require": {
+    "mercadopago/dx-php": "^2.0"
+  }
+}
+
+

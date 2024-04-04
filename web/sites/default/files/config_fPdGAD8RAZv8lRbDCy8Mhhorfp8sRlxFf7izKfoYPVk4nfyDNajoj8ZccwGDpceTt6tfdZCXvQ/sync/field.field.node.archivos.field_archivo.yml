@@ -1,0 +1,27 @@
+uuid: f6624158-8ebc-4f66-a42b-05ea6e366787
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_archivo
+    - node.type.archivos
+  module:
+    - file
+id: node.archivos.field_archivo
+field_name: field_archivo
+entity_type: node
+bundle: archivos
+label: Archivo
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'txt pdf hpg jpeg png'
+  max_filesize: ''
+  description_field: false
+field_type: file

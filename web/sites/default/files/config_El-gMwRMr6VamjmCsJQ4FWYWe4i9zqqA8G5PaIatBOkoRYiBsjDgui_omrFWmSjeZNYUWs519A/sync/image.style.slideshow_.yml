@@ -1,0 +1,15 @@
+uuid: 497d79c8-e3ce-4db1-83b5-cd56962b41cd
+langcode: es
+status: true
+dependencies: {  }
+name: slideshow_
+label: 'Slideshow  (2300 X 600)'
+effects:
+  197fe71c-6280-48c6-a9f2-f99f11be394b:
+    uuid: 197fe71c-6280-48c6-a9f2-f99f11be394b
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 2300
+      height: 600
+      anchor: center-center

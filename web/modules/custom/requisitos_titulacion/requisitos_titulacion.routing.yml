@@ -1,0 +1,7 @@
+tabla_requisitos.link_lic:
+  path: '/requisitos-titulacion/tabla_req/{nivel_pro}'
+  defaults:
+    _controller: '\Drupal\requisitos_titulacion\Controller\RequisitosTitulacionController::build'
+    _title: 'Example'
+  requirements:
+    _permission: 'access content'

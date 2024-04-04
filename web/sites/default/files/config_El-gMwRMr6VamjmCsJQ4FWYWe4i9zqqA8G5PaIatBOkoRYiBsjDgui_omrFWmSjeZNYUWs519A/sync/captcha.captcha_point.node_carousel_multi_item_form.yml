@@ -1,0 +1,7 @@
+uuid: 06bbb24b-ae96-407b-84bc-a9ae4bd328d3
+langcode: es
+status: false
+dependencies: {  }
+formId: node_carousel_multi_item_form
+captchaType: default
+label: node_carousel_multi_item_form

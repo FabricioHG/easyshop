@@ -1,0 +1,11 @@
+uuid: 64289a20-fd08-4d3c-8647-10d3bd459098
+langcode: es
+status: true
+dependencies:
+  config:
+    - node.type.presentacion_clientes_satisfecho
+id: node.presentacion_clientes_satisfecho
+target_entity_type_id: node
+target_bundle: presentacion_clientes_satisfecho
+default_langcode: site_default
+language_alterable: false

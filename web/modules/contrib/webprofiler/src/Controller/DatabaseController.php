@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Drupal\webprofiler\Controller;
 
@@ -33,26 +33,26 @@ class DatabaseController extends ControllerBase {
   private Connection $database;
 
   /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('webprofiler.profiler'),
-      $container->get('database')
-    );
-  }
-
-  /**
-   * Constructs a new WebprofilerController.
+   * DatabaseController constructor.
    *
    * @param \Symfony\Component\HttpKernel\Profiler\Profiler $profiler
    *   The Profiler service.
    * @param \Drupal\Core\Database\Connection $database
    *   The database connection.
    */
-  public function __construct(Profiler $profiler, Connection $database) {
+  final public function __construct(Profiler $profiler, Connection $database) {
     $this->profiler = $profiler;
     $this->database = $database;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): DatabaseController {
+    return new static(
+      $container->get('webprofiler.profiler'),
+      $container->get('database'),
+    );
   }
 
   /**
@@ -67,7 +67,9 @@ class DatabaseController extends ControllerBase {
    *   A table with the query explain results.
    */
   public function explainAction(string $token, int $qid): AjaxResponse {
-    if (!$profile = $this->profiler->loadProfile($token)) {
+    $profile = $this->profiler->loadProfile($token);
+
+    if ($profile == NULL) {
       return new AjaxResponse('');
     }
 
@@ -98,8 +100,8 @@ class DatabaseController extends ControllerBase {
           '#type' => 'table',
           '#header' => $header,
           '#rows' => $rows,
-        ]
-      )
+        ],
+      ),
     );
 
     return $response;
@@ -120,7 +122,9 @@ class DatabaseController extends ControllerBase {
     $this->profiler->disable();
     $token = $profile->getToken();
 
-    if (!$profile = $this->profiler->loadProfile($token)) {
+    $profile = $this->profiler->loadProfile($token);
+
+    if ($profile == NULL) {
       throw new NotFoundHttpException(sprintf('Token %s does not exist.', $token));
     }
 

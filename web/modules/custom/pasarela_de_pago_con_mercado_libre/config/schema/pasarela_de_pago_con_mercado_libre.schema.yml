@@ -1,0 +1,10 @@
+pasarela_de_pago_mercado_libre:
+  type: commerce_payment_gateway_configuration
+  mapping:
+    public_ley:
+      type: string
+      label: 'Public key'
+    access_token:
+      type: string
+      label: 'Access token'
+    

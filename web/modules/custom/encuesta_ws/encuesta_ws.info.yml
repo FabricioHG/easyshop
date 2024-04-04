@@ -1,0 +1,5 @@
+name: Encuesta WS
+type: module
+description: Encuesta conectada con Twilio
+package: Webs_systems
+core_version_requirement: ^9 || ^10

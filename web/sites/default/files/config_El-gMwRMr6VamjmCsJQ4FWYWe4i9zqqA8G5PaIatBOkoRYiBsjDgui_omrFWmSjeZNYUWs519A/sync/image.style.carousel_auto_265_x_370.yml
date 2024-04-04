@@ -1,0 +1,15 @@
+uuid: c73a94b6-db59-4eff-8d6e-851736ab85e8
+langcode: es
+status: true
+dependencies: {  }
+name: carousel_auto_265_x_370
+label: 'Carousel Auto 265 X 370'
+effects:
+  8eccdff1-b24f-4496-972f-9f6487c157f0:
+    uuid: 8eccdff1-b24f-4496-972f-9f6487c157f0
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 265
+      height: 370
+      anchor: center-center

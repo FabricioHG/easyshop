@@ -1,0 +1,18 @@
+uuid: 6f266b69-4ea1-437c-add3-f88960e3f1d3
+langcode: es
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+name: 'Carousel multi-item'
+type: carousel_multi_item
+description: ''
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: true

@@ -1,0 +1,30 @@
+uuid: daf0bfb9-1393-499e-8b6a-c4fc8b536524
+langcode: es
+status: true
+dependencies:
+  module:
+    - file
+    - image
+    - paragraphs
+id: paragraph.field_imagen_2
+field_name: field_imagen_2
+entity_type: paragraph
+type: image
+settings:
+  target_type: file
+  display_field: false
+  display_default: false
+  uri_scheme: public
+  default_image:
+    uuid: 6943067d-b758-4395-8837-8034cd6f10e3
+    alt: ''
+    title: ''
+    width: 800
+    height: 533
+module: image
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

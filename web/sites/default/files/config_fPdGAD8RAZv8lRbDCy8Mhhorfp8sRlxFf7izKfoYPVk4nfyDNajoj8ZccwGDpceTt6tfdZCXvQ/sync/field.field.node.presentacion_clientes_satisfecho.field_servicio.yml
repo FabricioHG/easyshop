@@ -1,0 +1,29 @@
+uuid: 50987acf-0b8e-4cb4-a063-3b0298dd1baa
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_servicio
+    - node.type.presentacion_clientes_satisfecho
+    - taxonomy.vocabulary.servicios
+id: node.presentacion_clientes_satisfecho.field_servicio
+field_name: field_servicio
+entity_type: node
+bundle: presentacion_clientes_satisfecho
+label: Servicio
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      servicios: servicios
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

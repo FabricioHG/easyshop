@@ -1,0 +1,51 @@
+uuid: ab80f2dc-e842-453d-9a80-d317330d7949
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.node.presentacion_clientes_satisfecho.body
+    - field.field.node.presentacion_clientes_satisfecho.field_imagen_clientes_satisfecho
+    - field.field.node.presentacion_clientes_satisfecho.field_servicio
+    - node.type.presentacion_clientes_satisfecho
+  module:
+    - image
+    - text
+    - user
+id: node.presentacion_clientes_satisfecho.default
+targetEntityType: node
+bundle: presentacion_clientes_satisfecho
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_imagen_clientes_satisfecho:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_servicio:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  langcode: true

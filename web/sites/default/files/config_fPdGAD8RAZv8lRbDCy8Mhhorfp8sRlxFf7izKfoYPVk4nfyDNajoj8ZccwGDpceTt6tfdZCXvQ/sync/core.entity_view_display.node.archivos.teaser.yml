@@ -1,0 +1,33 @@
+uuid: ffc0dd40-f26b-40a6-90c3-682c8a7ed8af
+langcode: es
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.archivos.body
+    - field.field.node.archivos.field_archivo
+    - node.type.archivos
+  module:
+    - text
+    - user
+id: node.archivos.teaser
+targetEntityType: node
+bundle: archivos
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_archivo: true
+  langcode: true

@@ -1,0 +1,25 @@
+uuid: 8706f895-60da-4ce1-89e0-56951e3f529c
+langcode: es
+status: true
+dependencies:
+  module:
+    - system
+    - webs_systems
+  theme:
+    - plantilla_web
+id: plantilla_web_carouselautoplay
+theme: plantilla_web
+region: piso_5
+weight: 0
+provider: null
+plugin: webs_systems_carousel_autoplay
+settings:
+  id: webs_systems_carousel_autoplay
+  label: 'Carousel autoplay'
+  label_display: '0'
+  provider: webs_systems
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'

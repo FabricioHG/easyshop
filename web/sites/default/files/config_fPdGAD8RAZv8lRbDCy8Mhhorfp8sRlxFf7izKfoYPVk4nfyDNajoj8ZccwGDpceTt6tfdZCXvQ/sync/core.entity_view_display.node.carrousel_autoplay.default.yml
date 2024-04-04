@@ -1,0 +1,36 @@
+uuid: 548b7d83-c1cb-4bd0-9d27-dc2acf6d940e
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.node.carrousel_autoplay.body
+    - field.field.node.carrousel_autoplay.field_imagen_carrousel_autoplay
+    - image.style.carousel_auto_265_x_370
+    - node.type.carrousel_autoplay
+  module:
+    - image
+    - user
+id: node.carrousel_autoplay.default
+targetEntityType: node
+bundle: carrousel_autoplay
+mode: default
+content:
+  field_imagen_carrousel_autoplay:
+    type: image
+    label: above
+    settings:
+      image_link: ''
+      image_style: carousel_auto_265_x_370
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  body: true
+  langcode: true

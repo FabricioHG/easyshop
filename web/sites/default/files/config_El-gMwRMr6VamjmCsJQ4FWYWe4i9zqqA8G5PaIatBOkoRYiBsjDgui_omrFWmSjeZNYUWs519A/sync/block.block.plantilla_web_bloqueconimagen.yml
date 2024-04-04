@@ -1,0 +1,30 @@
+uuid: b6d025d0-15d9-4ec5-b635-1844e0bab6c7
+langcode: es
+status: true
+dependencies:
+  content:
+    - 'block_content:bloque_con_image_izq_y_texto:154cbac2-19a0-4499-84af-4459fca38a89'
+  module:
+    - block_content
+    - system
+  theme:
+    - plantilla_web
+id: plantilla_web_bloqueconimagen
+theme: plantilla_web
+region: piso_4
+weight: 0
+provider: null
+plugin: 'block_content:154cbac2-19a0-4499-84af-4459fca38a89'
+settings:
+  id: 'block_content:154cbac2-19a0-4499-84af-4459fca38a89'
+  label: 'Bloque con imagen'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'

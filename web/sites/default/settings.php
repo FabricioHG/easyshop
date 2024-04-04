@@ -1,4 +1,9 @@
 <?php
+if (class_exists('Kint')) {
+  // Change the maximum depth to prevent out-of-memory errors.
+  \Kint::$depth_limit= 4;
+}
+
 
 // phpcs:ignoreFile
 
@@ -265,7 +270,7 @@ $databases = [];
  *   $settings['hash_salt'] = file_get_contents('/home/example/salt.txt');
  * @endcode
  */
-$settings['hash_salt'] = 'GGFyBpyhvJUE73MDecKMYVIv4x16SWOCRIjkv1R7_xXubKTQBWEwdBQBTgHG29nj5OxG5eiD5w';
+$settings['hash_salt'] = 'yv858i0oDbCPUD-_ktmAwrGtuta7CAkRKjkh44ycUbOzPUlyPqtaDYUfnuj4nrwO4tqlkqchBQ';
 
 /**
  * Deployment identifier.
@@ -590,7 +595,7 @@ $settings['update_free_access'] = FALSE;
  * See https://www.drupal.org/documentation/modules/file for more information
  * about securing private files.
  */
-# $settings['file_private_path'] = '';
+ $settings['file_private_path'] = '../private';
 
 /**
  * Temporary file path:
@@ -857,19 +862,19 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
  * Keep this code block at the end of this file to take full effect.
  */
 #
- if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
-   include $app_root . '/' . $site_path . '/settings.local.php';
- }
+# if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
+#   include $app_root . '/' . $site_path . '/settings.local.php';
+# }
 $databases['default']['default'] = array (
-  'database' => 'plantilla_web',
-  'username' => 'plantilla_web',
-  'password' => 'plantilla_web',
+  'database' => 'webPlantillaWSYS',
+  'username' => 'webPlantillaWSYS',
+  'password' => 'webPlantillaWSYS',
   'prefix' => '',
-  'host' => '127.0.0.1',
+  'host' => 'localhost',
   'port' => '3306',
   'isolation_level' => 'READ COMMITTED',
   'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
   'driver' => 'mysql',
   'autoload' => 'core/modules/mysql/src/Driver/Database/mysql/',
 );
-$settings['config_sync_directory'] = 'sites/default/files/config_lvUdobG4IXKVzM7285sQPpF1pdTSkspM9CEnU9xifIU7hleZ-e-LLfkBwwg1ZboP2rsc79mIUg/sync';
+$settings['config_sync_directory'] = 'sites/default/files/config_fPdGAD8RAZv8lRbDCy8Mhhorfp8sRlxFf7izKfoYPVk4nfyDNajoj8ZccwGDpceTt6tfdZCXvQ/sync';

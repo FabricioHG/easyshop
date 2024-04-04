@@ -2,16 +2,18 @@
  * @file
  * Plantilla web behaviors.
  */
-(function (Drupal) {
+(function ($, Drupal, once) {
 
   'use strict';
 
-  Drupal.behaviors.plantillaWeb = {
-    attach: function (context, settings) {
+	Drupal.behaviors.plantillaWeb = {
+    	attach: function (context, settings) {
+      		//Iniciar la libreria wow
+ 			once('com_wow', 'html', context).forEach(function (element) {
+        		new WOW().init();
+        		console.log('It works tema!...');
+      		});    
+    	}
+  	};
 
-      console.log('It works tema!.');
-
-    }
-  };
-
-} (Drupal));
+}) (jQuery, Drupal, once);

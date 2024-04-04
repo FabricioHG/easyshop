@@ -1,0 +1,24 @@
+uuid: 6a7452a8-ff27-4d4b-a7e7-7072c10b8dbc
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.presentacion_clientes_satisfecho
+  module:
+    - text
+id: node.presentacion_clientes_satisfecho.body
+field_name: body
+entity_type: node
+bundle: presentacion_clientes_satisfecho
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+  allowed_formats: {  }
+field_type: text_with_summary

@@ -1,0 +1,39 @@
+uuid: 5f5c6ad6-1531-4a15-921c-e825d7e77894
+langcode: es
+status: true
+dependencies:
+  config:
+    - block_content.type.bloque_con_image_izq_y_texto
+    - field.storage.block_content.field_imagen_izq_y_texto_der
+    - paragraphs.paragraphs_type.imagen_der_y_texto_izq
+    - paragraphs.paragraphs_type.imagen_y_texto
+  module:
+    - entity_reference_revisions
+id: block_content.bloque_con_image_izq_y_texto.field_imagen_izq_y_texto_der
+field_name: field_imagen_izq_y_texto_der
+entity_type: block_content
+bundle: bloque_con_image_izq_y_texto
+label: 'Imagen izq y texto der'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      imagen_y_texto: imagen_y_texto
+      imagen_der_y_texto_izq: imagen_der_y_texto_izq
+    negate: 0
+    target_bundles_drag_drop:
+      from_library:
+        weight: 3
+        enabled: false
+      imagen_der_y_texto_izq:
+        weight: 5
+        enabled: true
+      imagen_y_texto:
+        weight: 4
+        enabled: true
+field_type: entity_reference_revisions

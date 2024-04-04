@@ -1,0 +1,11 @@
+{
+    "name": "drupal/pasarela_de_pago_ws",
+    "type": "drupal-module",
+    "description": "Crea una pasarela de pago con stripe",
+    "homepage": "http://webssistemas.com.mx/",
+    "require": {
+        "php": ">=7.4",
+        "drupal/commerce": "^2.25 || ^3",
+        "stripe/stripe-php": "^7.25"
+    }
+}

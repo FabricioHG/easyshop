@@ -35,7 +35,7 @@ class Internals {
   /**
    * The blazy HTML ID.
    *
-   * @var int
+   * @var int|null
    */
   protected static $blazyId;
 
@@ -82,6 +82,25 @@ class Internals {
       $input = str_replace('//instagram', '//www.instagram', $input);
     }
     return $input;
+  }
+
+  /**
+   * Returns TRUE if the link has empty title, or just plain URL or text.
+   */
+  public static function emptyOrPlainTextLink(array $link): bool {
+    $empty = FALSE;
+    if ($title = $link['#title'] ?? NULL) {
+      // @todo php 8: str_starts_with($title, '/');
+      $length = strlen('/');
+      $empty = substr($title, 0, $length) === '/' || strpos($title, 'http') !== FALSE;
+    }
+
+    if ($empty ||
+      isset($link['#plain_text']) ||
+      isset($link['#context']['value'])) {
+      return TRUE;
+    }
+    return FALSE;
   }
 
   /**
@@ -205,10 +224,20 @@ class Internals {
     foreach ($view->field as $field_name => $field) {
       if ($options = $field->options ?? []) {
         $names[] = $field_name;
+        $subsets = $options['settings'] ?? [];
+        $type = $options['type'] ?? 'x';
 
-        if (!empty($options['group_rows'])
-          && $limit = $options['delta_limit'] ?? 0) {
-          if ($subsets = $options['settings'] ?? []) {
+        if ($subsets) {
+          if (isset($subsets['media_switch'])) {
+            $data['formatters'][] = [
+              'type' => $type,
+              'field_name' => $field_name,
+              'settings' => $subsets,
+            ];
+          }
+
+          if (!empty($options['group_rows'])
+            && $limit = $options['delta_limit'] ?? 0) {
             // Ensures we are in the ecosystem. Grid option is only available at
             // multi-value fields. A single value is not a concern.
             if (isset($subsets['grid_medium'])) {
