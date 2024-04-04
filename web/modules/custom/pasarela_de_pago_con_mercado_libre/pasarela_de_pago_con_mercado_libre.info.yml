@@ -1,0 +1,7 @@
+name: 'Pasarela de pago con Mercado Libre'
+type: module
+description: 'Pasarela de pago con Mercado libre'
+package: Webs_systems
+core_version_requirement: ^10
+dependencies:
+  - commerce:commerce_payment

@@ -1,0 +1,20 @@
+uuid: 37ec2348-cd38-4e5f-89d1-162c1ababaf5
+langcode: es
+status: true
+dependencies:
+  module:
+    - pasarela_de_pago_con_mercado_libre
+id: mercado_pago
+label: 'Mercado pago'
+weight: null
+plugin: pago_mercado_libre
+configuration:
+  display_label: 'Mercado libre'
+  mode: test
+  payment_method_types:
+    - credit_card
+  collect_billing_information: true
+  access_token: TEST-4103621265095896-040300-cb6c05074b5892a005ce4c87e8c235a9-1752998027
+  public_key: TEST-7286a7f6-7f91-4fee-958a-1a3fcc4b2ad8
+conditions: {  }
+conditionOperator: AND

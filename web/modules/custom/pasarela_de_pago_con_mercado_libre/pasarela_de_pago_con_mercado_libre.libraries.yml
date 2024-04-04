@@ -1,0 +1,15 @@
+# Custom module library for general purposes.
+pasarela_de_pago_ml_library:
+  css:
+    theme:
+      css/estilos.css: {}
+  js:
+    js/pasarela_ml.js: {}
+    https://sdk.mercadopago.com/js/v2: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/once
+    - core/drupalSettings
+    
+    

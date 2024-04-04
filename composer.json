@@ -40,6 +40,7 @@
         "drupal/views_slideshow": "^5.0",
         "drupal/webform": "^6.2@beta",
         "drupal/webprofiler": "^10.1",
+        "mercadopago/dx-php": "^2.6",
         "drush/drush": "^12.4"
     },
     "conflict": {
