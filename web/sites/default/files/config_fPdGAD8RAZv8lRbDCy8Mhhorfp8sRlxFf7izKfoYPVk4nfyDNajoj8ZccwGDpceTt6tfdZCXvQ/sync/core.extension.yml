@@ -88,8 +88,10 @@ module:
   webform: 0
   webform_ui: 0
   webs_systems: 0
+  pathauto: 1
   views: 10
   paragraphs: 11
+  views_taxonomy_radios_filter: 11
   standard: 1000
 theme:
   olivero: 0
@@ -97,4 +99,6 @@ theme:
   stable9: 0
   bootstrap5: 0
   plantilla_web: 0
+  belgrade: 0
+  ws_ecommerce: 0
 profile: standard

@@ -4,7 +4,7 @@
 
   Drupal.behaviors.pago_ws = {
     attach: function (context, settings) {
-    	let form_pago= "#commerce-checkout-flow-multistep-default";
+    	let form_pago= "#commerce-checkout-flow-custom-checkout-flow";
       let data_form = drupalSettings.pasarela_de_pago_ws;
       
       const stripe = Stripe(data_form.publishablekey);

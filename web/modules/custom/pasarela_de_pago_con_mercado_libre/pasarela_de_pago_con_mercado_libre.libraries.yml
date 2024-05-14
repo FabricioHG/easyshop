@@ -4,8 +4,8 @@ pasarela_de_pago_ml_library:
     theme:
       css/estilos.css: {}
   js:
-    js/pasarela_ml.js: {}
     https://sdk.mercadopago.com/js/v2: {}
+    js/pasarela_ml.js: {}
   dependencies:
     - core/drupal
     - core/jquery

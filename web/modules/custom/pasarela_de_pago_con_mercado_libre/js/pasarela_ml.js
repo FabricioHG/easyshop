@@ -6,7 +6,7 @@
 
   Drupal.behaviors.pago_ws = {
     attach: function (context, settings) {
-      let form_pago= "#commerce-checkout-flow-multistep-default";
+      let form_pago= "#commerce-checkout-flow-custom-checkout-flow";
       let data_form = drupalSettings.pasarela_de_pago_ml;
       let preference_Id = data_form.preference_id;
 

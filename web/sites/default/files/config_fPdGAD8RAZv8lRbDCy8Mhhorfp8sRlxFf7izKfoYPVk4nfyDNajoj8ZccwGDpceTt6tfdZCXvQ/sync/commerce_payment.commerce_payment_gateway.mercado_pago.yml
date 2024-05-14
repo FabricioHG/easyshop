@@ -16,5 +16,6 @@ configuration:
   collect_billing_information: true
   access_token: TEST-4103621265095896-040300-cb6c05074b5892a005ce4c87e8c235a9-1752998027
   public_key: TEST-7286a7f6-7f91-4fee-958a-1a3fcc4b2ad8
+  webhook_key: 529c29e78c1935af6d7c79d90480e0d362e98976413e14ed58cdd0a11b669f12
 conditions: {  }
 conditionOperator: AND

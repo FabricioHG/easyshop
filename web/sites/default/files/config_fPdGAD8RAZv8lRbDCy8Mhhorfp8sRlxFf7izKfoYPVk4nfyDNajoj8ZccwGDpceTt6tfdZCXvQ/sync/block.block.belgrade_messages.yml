@@ -1,0 +1,22 @@
+uuid: c9ce7914-857b-4c07-80f5-36407fe93afe
+langcode: es
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - belgrade
+_core:
+  default_config_hash: uxiZlSldLtoOp05pfXeKJxxtvB0ckxx3mAAabJdAJnU
+id: belgrade_messages
+theme: belgrade
+region: highlighted
+weight: -8
+provider: null
+plugin: system_messages_block
+settings:
+  id: system_messages_block
+  label: 'Mensajes de estado'
+  label_display: '0'
+  provider: system
+visibility: {  }

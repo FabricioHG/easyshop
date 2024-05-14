@@ -12,14 +12,14 @@ third_party_settings:
     cart_expiration: {  }
     enable_cart_message: true
   commerce_checkout:
-    checkout_flow: default
+    checkout_flow: checkout_flow_ws
 _core:
   default_config_hash: kYapI397yx2zFJGyDEs85Hyqgfc9jhmzxqPZMl2Fqhk
 id: default
 label: 'Por defecto'
 traits: {  }
 locked: false
-workflow: order_default
+workflow: order_default_validation
 numberPattern: order_default
 refresh_mode: customer
 refresh_frequency: 300

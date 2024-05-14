@@ -1,0 +1,28 @@
+uuid: 59dc217f-b769-4fa0-be3c-962c7d949770
+langcode: en
+status: true
+dependencies:
+  module:
+    - commerce_checkout
+    - system
+  theme:
+    - ws_ecommerce
+_core:
+  default_config_hash: jSLJ3sJUecEmCmbbB-ISvExMtHpzXsFIguGKTTI6lPA
+id: ws_ecommerce_checkout_progress
+theme: ws_ecommerce
+region: content
+weight: -7
+provider: null
+plugin: commerce_checkout_progress
+settings:
+  id: commerce_checkout_progress
+  label: 'Checkout progress'
+  label_display: '0'
+  provider: commerce_checkout
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    context_mapping: {  }
+    pages: '/checkout/*'

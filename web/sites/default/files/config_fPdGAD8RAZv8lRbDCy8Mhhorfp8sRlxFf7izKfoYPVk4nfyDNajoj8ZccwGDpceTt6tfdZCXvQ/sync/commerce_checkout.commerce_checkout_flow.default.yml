@@ -10,7 +10,7 @@ id: default
 plugin: multistep_default
 configuration:
   display_checkout_progress: true
-  display_checkout_progress_breadcrumb_links: false
+  display_checkout_progress_breadcrumb_links: true
   guest_order_assign: false
   guest_new_account: false
   guest_new_account_notify: false
@@ -40,16 +40,16 @@ configuration:
     payment_process:
       step: payment
       weight: 5
-      capture: false
-    completion_register:
-      step: complete
-      weight: 6
+      capture: true
     completion_message:
       step: complete
-      weight: 7
+      weight: 6
       message:
         value: "Your order number is [commerce_order:order_number].\r\nYou can view your order on your account page when logged in."
         format: plain_text
+    completion_register:
+      step: complete
+      weight: 7
     order_summary:
       step: _sidebar
       weight: 8

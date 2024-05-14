@@ -5,8 +5,8 @@ dependencies:
   config:
     - commerce_product.commerce_product_type.default
     - field.field.commerce_product.default.body
+    - field.field.commerce_product.default.field_categoria
     - field.field.commerce_product.default.field_imagen
-    - image.style.carousel_auto_265_x_370
   module:
     - commerce_product
     - image
@@ -25,16 +25,24 @@ content:
     third_party_settings: {  }
     weight: 2
     region: content
+  field_categoria:
+    type: entity_reference_label
+    label: visually_hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
   field_imagen:
     type: image
     label: above
     settings:
       image_link: ''
-      image_style: carousel_auto_265_x_370
+      image_style: ''
       image_loading:
         attribute: lazy
     third_party_settings: {  }
-    weight: 1
+    weight: 6
     region: content
   title:
     type: string
@@ -50,7 +58,7 @@ content:
     settings:
       combine: true
     third_party_settings: {  }
-    weight: 3
+    weight: 4
     region: content
 hidden:
   created: true

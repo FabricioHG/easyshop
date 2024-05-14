@@ -5,6 +5,7 @@ dependencies:
   config:
     - commerce_product.commerce_product_type.default
     - field.field.commerce_product.default.body
+    - field.field.commerce_product.default.field_categoria
     - field.field.commerce_product.default.field_imagen
     - image.style.thumbnail
   module:
@@ -22,7 +23,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 4
+    weight: 5
     region: content
     settings:
       rows: 9
@@ -32,13 +33,19 @@ content:
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 6
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_categoria:
+    type: options_buttons
+    weight: 2
     region: content
     settings: {  }
     third_party_settings: {  }
   field_imagen:
     type: image_image
-    weight: 2
+    weight: 3
     region: content
     settings:
       progress_indicator: throbber
@@ -46,20 +53,20 @@ content:
     third_party_settings: {  }
   langcode:
     type: language_select
-    weight: 3
+    weight: 4
     region: content
     settings:
       include_locked: true
     third_party_settings: {  }
   path:
     type: path
-    weight: 7
+    weight: 8
     region: content
     settings: {  }
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 8
+    weight: 9
     region: content
     settings:
       display_label: true
@@ -84,7 +91,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 5
+    weight: 6
     region: content
     settings:
       match_operator: CONTAINS
@@ -94,7 +101,7 @@ content:
     third_party_settings: {  }
   variations:
     type: inline_entity_form_simple
-    weight: 9
+    weight: 10
     region: content
     settings:
       form_mode: default

@@ -1,0 +1,57 @@
+uuid: d243d917-4652-4088-a657-32f91f2bc928
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_payment
+    - commerce_stripe
+    - pasarela_de_pago_con_mercado_libre
+label: 'Checkout flow WS'
+id: checkout_flow_ws
+plugin: custom_checkout_flow
+configuration:
+  display_checkout_progress: true
+  display_checkout_progress_breadcrumb_links: false
+  guest_order_assign: false
+  guest_new_account: false
+  guest_new_account_notify: false
+  panes:
+    contact_information:
+      double_entry: false
+      step: order_information
+      weight: '1'
+    review:
+      step: payment
+      weight: '3'
+    completion_message:
+      message:
+        value: "Your order number is [commerce_order:order_number].\r\nYou can view your order on your account page when logged in."
+        format: plain_text
+      step: complete
+      weight: '5'
+    login:
+      allow_guest_checkout: true
+      allow_registration: false
+      registration_form_mode: register
+      step: login
+      weight: '0'
+    completion_register:
+      step: complete
+      weight: '6'
+    order_summary:
+      view: ''
+      step: _sidebar
+      weight: '7'
+    payment_process:
+      capture: true
+      step: payment
+      weight: '4'
+    payment_information:
+      step: order_information
+      weight: '2'
+    stripe_review:
+      button_id: edit-actions-next
+      auto_submit_review_form: false
+      setup_future_usage: ''
+      step: _disabled
+      weight: '8'

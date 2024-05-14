@@ -82,6 +82,14 @@ class MercadoLibreForm extends BasePaymentOffsiteForm {
 
   private function createPreference($form){
     $payment_gateway_plugin = $this->plugin;
+
+    $payment = $this->entity;
+    $order = $payment->getOrder();
+    $order_items = $order->getItems();
+    $order_id = intval( $order->get('order_id')->getValue()[0]['value'] );
+    $email = $order->getEmail();
+
+
     // Agrega credenciales
     SDK::setAccessToken($payment_gateway_plugin->getAccessToken());
 
@@ -93,23 +101,38 @@ class MercadoLibreForm extends BasePaymentOffsiteForm {
     ];
 
     $productos = [];
-    $item = new Item();
-    $item->title = "Prueba de producto";
-    $item->quantity = 1;
-    $item->unit_price = 60;
+    foreach ($order_items as $key => $item) {
+      $item_title = $item->getTitle();
+      $item_quentity = strval(intval( $item->getQuantity() ) );
+      $item_price = number_format($item->getUnitPrice()->getNumber(),2) ;
 
-    array_push($productos, $item);
+      $item = new Item();
+      $item->title = $item_title;
+      $item->quantity = $item_quentity;
+      $item->unit_price = $item_price;
+      
+      array_push($productos, $item);
+      unset($item_array); 
+      unset($item);
+    }
 
-    $preference->items = $productos;
+    $metadata = [
+      'order_id' => $order_id,
+      'email' => $order_id
+    ];
 
+     
+    $preference->statement_descriptor = "Productos Webssistems";
+    $preference->auto_return = 'approved';
+    $preference->metadata = $metadata;
+    $preference->items =  $productos ;
     $preference->save();
-
+    //kint($preference);
     return $preference->id;
     
   }
 
 
 }//fin de la clase
-
 
 

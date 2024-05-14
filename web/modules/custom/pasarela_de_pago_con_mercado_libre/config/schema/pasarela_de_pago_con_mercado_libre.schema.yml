@@ -7,4 +7,7 @@ pasarela_de_pago_mercado_libre:
     access_token:
       type: string
       label: 'Access token'
+    webhook_key:
+      type: string
+      label: 'webhook key'
     

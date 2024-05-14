@@ -287,7 +287,7 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          hide_single_bundle: true
+          hide_single_bundle: false
         store_id:
           id: store_id
           table: commerce_order
@@ -854,6 +854,7 @@ display:
           row_class: ''
           default_row_class: true
           columns:
+            commerce_order_bulk_form: commerce_order_bulk_form
             order_number: order_number
             placed: placed
             type: type
@@ -865,6 +866,11 @@ display:
             operations: operations
           default: placed
           info:
+            commerce_order_bulk_form:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
             order_number:
               sortable: true
               default_sort_order: asc
@@ -884,7 +890,7 @@ display:
               default_sort_order: asc
               align: ''
               separator: ''
-              empty_column: true
+              empty_column: false
               responsive: priority-medium
             store_id:
               sortable: true
@@ -922,8 +928,6 @@ display:
               empty_column: false
               responsive: ''
             operations:
-              sortable: false
-              default_sort_order: asc
               align: ''
               separator: ''
               empty_column: false
