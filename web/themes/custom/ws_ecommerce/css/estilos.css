@@ -48,8 +48,82 @@ header > section.py-5.mt-lg-4.region.region-header {
   font-size: 13px;
   margin: 20px 0px;
 }
-
-
+#block-ws-ecommerce-breadcrumbs {
+  padding-left: 50px;
+}
+.int_precio_lista {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 0px 5px;
+}
+.line_precio_lista {
+  border: 1px solid #aeaeae;
+  width: 100%;
+  position: absolute;
+  top: 60%;
+  left: 0px;
+}
+/*Vista Inicio*/
+.view-id-productos.view-display-id-page_1 .views-view-responsive-grid__item {
+  border: 1px solid #cecece;
+  margin: 10px;
+  border-bottom: 3px solid #41449f;
+}
+.view-id-productos.view-display-id-page_1 .views-field.views-field-list-price__number {
+  border: 1px solid #cc3e3e;
+  padding: 0px 5px;
+  position: absolute;
+  color: #fff;
+  font-weight: bold;
+  background-color: #cc3e3e;
+}
+.precio_lista_tach_inicio {
+  border-bottom: 1px solid;
+  width: 100%;
+  position: absolute;
+  top: 62%;
+  left: -1px;
+}
+.view-id-productos.view-display-id-page_1 .views-field.views-field-price__number {
+  font-weight: bold;
+  font-size: 22px;
+  padding: 5px;
+}
+.view-id-productos.view-display-id-page_1 .views-field.views-field-price__number a{
+  color: #000;
+}
+.view-id-productos.view-display-id-page_1 .views-field.views-field-field-categoria {
+  border-top: 1px solid #cecece;
+  padding: 4px;
+  margin-top: 30px;
+}
+.view-id-productos.view-display-id-page_1 .views-field.views-field-field-categoria ul li{
+  display: inline-block;
+  padding: 0px 7px;
+  margin: 1px;
+  border-radius: 5px;
+  background-color: #41449f;
+  color: #fff;
+  font-weight: bold;
+  font-size: 12px;
+}
+.view-id-productos.view-display-id-page_1 .views-field.views-field-field-categoria ul {
+  list-style: none;
+  padding: 0px;
+}
+.view-id-productos.view-display-id-page_1 .views-field.views-field-title {
+  font-weight: bold;
+  padding: 5px;
+}
+.view-id-productos.view-display-id-page_1 .views-field.views-field-title a{
+  color: #000;
+}
+#block-ws-ecommerce-formularioexpuestoproductospage-1{
+  position: sticky;
+  top: 100px;
+  margin-bottom: 30px;
+}
 /*---------------------------------------Dispositivos mobiles ----------------------------------------*/
 
  /* Extra small devices (phones, 600px and down) */

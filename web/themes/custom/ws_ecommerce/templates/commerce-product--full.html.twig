@@ -30,7 +30,6 @@
 ]
 %}
 
-
 {# Obtener el url de las imagenes del producto#}
 {% set image_urls = [] %}
 
@@ -59,18 +58,55 @@
 {% set precio = field_precio.getValue().0["number"] %}
 {% set moneda = field_precio.getValue().0["currency_code"] %}
 
+{% set field_precio_lista = product.variation_list_price["#items"] %}
+{% set precio_lista = field_precio_lista.getValue().0["number"] %}
+{% set moneda_precio_lista = field_precio_lista.getValue().0["currency_code"] %}
+
+{# Obtener el url de los videos#}
+{% set videos_urls = [] %}
+
+{% if product.field_video["#items"] %}
+  {% for item_video in product.field_video["#items"] %}
+    {% set video_url = item_video.getValue()["uri"] %}
+    {% set videos_urls = videos_urls|merge([video_url]) %}  
+  {% endfor %}
+{% endif %}
+
 <div class="cont_pag_prod">
   <div class="cont_img_comprar">
     <div class="int_img_cont">
       <div class="sld-wrp">
         <div class="slider-for">
           {% for image_url in image_urls %}
-            <div> <img src="{{image_url.url}}"> </div>
+            {% if loop.first %}
+              {% if videos_urls %}
+                <div>
+                  <iframe width="400" height="400" src="{{videos_urls.0|replace({'https://www.youtube.com/watch?v=':'https://www.youtube.com/embed/'}) }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+              {% else %}
+                <div> <img src="{{image_url.url}}"> </div>
+              {% endif%}
+            {% else %}
+              <div> <img src="{{image_url.url}}"> </div>
+            {% endif%}
+            
           {% endfor%}
         </div>
         <div class="slider-nav">
           {% for image_url_thum in image_urls %}
-            <div> <img src="{{image_url_thum.url_thum}}"> </div>
+            {% if loop.first %}
+              {% if videos_urls %}
+                {# Obtener imagen del video #}
+                {% set img_video_part_1 = videos_urls.0|replace({'https://www.youtube.com/watch?v=':'https://i.ytimg.com/vi_webp/' }) %}
+                {% set img_video = img_video_part_1 ~ "/default.webp" %}
+                <div> <img src="{{img_video}}"> </div>
+                
+              {% else %}
+                <div> <img src="{{image_url_thum.url_thum}}"> </div>
+              {% endif%}
+            {% else %}
+              <div> <img src="{{image_url_thum.url_thum}}"> </div>
+            {% endif%}
           {% endfor%}
         </div>
       </div>
@@ -85,6 +121,9 @@
   <div class="cont_info">
     <div class="int_titulo">{{product.title}}</div>
     <div class="int_precio"> $ {{ precio|number_format(2, '.', ',') ~ ' ' ~ moneda }}</div>
+    {% if precio_lista %}
+      <div class="int_precio_lista">$ {{ precio_lista|number_format(2, '.', ',') ~ ' ' ~ moneda_precio_lista }} <span class="line_precio_lista"></span> </div>
+    {% endif%}
     <div class="int_categoria">{{product.field_categoria}}</div>
     <div class="int_cuerpo">
       {{product.body}}

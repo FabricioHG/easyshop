@@ -7,9 +7,11 @@ dependencies:
     - field.field.commerce_product.default.body
     - field.field.commerce_product.default.field_categoria
     - field.field.commerce_product.default.field_imagen
+    - field.field.commerce_product.default.field_video
   module:
     - commerce_product
     - image
+    - link
     - text
 _core:
   default_config_hash: 10qgl6V_HwkrJufzsNCV75OpqOeMzzKDJb3BhaogmzQ
@@ -43,6 +45,18 @@ content:
         attribute: lazy
     third_party_settings: {  }
     weight: 6
+    region: content
+  field_video:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 7
     region: content
   title:
     type: string

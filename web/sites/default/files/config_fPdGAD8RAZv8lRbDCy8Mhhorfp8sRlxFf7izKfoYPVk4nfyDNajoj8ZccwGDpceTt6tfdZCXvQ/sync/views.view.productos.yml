@@ -11,7 +11,6 @@ dependencies:
     - commerce_price
     - commerce_product
     - image
-    - views_bootstrap
     - views_taxonomy_radios_filter
 id: productos
 label: Productos
@@ -95,6 +94,59 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+        view_commerce_product:
+          id: view_commerce_product
+          table: commerce_product
+          field: view_commerce_product
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: commerce_product
+          plugin_id: entity_link
+          label: ''
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          text: vista
+          output_url_as_text: true
+          absolute: false
         variations_target_id:
           id: variations_target_id
           table: commerce_product__variations
@@ -151,6 +203,72 @@ display:
           settings:
             link: true
           group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        list_price__number:
+          id: list_price__number
+          table: commerce_product_variation_field_data
+          field: list_price__number
+          relationship: variations_target_id
+          group_type: group
+          admin_label: ''
+          entity_type: commerce_product_variation
+          entity_field: list_price
+          plugin_id: field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: true
+            text: '<div class="cont_precio_list_sup"><span class="precio_lista_tach_inicio"></span>{{ list_price__number }}</div>'
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: true
+          empty_zero: true
+          hide_alter_empty: true
+          click_sort_column: number
+          type: commerce_price_default
+          settings:
+            strip_trailing_zeroes: false
+            currency_display: symbol
+          group_column: ''
           group_columns: {  }
           group_rows: true
           delta_limit: 0
@@ -241,8 +359,73 @@ display:
           alter:
             alter_text: false
             text: ''
-            make_link: false
-            path: ''
+            make_link: true
+            path: '{{ view_commerce_product }}'
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 30
+            word_boundary: false
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: true
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        price__number:
+          id: price__number
+          table: commerce_product_variation_field_data
+          field: price__number
+          relationship: variations_target_id
+          group_type: group
+          admin_label: ''
+          entity_type: commerce_product_variation
+          entity_field: price
+          plugin_id: field
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: true
+            path: '{{ view_commerce_product }}'
             absolute: false
             external: false
             replace_spaces: false
@@ -269,7 +452,7 @@ display:
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: true
+          element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
@@ -277,10 +460,12 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings: {  }
-          group_column: value
+          click_sort_column: number
+          type: commerce_price_default
+          settings:
+            strip_trailing_zeroes: false
+            currency_display: symbol
+          group_column: ''
           group_columns: {  }
           group_rows: true
           delta_limit: 0
@@ -350,85 +535,21 @@ display:
           delta_offset: 0
           delta_reversed: false
           delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-        price__number:
-          id: price__number
-          table: commerce_product_variation_field_data
-          field: price__number
-          relationship: variations_target_id
-          group_type: group
-          admin_label: ''
-          entity_type: commerce_product_variation
-          entity_field: price
-          plugin_id: field
-          label: ''
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: number
-          type: commerce_price_default
-          settings:
-            strip_trailing_zeroes: false
-            currency_display: code
-          group_column: ''
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
+          multi_type: ul
           separator: ', '
           field_api_classes: false
       pager:
-        type: mini
+        type: full
         options:
           offset: 0
-          items_per_page: 10
+          items_per_page: 30
           total_pages: null
           id: 0
           tags:
             next: ››
             previous: ‹‹
+            first: '« Primero'
+            last: 'Último »'
           expose:
             items_per_page: false
             items_per_page_label: 'Elementos por página'
@@ -437,6 +558,7 @@ display:
             items_per_page_options_all_label: '- Todo -'
             offset: false
             offset_label: Desplazamiento
+          quantity: 9
       exposed_form:
         type: basic
         options:
@@ -518,17 +640,13 @@ display:
           error_message: true
           all_label: '<Any>'
       style:
-        type: views_bootstrap_grid
+        type: grid_responsive
         options:
           grouping: {  }
-          row_class: ''
-          default_row_class: true
-          col_xs: col-12
-          col_sm: col-sm-6
-          col_md: col-md-4
-          col_lg: col-lg-4
-          col_xl: col-xl-3
-          col_xxl: col-xxl-3
+          columns: 4
+          cell_min_width: 100
+          grid_gutter: 10
+          alignment: horizontal
       row:
         type: fields
       query:
