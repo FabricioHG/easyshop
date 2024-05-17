@@ -24,6 +24,7 @@
         "drupal/block_class": "^2.0",
         "drupal/bootstrap5": "^3.0",
         "drupal/commerce": "^2.36",
+        "drupal/commerce_shipping": "^2.8",
         "drupal/commerce_stripe": "^1.1",
         "drupal/core-composer-scaffold": "^10.1",
         "drupal/core-recommended": "^10.1",
