@@ -72,6 +72,22 @@
   {% endfor %}
 {% endif %}
 
+{# Obtener la fecha y sumar 15 dias para la entrega#}
+{# Obtenemos la fecha actual #}
+{% set fecha_actual = "now"|date("Y-m-d") %}
+
+{# Sumamos 15 días a la fecha 1 actual utilizando PHP #}
+{% set fecha_futura_1 = fecha_actual|date_modify("+15 days") %}
+
+{# Sumamos 20 días a la fecha actual utilizando PHP #}
+{% set fecha_futura_2 = fecha_actual|date_modify("+20 days") %}
+
+
+{# Convertimos la fecha de entrega futura a una cadena de texto en el formato deseado #}
+{% set fecha_futura_formateada = fecha_futura_1|date("M d") ~ " - " ~ fecha_futura_2|date("M d") %}
+
+{# Mostramos la fecha futura formateada #}
+
 <div class="cont_pag_prod">
   <div class="cont_img_comprar">
     <div class="int_img_cont">
@@ -113,7 +129,7 @@
     </div>
 
     <div class="int_prod_carr">
-      <div class="text_ch"><strong>Lorem ipsum dolor</strong> sit amet, consectetur sed <strong>do eiusmod</strong></div>
+      <div class="text_ch"><strong>Entrega estimada para el </strong> <strong class="txt_rojo upper">{{fecha_futura_formateada}}</strong> </div>
         {{product.variations}}    
     </div>
 

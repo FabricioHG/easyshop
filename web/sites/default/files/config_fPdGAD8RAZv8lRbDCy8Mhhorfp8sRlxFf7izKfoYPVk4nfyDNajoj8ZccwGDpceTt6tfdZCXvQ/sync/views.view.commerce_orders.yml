@@ -298,7 +298,7 @@ display:
           entity_type: commerce_order
           entity_field: store_id
           plugin_id: commerce_store
-          label: Store
+          label: Tienda
           exclude: false
           alter:
             alter_text: false
@@ -364,7 +364,7 @@ display:
           entity_type: commerce_order
           entity_field: uid
           plugin_id: field
-          label: Customer
+          label: Cliente
           exclude: false
           alter:
             alter_text: false

@@ -9,7 +9,7 @@ dependencies:
 _core:
   default_config_hash: pjAffbvMFN38k-DPrfBUXiSttBPMx5Ljl-ua11kpzKc
 id: commerce_stores
-label: Stores
+label: Tiendas
 module: views
 description: ''
 tag: Commerce
@@ -22,7 +22,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: Stores
+      title: Tiendas
       fields:
         commerce_store_bulk_form:
           id: commerce_store_bulk_form

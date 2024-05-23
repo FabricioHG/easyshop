@@ -1,0 +1,25 @@
+uuid: 934bc113-f49d-4d48-b133-be6511be45c4
+langcode: es
+status: true
+dependencies:
+  module:
+    - system
+    - webs_systems
+  theme:
+    - ws_ecommerce
+id: ws_ecommerce_slidedeimagenesmultipleinfinito
+theme: ws_ecommerce
+region: piso_1
+weight: 0
+provider: null
+plugin: webs_systems_example
+settings:
+  id: webs_systems_example
+  label: 'Slide de imagenes Multiple infinito'
+  label_display: '0'
+  provider: webs_systems
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'

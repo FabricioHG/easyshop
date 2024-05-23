@@ -27,6 +27,7 @@ module:
   commerce_payment_example: 0
   commerce_price: 0
   commerce_product: 0
+  commerce_shipping: 0
   commerce_store: 0
   commerce_stripe: 0
   config: 0
@@ -68,10 +69,12 @@ module:
   pasarela_de_pago_ws: 0
   path: 0
   path_alias: 0
+  physical: 0
   profile: 0
   requisitos_titulacion: 0
   search: 0
   shortcut: 0
+  smtp: 0
   state_machine: 0
   system: 0
   taxonomy: 0

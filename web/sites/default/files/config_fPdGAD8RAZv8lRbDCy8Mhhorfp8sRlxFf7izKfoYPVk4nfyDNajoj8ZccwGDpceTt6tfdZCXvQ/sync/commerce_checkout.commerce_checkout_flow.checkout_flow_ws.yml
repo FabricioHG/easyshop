@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - commerce_payment
+    - commerce_shipping
     - commerce_stripe
     - pasarela_de_pago_con_mercado_libre
 label: 'Checkout flow WS'
@@ -16,42 +17,47 @@ configuration:
   guest_new_account: false
   guest_new_account_notify: false
   panes:
-    contact_information:
-      double_entry: false
-      step: order_information
-      weight: '1'
-    review:
-      step: payment
-      weight: '3'
-    completion_message:
-      message:
-        value: "Your order number is [commerce_order:order_number].\r\nYou can view your order on your account page when logged in."
-        format: plain_text
-      step: complete
-      weight: '5'
     login:
       allow_guest_checkout: true
       allow_registration: false
       registration_form_mode: register
       step: login
       weight: '0'
-    completion_register:
-      step: complete
-      weight: '6'
-    order_summary:
-      view: ''
-      step: _sidebar
-      weight: '7'
+    contact_information:
+      double_entry: false
+      step: order_information
+      weight: '1'
+    shipping_information:
+      auto_recalculate: false
+      require_shipping_profile: false
+      step: order_information
+      weight: '2'
+    payment_information:
+      step: order_information
+      weight: '3'
+    review:
+      step: payment
+      weight: '4'
     payment_process:
       capture: true
       step: payment
-      weight: '4'
-    payment_information:
-      step: order_information
-      weight: '2'
+      weight: '5'
+    completion_message:
+      message:
+        value: "Your order number is [commerce_order:order_number].\r\nYou can view your order on your account page when logged in.\r\n\r\nEstamos procesando tu pedido, hemos enviado la información de seguimiento al correo que proporcionaste durante el proceso de compra. Pronto te mantendremos al tanto del proceso de envío."
+        format: plain_text
+      step: complete
+      weight: '6'
+    completion_register:
+      step: complete
+      weight: '7'
+    order_summary:
+      view: ''
+      step: _sidebar
+      weight: '8'
     stripe_review:
       button_id: edit-actions-next
       auto_submit_review_form: false
       setup_future_usage: ''
       step: _disabled
-      weight: '8'
+      weight: '9'

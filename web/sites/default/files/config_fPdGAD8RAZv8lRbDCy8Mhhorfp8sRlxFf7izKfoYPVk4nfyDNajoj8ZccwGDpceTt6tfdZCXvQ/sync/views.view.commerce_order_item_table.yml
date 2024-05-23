@@ -217,7 +217,7 @@ display:
           entity_type: commerce_order_item
           entity_field: quantity
           plugin_id: field
-          label: Quantity
+          label: Cantidad
           exclude: false
           alter:
             alter_text: false

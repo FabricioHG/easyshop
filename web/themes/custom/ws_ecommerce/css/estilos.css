@@ -45,7 +45,7 @@ header > section.py-5.mt-lg-4.region.region-header {
   padding: 30px 0px;
 }
 .text_ch {
-  font-size: 13px;
+  font-size: 14px;
   margin: 20px 0px;
 }
 #block-ws-ecommerce-breadcrumbs {
@@ -68,7 +68,7 @@ header > section.py-5.mt-lg-4.region.region-header {
 .view-id-productos.view-display-id-page_1 .views-view-responsive-grid__item {
   border: 1px solid #cecece;
   margin: 10px;
-  border-bottom: 3px solid #41449f;
+  border-bottom: 4px solid #0468BF;
 }
 .view-id-productos.view-display-id-page_1 .views-field.views-field-list-price__number {
   border: 1px solid #cc3e3e;
@@ -94,7 +94,7 @@ header > section.py-5.mt-lg-4.region.region-header {
   color: #000;
 }
 .view-id-productos.view-display-id-page_1 .views-field.views-field-field-categoria {
-  border-top: 1px solid #cecece;
+  border-top: 1px solid #253C59;
   padding: 4px;
   margin-top: 30px;
 }
@@ -103,7 +103,7 @@ header > section.py-5.mt-lg-4.region.region-header {
   padding: 0px 7px;
   margin: 1px;
   border-radius: 5px;
-  background-color: #41449f;
+  background-color: #0468BF;
   color: #fff;
   font-weight: bold;
   font-size: 12px;
@@ -112,6 +112,17 @@ header > section.py-5.mt-lg-4.region.region-header {
   list-style: none;
   padding: 0px;
 }
+.cont_info .int_categoria .field-categoria a{
+  color: #0468BF;
+}
+.cont_info .int_categoria .field-categoria:hover{
+  background-color: #0468BF;
+
+}
+.cont_info .int_categoria .field-categoria:hover a{
+  color: #fff;
+}
+
 .view-id-productos.view-display-id-page_1 .views-field.views-field-title {
   font-weight: bold;
   padding: 5px;
@@ -123,6 +134,62 @@ header > section.py-5.mt-lg-4.region.region-header {
   position: sticky;
   top: 100px;
   margin-bottom: 30px;
+}
+.slider_inf{
+  box-shadow: none;
+}
+/*footer {
+  margin-top: 50px;
+}*/
+.bg-dark {
+  background-color: #0468BF !important;
+}
+.btn-primary {
+  --beo-btn-bg: rgb(191, 23, 54);
+  --beo-btn-border-color: rgb(191, 23, 54) !important;
+  --beo-btn-hover-bg: rgb(217, 4, 61) !important;
+  --beo-btn-hover-border-color: rgb(191, 23, 54) !important;
+}
+#block-ws-ecommerce-formularioexpuestoproductospage-1 .btn-primary {
+  --beo-btn-bg: #fff !important;
+  --beo-btn-border-color: rgb(191, 23, 54) !important;
+  --beo-btn-hover-bg: rgb(217, 4, 61) !important;
+  --beo-btn-hover-border-color: rgb(191, 23, 54) !important;
+  color: rgb(191, 23, 54);
+}
+#block-ws-ecommerce-formularioexpuestoproductospage-1 .btn-primary:hover {
+  color: #fff;
+}
+.form-check-input:checked, .facets-checkbox:checked {
+  background-color: #0468BF;
+  border-color: #0468BF;
+}
+#navigationRegion {
+  background-color: #253C59 !important;
+}
+#block-ws-ecommerce-shopping-cart .cart-block--contents.bg-primary.text-white.mt-3.cart-block--contents__expanded{
+  background-color: #253C59 !important;
+}
+#block-ws-ecommerce-shopping-cart .cart--cart-block .bg-primary {
+  background-color: #253C59 !important;
+}
+.position-relative.bg-dark.py-2.opacify-links.text-white.region.region-top-bar .d-flex.align-items-center.justify-content-between.fw-light {
+  font-weight: bold !important;
+}
+#block-ws-ecommerce-checkout-progress .checkout-progress{
+  color: #0468BF !important;
+}
+#block-ws-ecommerce-main-menu-header .nav .nav-item a:hover{
+  color: #253C59;
+}
+#edit-login-guest-continue{
+  border: 2px solid #0468BF;
+}
+.txt_rojo{
+  color: rgb(191, 23, 54);
+}
+.upper{
+  text-transform: uppercase;
 }
 /*---------------------------------------Dispositivos mobiles ----------------------------------------*/
 

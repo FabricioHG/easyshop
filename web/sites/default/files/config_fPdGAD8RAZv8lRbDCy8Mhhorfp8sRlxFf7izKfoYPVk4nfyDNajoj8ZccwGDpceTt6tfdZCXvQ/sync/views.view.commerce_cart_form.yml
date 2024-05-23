@@ -166,7 +166,7 @@ display:
           admin_label: ''
           entity_type: commerce_order_item
           plugin_id: commerce_order_item_edit_quantity
-          label: Quantity
+          label: Cantidad
           exclude: false
           alter:
             alter_text: false

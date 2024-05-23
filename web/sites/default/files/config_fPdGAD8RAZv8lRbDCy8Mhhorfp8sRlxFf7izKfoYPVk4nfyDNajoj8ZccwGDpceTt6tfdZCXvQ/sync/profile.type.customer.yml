@@ -11,7 +11,7 @@ third_party_settings:
 _core:
   default_config_hash: I3_fH4tUQVejPgxvJzH1-mGg9A9OaY4Hm5iN2G2Fz20
 id: customer
-label: Customer
+label: Cliente
 display_label: 'Customer information'
 multiple: true
 registration: false

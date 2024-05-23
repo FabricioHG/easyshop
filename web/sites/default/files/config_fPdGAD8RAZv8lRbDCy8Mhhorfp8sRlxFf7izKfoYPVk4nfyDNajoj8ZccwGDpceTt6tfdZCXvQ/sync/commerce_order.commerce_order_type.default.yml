@@ -5,6 +5,7 @@ dependencies:
   module:
     - commerce_cart
     - commerce_checkout
+    - commerce_shipping
 third_party_settings:
   commerce_cart:
     cart_block_view: commerce_cart_block
@@ -13,6 +14,8 @@ third_party_settings:
     enable_cart_message: true
   commerce_checkout:
     checkout_flow: checkout_flow_ws
+  commerce_shipping:
+    shipment_type: default
 _core:
   default_config_hash: kYapI397yx2zFJGyDEs85Hyqgfc9jhmzxqPZMl2Fqhk
 id: default
@@ -24,5 +27,5 @@ numberPattern: order_default
 refresh_mode: customer
 refresh_frequency: 300
 sendReceipt: true
-receiptBcc: ''
-receiptSubject: ''
+receiptBcc: fabriciofranciscohernandezgome@gmail.com
+receiptSubject: 'Confirmación de pedido - [site:name]'

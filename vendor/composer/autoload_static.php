@@ -92,6 +92,7 @@ class ComposerStaticInit8a4ffb2f7ffb4671b2a17c2c471c1590
             'Psr\\Cache\\' => 10,
             'PhpParser\\' => 10,
             'Peast\\' => 6,
+            'PHPMailer\\PHPMailer\\' => 20,
         ),
         'M' => 
         array (
@@ -126,6 +127,7 @@ class ComposerStaticInit8a4ffb2f7ffb4671b2a17c2c471c1590
             'Drupal\\Core\\' => 12,
             'Drupal\\Composer\\Plugin\\Scaffold\\' => 32,
             'Drupal\\Component\\' => 17,
+            'DrupalFinder\\' => 13,
             'DrupalCodeGenerator\\' => 20,
             'Doctrine\\Persistence\\' => 21,
             'Doctrine\\Deprecations\\' => 22,
@@ -357,6 +359,10 @@ class ComposerStaticInit8a4ffb2f7ffb4671b2a17c2c471c1590
         array (
             0 => __DIR__ . '/..' . '/mck89/peast/lib/Peast',
         ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
         'MercadoPago\\' => 
         array (
             0 => __DIR__ . '/..' . '/mercadopago/dx-php/src/MercadoPago',
@@ -424,6 +430,10 @@ class ComposerStaticInit8a4ffb2f7ffb4671b2a17c2c471c1590
         'Drupal\\Component\\' => 
         array (
             0 => __DIR__ . '/../..' . '/web/core/lib/Drupal/Component',
+        ),
+        'DrupalFinder\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/webflo/drupal-finder/src',
         ),
         'DrupalCodeGenerator\\' => 
         array (
@@ -539,7 +549,6 @@ class ComposerStaticInit8a4ffb2f7ffb4671b2a17c2c471c1590
         'DateObjectError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateObjectError.php',
         'DateRangeError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateRangeError.php',
         'Drupal' => __DIR__ . '/../..' . '/web/core/lib/Drupal.php',
-        'DrupalFinder\\DrupalFinder' => __DIR__ . '/..' . '/webflo/drupal-finder/src/DrupalFinder.php',
         'Drupal\\Component\\DependencyInjection\\Container' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Component/DependencyInjection/Container.php',
         'Drupal\\Component\\DependencyInjection\\PhpArrayContainer' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Component/DependencyInjection/PhpArrayContainer.php',
         'Drupal\\Component\\FileCache\\FileCacheFactory' => __DIR__ . '/../..' . '/web/core/lib/Drupal/Component/FileCache/FileCacheFactory.php',
