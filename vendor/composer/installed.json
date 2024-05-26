@@ -2331,6 +2331,105 @@
             "install-path": "../../web/modules/contrib/captcha"
         },
         {
+            "name": "drupal/charts",
+            "version": "5.0.13",
+            "version_normalized": "5.0.13.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/charts.git",
+                "reference": "5.0.13"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/charts-5.0.13.zip",
+                "reference": "5.0.13",
+                "shasum": "0a7a8a8ad429c65fbf90c2785779c1fa1464d035"
+            },
+            "require": {
+                "drupal/core": "^9.2 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "5.0.13",
+                    "datestamp": "1714145378",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "andileco",
+                    "homepage": "https://www.drupal.org/user/2054544"
+                },
+                {
+                    "name": "nikathone",
+                    "homepage": "https://www.drupal.org/user/2421800"
+                },
+                {
+                    "name": "quicksketch",
+                    "homepage": "https://www.drupal.org/user/35821"
+                }
+            ],
+            "description": "A charting API for Drupal that provides chart elements and integration with Views.",
+            "homepage": "https://www.drupal.org/project/charts",
+            "support": {
+                "source": "https://git.drupalcode.org/project/charts"
+            },
+            "install-path": "../../web/modules/contrib/charts"
+        },
+        {
+            "name": "drupal/charts_google",
+            "version": "5.0.13",
+            "version_normalized": "5.0.13.0",
+            "require": {
+                "drupal/charts": "*",
+                "drupal/core": "^9.2 || ^10"
+            },
+            "type": "metapackage",
+            "extra": {
+                "drupal": {
+                    "version": "5.0.13",
+                    "datestamp": "1714145378",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "andileco",
+                    "homepage": "https://www.drupal.org/user/2054544"
+                },
+                {
+                    "name": "nikathone",
+                    "homepage": "https://www.drupal.org/user/2421800"
+                },
+                {
+                    "name": "quicksketch",
+                    "homepage": "https://www.drupal.org/user/35821"
+                }
+            ],
+            "description": "Charts module integration with Google Charts.",
+            "homepage": "https://www.drupal.org/project/charts",
+            "support": {
+                "source": "https://git.drupalcode.org/project/charts"
+            },
+            "install-path": null
+        },
+        {
             "name": "drupal/commerce",
             "version": "2.39.0",
             "version_normalized": "2.39.0.0",
@@ -3582,6 +3681,216 @@
             "install-path": "../../web/modules/contrib/field_group"
         },
         {
+            "name": "drupal/ga_dashboard",
+            "version": "1.0.0",
+            "version_normalized": "1.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/ga_dashboard.git",
+                "reference": "1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/ga_dashboard-1.0.0.zip",
+                "reference": "1.0.0",
+                "shasum": "f78528bceeeadb39cb7509fb0150ab9cf2c20a46"
+            },
+            "require": {
+                "drupal/charts": "*",
+                "drupal/charts_google": "*",
+                "drupal/core": "^8 || ^9 || ^10",
+                "drupal/google_analytics_reports": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.0.0",
+                    "datestamp": "1700145652",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "jijojoseph_zyxware",
+                    "homepage": "https://www.drupal.org/user/3561263"
+                },
+                {
+                    "name": "krishnarp",
+                    "homepage": "https://www.drupal.org/user/174697"
+                },
+                {
+                    "name": "prasanth_kp",
+                    "homepage": "https://www.drupal.org/user/3700066"
+                },
+                {
+                    "name": "varunity",
+                    "homepage": "https://www.drupal.org/user/273530"
+                }
+            ],
+            "description": "Google Analytics dashboard for site.",
+            "homepage": "https://www.drupal.org/project/ga_dashboard",
+            "support": {
+                "source": "https://git.drupalcode.org/project/ga_dashboard"
+            },
+            "install-path": "../../web/modules/contrib/ga_dashboard"
+        },
+        {
+            "name": "drupal/google_analytics_reports",
+            "version": "3.1.0",
+            "version_normalized": "3.1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/google_analytics_reports.git",
+                "reference": "8.x-3.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/google_analytics_reports-8.x-3.1.zip",
+                "reference": "8.x-3.1",
+                "shasum": "7e52953e7f51b5694575fe07bd89b40c55571830"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9 || ^10",
+                "drupal/google_analytics_reports_api": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-3.1",
+                    "datestamp": "1702542031",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "grendzy",
+                    "homepage": "https://www.drupal.org/user/96647"
+                },
+                {
+                    "name": "jantoine",
+                    "homepage": "https://www.drupal.org/user/192192"
+                },
+                {
+                    "name": "jkitching",
+                    "homepage": "https://www.drupal.org/user/159067"
+                },
+                {
+                    "name": "jojonaloha",
+                    "homepage": "https://www.drupal.org/user/1579186"
+                },
+                {
+                    "name": "klausi",
+                    "homepage": "https://www.drupal.org/user/262198"
+                },
+                {
+                    "name": "Mohammed J. Razem",
+                    "homepage": "https://www.drupal.org/user/255384"
+                },
+                {
+                    "name": "Plazik",
+                    "homepage": "https://www.drupal.org/user/982724"
+                },
+                {
+                    "name": "Rajab Natshah",
+                    "homepage": "https://www.drupal.org/user/1414312"
+                },
+                {
+                    "name": "raspberryman",
+                    "homepage": "https://www.drupal.org/user/71464"
+                }
+            ],
+            "description": "Display statistics from Google Analytics using Views.",
+            "homepage": "https://www.drupal.org/project/google_analytics_reports",
+            "support": {
+                "source": "https://git.drupalcode.org/project/google_analytics_reports"
+            },
+            "install-path": "../../web/modules/contrib/google_analytics_reports"
+        },
+        {
+            "name": "drupal/google_analytics_reports_api",
+            "version": "3.1.0",
+            "version_normalized": "3.1.0.0",
+            "require": {
+                "drupal/core": "^8 || ^9 || ^10",
+                "drupal/google_analytics_reports": "^3"
+            },
+            "type": "metapackage",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-3.1",
+                    "datestamp": "1702542031",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "grendzy",
+                    "homepage": "https://www.drupal.org/user/96647"
+                },
+                {
+                    "name": "jantoine",
+                    "homepage": "https://www.drupal.org/user/192192"
+                },
+                {
+                    "name": "jkitching",
+                    "homepage": "https://www.drupal.org/user/159067"
+                },
+                {
+                    "name": "jojonaloha",
+                    "homepage": "https://www.drupal.org/user/1579186"
+                },
+                {
+                    "name": "klausi",
+                    "homepage": "https://www.drupal.org/user/262198"
+                },
+                {
+                    "name": "Mohammed J. Razem",
+                    "homepage": "https://www.drupal.org/user/255384"
+                },
+                {
+                    "name": "Plazik",
+                    "homepage": "https://www.drupal.org/user/982724"
+                },
+                {
+                    "name": "Rajab Natshah",
+                    "homepage": "https://www.drupal.org/user/1414312"
+                },
+                {
+                    "name": "raspberryman",
+                    "homepage": "https://www.drupal.org/user/71464"
+                }
+            ],
+            "description": "API to access statistics from the <a href=\"https://developers.google.com/analytics/devguides/reporting/core/v3/\">Google Analytics Core Reporting API</a>.",
+            "homepage": "https://www.drupal.org/project/google_analytics_reports",
+            "support": {
+                "source": "https://git.drupalcode.org/project/google_analytics_reports"
+            },
+            "install-path": null
+        },
+        {
             "name": "drupal/inline_entity_form",
             "version": "1.0.0-rc17",
             "version_normalized": "1.0.0.0-RC17",
@@ -3675,6 +3984,161 @@
                 "source": "https://git.drupalcode.org/project/inline_entity_form"
             },
             "install-path": "../../web/modules/contrib/inline_entity_form"
+        },
+        {
+            "name": "drupal/jquery_ui",
+            "version": "1.6.0",
+            "version_normalized": "1.6.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/jquery_ui.git",
+                "reference": "8.x-1.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/jquery_ui-8.x-1.6.zip",
+                "reference": "8.x-1.6",
+                "shasum": "0ddccdcf35a066de1843e1d9670677ee1a2faac0"
+            },
+            "require": {
+                "drupal/core": "^9.2 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.6",
+                    "datestamp": "1668521197",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "bnjmnm",
+                    "homepage": "https://www.drupal.org/user/2369194"
+                },
+                {
+                    "name": "jjeff",
+                    "homepage": "https://www.drupal.org/user/17190"
+                },
+                {
+                    "name": "lauriii",
+                    "homepage": "https://www.drupal.org/user/1078742"
+                },
+                {
+                    "name": "litwol",
+                    "homepage": "https://www.drupal.org/user/78134"
+                },
+                {
+                    "name": "mfb",
+                    "homepage": "https://www.drupal.org/user/12302"
+                },
+                {
+                    "name": "mfer",
+                    "homepage": "https://www.drupal.org/user/25701"
+                },
+                {
+                    "name": "mikelutz",
+                    "homepage": "https://www.drupal.org/user/2972409"
+                },
+                {
+                    "name": "nod_",
+                    "homepage": "https://www.drupal.org/user/598310"
+                },
+                {
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
+                },
+                {
+                    "name": "RobLoach",
+                    "homepage": "https://www.drupal.org/user/61114"
+                },
+                {
+                    "name": "sun",
+                    "homepage": "https://www.drupal.org/user/54136"
+                },
+                {
+                    "name": "webchick",
+                    "homepage": "https://www.drupal.org/user/24967"
+                },
+                {
+                    "name": "Wim Leers",
+                    "homepage": "https://www.drupal.org/user/99777"
+                },
+                {
+                    "name": "zrpnr",
+                    "homepage": "https://www.drupal.org/user/1448368"
+                }
+            ],
+            "description": "Provides jQuery UI library.",
+            "homepage": "https://www.drupal.org/project/jquery_ui",
+            "support": {
+                "source": "https://git.drupalcode.org/project/jquery_ui"
+            },
+            "install-path": "../../web/modules/contrib/jquery_ui"
+        },
+        {
+            "name": "drupal/jquery_ui_accordion",
+            "version": "2.0.0",
+            "version_normalized": "2.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/jquery_ui_accordion.git",
+                "reference": "2.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/jquery_ui_accordion-2.0.0.zip",
+                "reference": "2.0.0",
+                "shasum": "47f3983502a5be5a8c201b54aa18e20f1e595477"
+            },
+            "require": {
+                "drupal/core": "^9.2 || ^10",
+                "drupal/jquery_ui": "^1.6"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.0",
+                    "datestamp": "1670871459",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "bnjmnm",
+                    "homepage": "https://www.drupal.org/user/2369194"
+                },
+                {
+                    "name": "lauriii",
+                    "homepage": "https://www.drupal.org/user/1078742"
+                },
+                {
+                    "name": "zrpnr",
+                    "homepage": "https://www.drupal.org/user/1448368"
+                }
+            ],
+            "description": "Provides jQuery UI Accordion library.",
+            "homepage": "https://www.drupal.org/project/jquery_ui_accordion",
+            "support": {
+                "source": "https://git.drupalcode.org/project/jquery_ui_accordion"
+            },
+            "install-path": "../../web/modules/contrib/jquery_ui_accordion"
         },
         {
             "name": "drupal/paragraphs",
@@ -4507,6 +4971,62 @@
                 "issues": "https://www.drupal.org/project/issues/twig_tweak"
             },
             "install-path": "../../web/modules/contrib/twig_tweak"
+        },
+        {
+            "name": "drupal/views_accordion",
+            "version": "2.0.1",
+            "version_normalized": "2.0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/views_accordion.git",
+                "reference": "2.0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/views_accordion-2.0.1.zip",
+                "reference": "2.0.1",
+                "shasum": "90b075cedf402f106e8a604af84608f7a20c06d6"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10",
+                "drupal/jquery_ui_accordion": "^2.0"
+            },
+            "require-dev": {
+                "drupal/jquery_ui_accordion": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.1",
+                    "datestamp": "1679494924",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "heddn",
+                    "homepage": "https://www.drupal.org/user/1463982"
+                },
+                {
+                    "name": "Manuel Garcia",
+                    "homepage": "https://www.drupal.org/user/213194"
+                }
+            ],
+            "description": "Provides an accordion views display plugin.",
+            "homepage": "https://www.drupal.org/project/views_accordion",
+            "support": {
+                "source": "https://git.drupalcode.org/project/views_accordion",
+                "issues": "https://www.drupal.org/project/issues/views_accordion"
+            },
+            "install-path": "../../web/modules/contrib/views_accordion"
         },
         {
             "name": "drupal/views_bootstrap",

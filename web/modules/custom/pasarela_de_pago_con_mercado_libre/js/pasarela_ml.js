@@ -23,7 +23,7 @@
           },
           render:{
             container:'#wallet_container',
-            label: 'pagar',
+            label: 'Pagar',
           }
         });
         //Escuchador del boton de mercado pago, cuando se presione se ejecuta la funcion 

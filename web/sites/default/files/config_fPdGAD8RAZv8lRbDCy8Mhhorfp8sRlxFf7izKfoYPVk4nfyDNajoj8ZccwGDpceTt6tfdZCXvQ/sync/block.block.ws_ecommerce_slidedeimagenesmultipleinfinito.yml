@@ -15,11 +15,11 @@ provider: null
 plugin: webs_systems_example
 settings:
   id: webs_systems_example
-  label: 'Slide de imagenes Multiple infinito'
-  label_display: '0'
+  label: ' Aceptamos una amplia variedad de métodos de pago, incluyendo tarjetas de crédito, debito y efectivo.'
+  label_display: visible
   provider: webs_systems
 visibility:
   request_path:
     id: request_path
     negate: false
-    pages: '<front>'
+    pages: "<front>\r\n/product/*"

@@ -65,6 +65,7 @@ class StripeForm extends BasePaymentOffsiteForm {
       '#value' => 'Pagar',
       '#attributes' => array(
         'id' => 'submit',
+        'class' => array('btn_ws_pago'),
       ),
     );
 

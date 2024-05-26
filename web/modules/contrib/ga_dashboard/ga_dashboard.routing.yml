@@ -1,0 +1,7 @@
+ga_dashboard.ga_dashboard:
+  path: '/admin/ga-dashboard'
+  defaults:
+    _controller: '\Drupal\ga_dashboard\Controller\GaDashboardController::gaDashboard'
+    _title: 'Google Analytics Dashboard'
+  requirements:
+    _permission: 'access content'

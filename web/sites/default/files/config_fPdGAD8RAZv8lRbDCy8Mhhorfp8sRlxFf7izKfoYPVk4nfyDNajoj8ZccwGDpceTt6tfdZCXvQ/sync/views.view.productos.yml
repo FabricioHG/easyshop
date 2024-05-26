@@ -527,7 +527,7 @@ display:
           click_sort_column: target_id
           type: entity_reference_label
           settings:
-            link: false
+            link: true
           group_column: target_id
           group_columns: {  }
           group_rows: true
@@ -604,7 +604,7 @@ display:
           exposed: true
           expose:
             operator_id: field_categoria_target_id_op
-            label: Categoría
+            label: Categorías
             description: ''
             use_operator: false
             operator: field_categoria_target_id_op

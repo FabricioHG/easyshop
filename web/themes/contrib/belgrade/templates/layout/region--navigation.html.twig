@@ -28,12 +28,15 @@
   <section{{ attributes.addClass(classes) }} data-bs-scroll="{{ navigation_body_scrolling }}" data-bs-backdrop="{{ navigation_backdrop }}" tabindex="-1" id="navigationRegion" aria-labelledby="navigationRegionLabel">
     <div class="offcanvas-header">
       <a href="{{ path('<front>') }}" rel="home" class="site-logo">
+        <img src="/sites/default/files/Happy_Shop_blanco.png">
+        {#
       {% if inline_logo %}
         {{ source(site_logo, ignore_missing = true) }}
       {% else %}
         <img src="{{ site_logo }}" alt="{{ 'Home'|t }}" />
       {% endif %}
       </a>
+      #}
       <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">

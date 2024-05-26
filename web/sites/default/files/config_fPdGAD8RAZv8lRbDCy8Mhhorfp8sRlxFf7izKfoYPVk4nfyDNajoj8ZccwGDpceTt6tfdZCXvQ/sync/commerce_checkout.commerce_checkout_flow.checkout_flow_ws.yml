@@ -34,30 +34,33 @@ configuration:
       weight: '2'
     payment_information:
       step: order_information
-      weight: '3'
+      weight: '4'
     review:
       step: payment
-      weight: '4'
+      weight: '5'
     payment_process:
       capture: true
       step: payment
-      weight: '5'
+      weight: '6'
     completion_message:
       message:
         value: "Your order number is [commerce_order:order_number].\r\nYou can view your order on your account page when logged in.\r\n\r\nEstamos procesando tu pedido, hemos enviado la información de seguimiento al correo que proporcionaste durante el proceso de compra. Pronto te mantendremos al tanto del proceso de envío."
         format: plain_text
       step: complete
-      weight: '6'
+      weight: '7'
     completion_register:
       step: complete
-      weight: '7'
+      weight: '8'
     order_summary:
       view: ''
       step: _sidebar
-      weight: '8'
+      weight: '9'
     stripe_review:
       button_id: edit-actions-next
       auto_submit_review_form: false
       setup_future_usage: ''
       step: _disabled
-      weight: '9'
+      weight: '10'
+    message_shiping_pane:
+      step: order_information
+      weight: '3'

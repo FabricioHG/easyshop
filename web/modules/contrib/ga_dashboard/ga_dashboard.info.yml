@@ -1,0 +1,14 @@
+name: Google Analytics dashboard
+description: Google Analytics dashboard for site.
+package: Custom Module
+type: module
+core_version_requirement: ^8 || ^9 || ^10
+dependencies:
+  - charts
+  - charts_google
+  - google_analytics_reports
+
+# Information added by Drupal.org packaging script on 2023-11-16
+version: '1.0.0'
+project: 'ga_dashboard'
+datestamp: 1700145654

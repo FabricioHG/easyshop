@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.storage.node.body
     - field.storage.node.field_imagen
-    - image.style.slideshow_
     - node.type.slideshow
   module:
     - image
@@ -82,7 +81,7 @@ display:
           type: image
           settings:
             image_link: ''
-            image_style: slideshow_
+            image_style: ''
             image_loading:
               attribute: lazy
           group_column: ''
@@ -224,14 +223,14 @@ display:
         type: views_bootstrap_carousel
         options:
           grouping: {  }
-          interval: '3000'
-          keyboard: 1
-          ride: 1
-          navigation: 1
-          indicators: 1
-          pause: 1
-          use_caption: 1
-          wrap: 1
+          interval: 3000
+          keyboard: true
+          ride: true
+          navigation: true
+          indicators: true
+          pause: true
+          use_caption: true
+          wrap: true
           effect: slide
           image: field_imagen
           title: ''
