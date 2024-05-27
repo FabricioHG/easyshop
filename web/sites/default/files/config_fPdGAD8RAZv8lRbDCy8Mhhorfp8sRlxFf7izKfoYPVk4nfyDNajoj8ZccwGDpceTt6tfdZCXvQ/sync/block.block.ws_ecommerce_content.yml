@@ -1,0 +1,22 @@
+uuid: 862e2166-c453-4ec3-a4d4-e05eee9a9221
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - ws_ecommerce
+_core:
+  default_config_hash: XJkApTCnidVbNIe-SvLIX1pVPIiw5j_m0SWT-eYw39E
+id: ws_ecommerce_content
+theme: ws_ecommerce
+region: content
+weight: 0
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

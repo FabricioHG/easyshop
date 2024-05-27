@@ -1,0 +1,30 @@
+uuid: 9758a832-3cba-4802-a28c-bd940853c57f
+langcode: es
+status: true
+dependencies:
+  config:
+    - views.view.categoria
+  module:
+    - system
+    - views
+  theme:
+    - ws_ecommerce
+id: ws_ecommerce_views_block__categoria_block_1
+theme: ws_ecommerce
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:categoria-block_1'
+settings:
+  id: 'views_block:categoria-block_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '/categoria/*'

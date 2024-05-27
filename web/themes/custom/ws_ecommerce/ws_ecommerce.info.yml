@@ -1,0 +1,31 @@
+name: WS ecommerce
+type: theme
+base theme: belgrade
+description: A flexible theme with a responsive, mobile-first layout.
+package: Custom
+core_version_requirement: ^10
+
+libraries:
+  - ws_ecommerce/global
+
+regions:
+  navigation: 'Navigation'
+  top_bar: 'Top bar'
+  slideshow: 'Slideshow'
+  header: 'Header'
+  highlighted: 'Highlighted'
+  help: 'Help'
+  content: 'Content'
+  sidebar_first: 'Primary'
+  sidebar_second: 'Secondary'
+  piso_1: 'Piso 1'
+  piso_2: 'Piso 2'
+  piso_3: 'Piso 3'
+  piso_4: 'Piso 4'
+  piso_5: 'Piso 5'
+  piso_6: 'Piso 6'
+  piso_7: 'Piso 7'
+  footer: 'Footer'
+  page_top: 'Page top'
+  page_bottom: 'Page bottom'
+  hidden: 'HIDDEN'
