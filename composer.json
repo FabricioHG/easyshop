@@ -32,6 +32,7 @@
         "drupal/devel_kint_extras": "^1.1",
         "drupal/entity_usage": "^2.0@beta",
         "drupal/field_group": "^3.4",
+        "drupal/ga4_google_analytics": "^1.1",
         "drupal/ga_dashboard": "^1.0",
         "drupal/inline_entity_form": "^1.0@RC",
         "drupal/paragraphs": "^1.15",

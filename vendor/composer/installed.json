@@ -61,17 +61,17 @@
         },
         {
             "name": "chi-teck/drupal-code-generator",
-            "version": "3.5.0",
-            "version_normalized": "3.5.0.0",
+            "version": "3.6.0",
+            "version_normalized": "3.6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Chi-teck/drupal-code-generator.git",
-                "reference": "74c2dc687e124bfc4001e73e9346b33067e2ec2b"
+                "reference": "7794c268309a6fd7aeecfd1246a01238c14384c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Chi-teck/drupal-code-generator/zipball/74c2dc687e124bfc4001e73e9346b33067e2ec2b",
-                "reference": "74c2dc687e124bfc4001e73e9346b33067e2ec2b",
+                "url": "https://api.github.com/repos/Chi-teck/drupal-code-generator/zipball/7794c268309a6fd7aeecfd1246a01238c14384c4",
+                "reference": "7794c268309a6fd7aeecfd1246a01238c14384c4",
                 "shasum": ""
             },
             "require": {
@@ -100,7 +100,7 @@
                 "symfony/yaml": "^6.3",
                 "vimeo/psalm": "^5.22.2"
             },
-            "time": "2024-04-11T11:23:44+00:00",
+            "time": "2024-05-20T12:50:42+00:00",
             "bin": [
                 "bin/dcg"
             ],
@@ -118,7 +118,7 @@
             "description": "Drupal code generator",
             "support": {
                 "issues": "https://github.com/Chi-teck/drupal-code-generator/issues",
-                "source": "https://github.com/Chi-teck/drupal-code-generator/tree/3.5.0"
+                "source": "https://github.com/Chi-teck/drupal-code-generator/tree/3.6.0"
             },
             "install-path": "../chi-teck/drupal-code-generator"
         },
@@ -1410,17 +1410,17 @@
         },
         {
             "name": "doctrine/event-manager",
-            "version": "2.0.0",
-            "version_normalized": "2.0.0.0",
+            "version": "2.0.1",
+            "version_normalized": "2.0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/event-manager.git",
-                "reference": "750671534e0241a7c50ea5b43f67e23eb5c96f32"
+                "reference": "b680156fa328f1dfd874fd48c7026c41570b9c6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/event-manager/zipball/750671534e0241a7c50ea5b43f67e23eb5c96f32",
-                "reference": "750671534e0241a7c50ea5b43f67e23eb5c96f32",
+                "url": "https://api.github.com/repos/doctrine/event-manager/zipball/b680156fa328f1dfd874fd48c7026c41570b9c6e",
+                "reference": "b680156fa328f1dfd874fd48c7026c41570b9c6e",
                 "shasum": ""
             },
             "require": {
@@ -1430,12 +1430,12 @@
                 "doctrine/common": "<2.9"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^10",
+                "doctrine/coding-standard": "^12",
                 "phpstan/phpstan": "^1.8.8",
-                "phpunit/phpunit": "^9.5",
-                "vimeo/psalm": "^4.28"
+                "phpunit/phpunit": "^10.5",
+                "vimeo/psalm": "^5.24"
             },
-            "time": "2022-10-12T20:59:15+00:00",
+            "time": "2024-05-22T20:47:39+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1484,7 +1484,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/event-manager/issues",
-                "source": "https://github.com/doctrine/event-manager/tree/2.0.0"
+                "source": "https://github.com/doctrine/event-manager/tree/2.0.1"
             },
             "funding": [
                 {
@@ -2196,18 +2196,18 @@
         },
         {
             "name": "drupal/bootstrap5",
-            "version": "3.0.11",
-            "version_normalized": "3.0.11.0",
+            "version": "3.0.13",
+            "version_normalized": "3.0.13.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/bootstrap5.git",
-                "reference": "3.0.11"
+                "reference": "3.0.13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/bootstrap5-3.0.11.zip",
-                "reference": "3.0.11",
-                "shasum": "ea2ada76567d00cb84aa18904fd35e60dce716eb"
+                "url": "https://ftp.drupal.org/files/projects/bootstrap5-3.0.13.zip",
+                "reference": "3.0.13",
+                "shasum": "1b9c5b16e0882d3b0fd5510fa1d474c4b2717b2c"
             },
             "require": {
                 "drupal/core": "^9.4 || ^10"
@@ -2215,8 +2215,8 @@
             "type": "drupal-theme",
             "extra": {
                 "drupal": {
-                    "version": "3.0.11",
-                    "datestamp": "1711069787",
+                    "version": "3.0.13",
+                    "datestamp": "1716649113",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2701,31 +2701,31 @@
         },
         {
             "name": "drupal/commerce_shipping",
-            "version": "2.8.0",
-            "version_normalized": "2.8.0.0",
+            "version": "2.9.0",
+            "version_normalized": "2.9.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/commerce_shipping.git",
-                "reference": "8.x-2.8"
+                "reference": "8.x-2.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/commerce_shipping-8.x-2.8.zip",
-                "reference": "8.x-2.8",
-                "shasum": "a62b910078df28f0e6ed1d27c111020d00b57816"
+                "url": "https://ftp.drupal.org/files/projects/commerce_shipping-8.x-2.9.zip",
+                "reference": "8.x-2.9",
+                "shasum": "c15b78b5a79f4ff6350aa0b3e7b4e9e918b7948a"
             },
             "require": {
                 "drupal/commerce": "^2.29",
                 "drupal/commerce_order": "*",
                 "drupal/commerce_price": "*",
-                "drupal/core": "^9.2 || ^10",
+                "drupal/core": "^9.2 || ^10 || ^11",
                 "drupal/physical": "^1.0"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.8",
-                    "datestamp": "1707227072",
+                    "version": "8.x-2.9",
+                    "datestamp": "1716454975",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3679,6 +3679,53 @@
                 "issues": "https://www.drupal.org/project/issues/field_group"
             },
             "install-path": "../../web/modules/contrib/field_group"
+        },
+        {
+            "name": "drupal/ga4_google_analytics",
+            "version": "1.1.4",
+            "version_normalized": "1.1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/ga4_google_analytics.git",
+                "reference": "1.1.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/ga4_google_analytics-1.1.4.zip",
+                "reference": "1.1.4",
+                "shasum": "f22462efa933383aade90890c7de1c3474ddde95"
+            },
+            "require": {
+                "drupal/core": "^9 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "1.1.4",
+                    "datestamp": "1708493585",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "installation-source": "dist",
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "sujan shrestha",
+                    "homepage": "https://www.drupal.org/user/3475737"
+                }
+            ],
+            "description": "A simple module to integrate Google Analytics GA4 tracking into your Drupal site.",
+            "homepage": "https://www.drupal.org/project/ga4_google_analytics",
+            "support": {
+                "source": "https://git.drupalcode.org/project/ga4_google_analytics"
+            },
+            "install-path": "../../web/modules/contrib/ga4_google_analytics"
         },
         {
             "name": "drupal/ga_dashboard",
@@ -5030,18 +5077,18 @@
         },
         {
             "name": "drupal/views_bootstrap",
-            "version": "5.5.0-beta1",
-            "version_normalized": "5.5.0.0-beta1",
+            "version": "5.5.0-beta3",
+            "version_normalized": "5.5.0.0-beta3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views_bootstrap.git",
-                "reference": "5.5.0-beta1"
+                "reference": "5.5.0-beta3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_bootstrap-5.5.0-beta1.zip",
-                "reference": "5.5.0-beta1",
-                "shasum": "77ee15a08a60b2c00dd0a22030f61d27a54a9399"
+                "url": "https://ftp.drupal.org/files/projects/views_bootstrap-5.5.0-beta3.zip",
+                "reference": "5.5.0-beta3",
+                "shasum": "fabb6985a82ba0a7cc4add554d9e78d47a402be4"
             },
             "require": {
                 "drupal/core": "^9 || ^10"
@@ -5049,8 +5096,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "5.5.0-beta1",
-                    "datestamp": "1715903257",
+                    "version": "5.5.0-beta3",
+                    "datestamp": "1716389149",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
