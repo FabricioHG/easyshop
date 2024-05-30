@@ -1,0 +1,21 @@
+uuid: 7c7eb173-1787-40d7-8991-fd64c296bdc6
+langcode: es
+status: true
+dependencies:
+  module:
+    - block_content
+    - entity_reference_revisions
+    - paragraphs
+id: block_content.field_imagen_izq_y_texto_der
+field_name: field_imagen_izq_y_texto_der
+entity_type: block_content
+type: entity_reference_revisions
+settings:
+  target_type: paragraph
+module: entity_reference_revisions
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

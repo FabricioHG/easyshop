@@ -1,0 +1,11 @@
+uuid: 7d703fd4-35c7-4bd7-adc1-a9abaa7c555f
+langcode: es
+status: true
+dependencies:
+  config:
+    - block_content.type.bloque_con_image_izq_y_texto
+id: block_content.bloque_con_image_izq_y_texto
+target_entity_type_id: block_content
+target_bundle: bloque_con_image_izq_y_texto
+default_langcode: site_default
+language_alterable: false

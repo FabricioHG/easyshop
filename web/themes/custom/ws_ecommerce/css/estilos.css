@@ -78,9 +78,10 @@ header > section.py-5.mt-lg-4.region.region-header {
 .view-id-productos.view-display-id-page_1 .views-view-responsive-grid__item,
 .view-id-categoria.view-display-id-block_1 .views-view-responsive-grid__item
 {
-  border: 1px solid #cecece;
+  border: 1px solid #f2f2f2;
   margin: 10px;
   border-bottom: 4px solid #0468BF;
+  box-shadow: 5px 5px 4px rgba(0, 0, 0, 0.1);
 }
 
 .view-id-categoria.view-display-id-block_1 .views-view-responsive-grid__item{

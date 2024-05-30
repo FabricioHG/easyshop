@@ -1,0 +1,22 @@
+uuid: 6a2340a0-4c19-49f7-9b9f-694db0b65787
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - ws_ecommerce
+_core:
+  default_config_hash: z0llL779cPFRJ5myqA63dPOl35O7K1lx6wP5omHTi8U
+id: ws_ecommerce_powered
+theme: ws_ecommerce
+region: footer
+weight: -7
+provider: null
+plugin: system_powered_by_block
+settings:
+  id: system_powered_by_block
+  label: 'Powered by Drupal'
+  label_display: '0'
+  provider: system
+visibility: {  }

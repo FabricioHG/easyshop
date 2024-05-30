@@ -31,17 +31,20 @@
         "drupal/entity_usage": "^2.0@beta",
         "drupal/field_group": "^3.4",
         "drupal/inline_entity_form": "^1.0@RC",
+        "drupal/jquery_ui": "^1.7",
+        "drupal/jquery_ui_accordion": "^2.1",
         "drupal/paragraphs": "^1.15",
         "drupal/recaptcha": "^3.2",
         "drupal/slick": "^2.9",
+        "drupal/smtp": "^1.2",
         "drupal/twig_tweak": "^3.2",
         "drupal/views_bootstrap": "^5.5@alpha",
         "drupal/views_bootstrap_multi_item": "^1.0@alpha",
         "drupal/views_slideshow": "^5.0",
         "drupal/webform": "^6.2@beta",
         "drupal/webprofiler": "^10.1",
-        "mercadopago/dx-php": "^2.6",
-        "drush/drush": "^12.4"
+        "drush/drush": "^12.4",
+        "mercadopago/dx-php": "^2.6"
     },
     "conflict": {
         "drupal/drupal": "*"

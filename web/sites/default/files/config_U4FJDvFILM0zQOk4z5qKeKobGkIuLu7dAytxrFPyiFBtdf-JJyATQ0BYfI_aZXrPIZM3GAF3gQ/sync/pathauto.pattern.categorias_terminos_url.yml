@@ -1,0 +1,22 @@
+uuid: 0cdd0001-76b3-4813-aca5-5d194db35c2a
+langcode: es
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: categorias_terminos_url
+label: 'Categorias terminos url'
+type: 'canonical_entities:taxonomy_term'
+pattern: '/categoria/[term:name]'
+selection_criteria:
+  679d5a62-4f6d-440c-bd40-6b34d34f316f:
+    id: 'entity_bundle:taxonomy_term'
+    negate: false
+    uuid: 679d5a62-4f6d-440c-bd40-6b34d34f316f
+    context_mapping:
+      taxonomy_term: taxonomy_term
+    bundles:
+      categorias: categorias
+selection_logic: and
+weight: -5
+relationships: {  }

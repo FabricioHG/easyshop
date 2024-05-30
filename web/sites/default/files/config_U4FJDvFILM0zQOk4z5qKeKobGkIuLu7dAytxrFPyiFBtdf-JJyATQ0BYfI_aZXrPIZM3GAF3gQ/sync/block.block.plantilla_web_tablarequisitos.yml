@@ -1,0 +1,25 @@
+uuid: 48830e33-9efb-48fb-9755-1a7ac9a2d12d
+langcode: es
+status: true
+dependencies:
+  module:
+    - requisitos_titulacion
+    - system
+  theme:
+    - plantilla_web
+id: plantilla_web_tablarequisitos
+theme: plantilla_web
+region: content
+weight: 0
+provider: null
+plugin: requisitos_titulacion_tabla_requisitos
+settings:
+  id: requisitos_titulacion_tabla_requisitos
+  label: 'Tabla requisitos'
+  label_display: visible
+  provider: requisitos_titulacion
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: /node/59

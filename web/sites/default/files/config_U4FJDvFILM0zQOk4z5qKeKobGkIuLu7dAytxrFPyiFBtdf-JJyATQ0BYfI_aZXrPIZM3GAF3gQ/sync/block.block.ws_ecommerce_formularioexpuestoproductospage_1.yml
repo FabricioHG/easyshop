@@ -1,0 +1,28 @@
+uuid: 55574b66-62b7-43ec-addf-132356e6c0bf
+langcode: es
+status: true
+dependencies:
+  config:
+    - views.view.productos
+  module:
+    - system
+    - views
+  theme:
+    - ws_ecommerce
+id: ws_ecommerce_formularioexpuestoproductospage_1
+theme: ws_ecommerce
+region: sidebar_first
+weight: 0
+provider: null
+plugin: 'views_exposed_filter_block:productos-page_1'
+settings:
+  id: 'views_exposed_filter_block:productos-page_1'
+  label: ''
+  label_display: '0'
+  provider: views
+  views_label: ''
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: "<front>\r\n/productos/*"

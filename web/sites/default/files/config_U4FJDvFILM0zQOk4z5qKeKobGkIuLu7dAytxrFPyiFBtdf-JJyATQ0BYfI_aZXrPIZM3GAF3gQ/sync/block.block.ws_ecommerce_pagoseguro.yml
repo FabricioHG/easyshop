@@ -1,0 +1,25 @@
+uuid: 2c8b2bc9-30a6-495b-ab94-bbb58fad6d95
+langcode: es
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:1ff79814-920c-4c73-b162-ad3a9c492fde'
+  module:
+    - block_content
+  theme:
+    - ws_ecommerce
+id: ws_ecommerce_pagoseguro
+theme: ws_ecommerce
+region: footer
+weight: 0
+provider: null
+plugin: 'block_content:1ff79814-920c-4c73-b162-ad3a9c492fde'
+settings:
+  id: 'block_content:1ff79814-920c-4c73-b162-ad3a9c492fde'
+  label: 'Pago seguro'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

@@ -1,0 +1,11 @@
+uuid: 2076d113-f51f-41d5-930a-c4291c18516b
+langcode: es
+status: true
+dependencies:
+  module:
+    - paragraphs_library
+id: paragraphs_library_item.token
+label: Comodín
+description: ''
+targetEntityType: paragraphs_library_item
+cache: true

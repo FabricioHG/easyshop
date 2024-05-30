@@ -1,0 +1,66 @@
+uuid: d243d917-4652-4088-a657-32f91f2bc928
+langcode: es
+status: true
+dependencies:
+  module:
+    - commerce_payment
+    - commerce_shipping
+    - commerce_stripe
+    - pasarela_de_pago_con_mercado_libre
+label: 'Checkout flow WS'
+id: checkout_flow_ws
+plugin: custom_checkout_flow
+configuration:
+  display_checkout_progress: true
+  display_checkout_progress_breadcrumb_links: false
+  guest_order_assign: false
+  guest_new_account: false
+  guest_new_account_notify: false
+  panes:
+    login:
+      allow_guest_checkout: true
+      allow_registration: false
+      registration_form_mode: register
+      step: login
+      weight: '0'
+    contact_information:
+      double_entry: false
+      step: order_information
+      weight: '1'
+    shipping_information:
+      auto_recalculate: false
+      require_shipping_profile: false
+      step: order_information
+      weight: '2'
+    message_shiping_pane:
+      step: order_information
+      weight: '3'
+    payment_information:
+      step: order_information
+      weight: '4'
+    review:
+      step: payment
+      weight: '5'
+    payment_process:
+      capture: true
+      step: payment
+      weight: '6'
+    completion_message:
+      message:
+        value: '<p class="text-center">Su número de pedido es<strong> [commerce_order:order_number]</strong>.&nbsp;<br>Puede ver su pedido en la página de su cuenta cuando inicie sesión.&nbsp;</p><p class="text-center">Estamos procesando tu pedido, hemos enviado la información de seguimiento al correo que proporcionaste durante el proceso de compra. Pronto te mantendremos al tanto del proceso de envío.</p>'
+        format: full_html
+      step: complete
+      weight: '7'
+    completion_register:
+      step: complete
+      weight: '8'
+    order_summary:
+      view: ''
+      step: _sidebar
+      weight: '9'
+    stripe_review:
+      button_id: edit-actions-next
+      auto_submit_review_form: false
+      setup_future_usage: ''
+      step: _disabled
+      weight: '10'

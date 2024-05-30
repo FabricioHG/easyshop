@@ -1,0 +1,23 @@
+uuid: 52af9c7b-7668-4047-bf27-a486c7b2a61b
+langcode: es
+status: false
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.full
+    - taxonomy.vocabulary.categorias
+  module:
+    - text
+id: taxonomy_term.categorias.full
+targetEntityType: taxonomy_term
+bundle: categorias
+mode: full
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  langcode: true

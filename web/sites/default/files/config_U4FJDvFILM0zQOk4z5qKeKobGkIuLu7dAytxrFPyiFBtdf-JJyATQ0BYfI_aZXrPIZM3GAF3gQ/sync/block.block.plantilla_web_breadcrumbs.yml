@@ -1,0 +1,22 @@
+uuid: 0718f18d-c319-4457-99b0-d9deb4854fea
+langcode: es
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - plantilla_web
+_core:
+  default_config_hash: VhBzWb7lMRtIOg9G7VSw_0uopi-7zXeHq4vXqqV1HFE
+id: plantilla_web_breadcrumbs
+theme: plantilla_web
+region: breadcrumb
+weight: 0
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: 'Enlaces de ayuda a la navegación'
+  label_display: '0'
+  provider: system
+visibility: {  }
