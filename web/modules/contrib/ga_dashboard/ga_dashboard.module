@@ -1,8 +1,0 @@
-<?php
-
-/**
- * Implements hook_toolbar().
- */
-function ga_dashboard_toolbar_alter(&$items) {
-  $items['administration']['#attached']['library'][] = 'ga_dashboard/custom-google-analytics-dashboard-styles';
-}

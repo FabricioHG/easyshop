@@ -1,9 +1,0 @@
-<?php
-
-/**
- * Implements hook_uninstall().
- */
-function ga_dashboard_uninstall() {
-  // delete google analytics report view
-  \Drupal::configFactory()->getEditable('views.view.ga_reports_page')->delete();
-}

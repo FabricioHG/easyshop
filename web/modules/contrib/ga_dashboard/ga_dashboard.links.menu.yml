@@ -1,6 +1,0 @@
-ga_dashboard.ga_dashboard:
-  title: GA Dashboard
-  route_name: ga_dashboard.ga_dashboard
-  parent: system.admin
-  description: 'View reports, updates'
-  weight: 999
