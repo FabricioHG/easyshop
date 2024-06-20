@@ -1,0 +1,8 @@
+uuid: a3182106-402a-4dac-a63c-928249aaf6f6
+langcode: es
+status: true
+dependencies: {  }
+id: bloque_con_image_izq_y_texto
+label: 'Bloque con image izq y texto'
+revision: 0
+description: ''

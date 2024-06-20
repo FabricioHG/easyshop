@@ -1,0 +1,29 @@
+uuid: 08d3f8da-8ca0-4f9c-8ee7-ed178670ddee
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.field.node.preguntas_frecuentes.body
+    - node.type.preguntas_frecuentes
+  module:
+    - text
+    - user
+id: node.preguntas_frecuentes.default
+targetEntityType: node
+bundle: preguntas_frecuentes
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  langcode: true

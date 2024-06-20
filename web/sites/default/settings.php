@@ -2,6 +2,10 @@
 
 // phpcs:ignoreFile
 
+// if ( isset($GLOBALS['request']) && '/web/index.php' === $GLOBALS['request']->server->get('SCRIPT_NAME') ) {
+//     $GLOBALS['request']->server->set('SCRIPT_NAME', '/index.php');
+// }
+
 /**
  * @file
  * Drupal site-specific configuration file.
@@ -286,7 +290,7 @@ $databases = [];
  *   $settings['hash_salt'] = file_get_contents('/home/example/salt.txt');
  * @endcode
  */
-$settings['hash_salt'] = 'kQ0swDR9FvOGkydqP7AmIG6_T-RiIwh0o0TrOAe8UU9L9R_kGqozooHw_sjNSu0f9KYZ6izwuQ';
+$settings['hash_salt'] = 'EaKKDLYPjyX1vAQiOZffwvGl9wmFyd97cqCo9XUjfhQfvr3YFJicSUDYIxYQ_sO4jNDL9iJvFQ';
 
 /**
  * Deployment identifier.
@@ -611,7 +615,7 @@ $settings['update_free_access'] = FALSE;
  * See https://www.drupal.org/documentation/modules/file for more information
  * about securing private files.
  */
-# $settings['file_private_path'] = '';
+ $settings['file_private_path'] = '../private';
 
 /**
  * Temporary file path:
@@ -882,9 +886,9 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 #   include $app_root . '/' . $site_path . '/settings.local.php';
 # }
 $databases['default']['default'] = array (
-  'database' => 'easyshop.com.mx',
-  'username' => 'easyshop.com.mx',
-  'password' => 'easyshop.com.mx',
+  'database' => 'easysho1_easyshop',
+  'username' => 'easysho1_easyshop',
+  'password' => 'qYYOKKYY[H#s',
   'prefix' => '',
   'host' => 'localhost',
   'port' => '3306',
@@ -893,4 +897,4 @@ $databases['default']['default'] = array (
   'namespace' => 'Drupal\\mysql\\Driver\\Database\\mysql',
   'autoload' => 'core/modules/mysql/src/Driver/Database/mysql/',
 );
-$settings['config_sync_directory'] = 'sites/default/files/config_U4FJDvFILM0zQOk4z5qKeKobGkIuLu7dAytxrFPyiFBtdf-JJyATQ0BYfI_aZXrPIZM3GAF3gQ/sync';
+$settings['config_sync_directory'] = 'sites/default/files/config_sPxlDsGmQBy_PpTqG4kx9GVMrueBsPlhDHXyWBqS5YbKrfWpsYvXKW-CtV8FhW-CHc_Eutrt1w/sync';

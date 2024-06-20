@@ -28,7 +28,7 @@ use Drupal\Core\State\StateInterface;
  * @CommercePaymentGateway(
  *   id = "pago_mercado_libre",
  *   label = @Translation("Payment Mercado libre"),
- *   display_label = @Translation("Mercado libre"),
+ *   display_label = @Translation("Mercado Pago"),
  *    forms = {
  *     "offsite-payment" = "Drupal\pasarela_de_pago_con_mercado_libre\PluginForm\MercadoLibreForm",
  *   },

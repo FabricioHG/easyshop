@@ -1,0 +1,25 @@
+uuid: 753d44c0-01a1-4925-9d38-9b047433fd0f
+langcode: es
+status: true
+dependencies:
+  config:
+    - system.menu.main
+  module:
+    - system
+  theme:
+    - plantilla_web
+id: plantilla_web_navegacionprincipal
+theme: plantilla_web
+region: nav_main
+weight: 0
+provider: null
+plugin: 'system_menu_block:main'
+settings:
+  id: 'system_menu_block:main'
+  label: 'Navegación principal'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility: {  }

@@ -1,0 +1,15 @@
+uuid: 241fcb07-88e1-4d2c-84f0-6989fbf991a9
+langcode: es
+status: true
+dependencies: {  }
+name: clientes_satisfechos_300_x_600_
+label: 'Producto (220 x 270)'
+effects:
+  8c74f7ce-e853-4699-ae97-4021bc76146f:
+    uuid: 8c74f7ce-e853-4699-ae97-4021bc76146f
+    id: image_scale_and_crop
+    weight: 2
+    data:
+      width: 220
+      height: 250
+      anchor: center-center

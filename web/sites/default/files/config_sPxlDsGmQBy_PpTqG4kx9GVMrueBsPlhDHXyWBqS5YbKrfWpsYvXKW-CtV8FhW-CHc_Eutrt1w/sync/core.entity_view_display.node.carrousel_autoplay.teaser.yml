@@ -1,0 +1,33 @@
+uuid: fb1f323b-7b22-41eb-b771-6f257ae3e7ee
+langcode: es
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.carrousel_autoplay.body
+    - field.field.node.carrousel_autoplay.field_imagen_carrousel_autoplay
+    - node.type.carrousel_autoplay
+  module:
+    - text
+    - user
+id: node.carrousel_autoplay.teaser
+targetEntityType: node
+bundle: carrousel_autoplay
+mode: teaser
+content:
+  body:
+    type: text_summary_or_trimmed
+    label: hidden
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_imagen_carrousel_autoplay: true
+  langcode: true

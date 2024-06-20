@@ -1,0 +1,23 @@
+uuid: dbf72cf5-dfbc-490e-8496-8daf5eb4e491
+langcode: es
+status: true
+dependencies:
+  config:
+    - commerce_product.commerce_product_type.default
+    - field.storage.commerce_product.field_proveedor_url
+  module:
+    - link
+id: commerce_product.default.field_proveedor_url
+field_name: field_proveedor_url
+entity_type: commerce_product
+bundle: default
+label: 'Proveedor url'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 1
+  link_type: 17
+field_type: link

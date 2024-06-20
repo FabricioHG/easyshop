@@ -1,0 +1,21 @@
+uuid: a6ca1ea2-384f-45ef-8829-78f65c8db477
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_titulo
+    - paragraphs.paragraphs_type.imagen_y_texto
+id: paragraph.imagen_y_texto.field_titulo
+field_name: field_titulo
+entity_type: paragraph
+bundle: imagen_y_texto
+label: Titulo
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
+default_value_callback: ''
+settings: {  }
+field_type: string

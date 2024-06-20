@@ -1,0 +1,11 @@
+uuid: cc613045-6b9e-4997-9789-1c778a588b73
+langcode: es
+status: true
+dependencies:
+  config:
+    - node.type.carrousel_autoplay
+id: node.carrousel_autoplay
+target_entity_type_id: node
+target_bundle: carrousel_autoplay
+default_langcode: site_default
+language_alterable: false

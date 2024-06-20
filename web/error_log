@@ -1,2 +1,51 @@
 [29-May-2024 15:24:14 America/Mexico_City] {"message":"Payment not found","error":"not_found","status":404,"cause":[{"code":2000,"description":"Payment not found","data":"29-05-2024T21:24:14UTC;fe5c515d-0c5d-4e4c-8199-aac6e77ebda9"}]}
 [29-May-2024 15:24:14 America/Mexico_City] Uncaught PHP Exception TypeError: "Drupal\commerce_price\Price::__construct(): Argument #1 ($number) must be of type string, null given, called in /home2/easysho1/public_html/web/modules/custom/pasarela_de_pago_con_mercado_libre/src/Plugin/Commerce/PaymentGateway/PagoMercadoLibre.php on line 153" at /home2/easysho1/public_html/web/modules/contrib/commerce/modules/price/src/Price.php line 36
+[30-May-2024 23:33:44 America/Mexico_City] PDOException: SQLSTATE[08004] [1040] Too many connections in /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/PhpArrayContainer.php on line 79 #0 /home2/easysho1/public_html/web/core/modules/mysql/src/Driver/Database/mysql/Connection.php(179): PDO->__construct('mysql:host=loca...', 'easysho1_easysh...', Object(SensitiveParameterValue), Array)
+#1 /home2/easysho1/public_html/web/core/lib/Drupal/Core/Database/Database.php(464): Drupal\mysql\Driver\Database\mysql\Connection::open(Array)
+#2 /home2/easysho1/public_html/web/core/lib/Drupal/Core/Database/Database.php(195): Drupal\Core\Database\Database::openConnection('default', 'default')
+#3 [internal function]: Drupal\Core\Database\Database::getConnection('default')
+#4 /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/PhpArrayContainer.php(79): call_user_func_array('Drupal\\Core\\Dat...', Array)
+#5 /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/Container.php(177): Drupal\Component\DependencyInjection\PhpArrayContainer->createService(Array, 'database')
+#6 /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/PhpArrayContainer.php(219): Drupal\Component\DependencyInjection\Container->get('database', 1)
+#7 /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/PhpArrayContainer.php(62): Drupal\Component\DependencyInjection\PhpArrayContainer->resolveServicesAndParameters(Array)
+#8 /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/Container.php(177): Drupal\Component\DependencyInjection\PhpArrayContainer->createService(Array, 'cache.container')
+#9 /home2/easysho1/public_html/web/core/lib/Drupal/Core/DrupalKernel.php(554): Drupal\Component\DependencyInjection\Container->get('cache.container')
+#10 /home2/easysho1/public_html/web/core/lib/Drupal/Core/DrupalKernel.php(928): Drupal\Core\DrupalKernel->getCachedContainerDefinition()
+#11 /home2/easysho1/public_html/web/core/lib/Drupal/Core/DrupalKernel.php(494): Drupal\Core\DrupalKernel->initializeContainer()
+#12 /home2/easysho1/public_html/web/core/lib/Drupal/Core/DrupalKernel.php(702): Drupal\Core\DrupalKernel->boot()
+#13 /home2/easysho1/public_html/web/index.php(19): Drupal\Core\DrupalKernel->handle(Object(Symfony\Component\HttpFoundation\Request))
+#14 {main}
+[30-May-2024 23:39:18 America/Mexico_City] PDOException: SQLSTATE[HY000] [1040] Too many connections in /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/PhpArrayContainer.php on line 79 #0 /home2/easysho1/public_html/web/core/modules/mysql/src/Driver/Database/mysql/Connection.php(179): PDO->__construct('mysql:host=loca...', 'easysho1_easysh...', Object(SensitiveParameterValue), Array)
+#1 /home2/easysho1/public_html/web/core/lib/Drupal/Core/Database/Database.php(464): Drupal\mysql\Driver\Database\mysql\Connection::open(Array)
+#2 /home2/easysho1/public_html/web/core/lib/Drupal/Core/Database/Database.php(195): Drupal\Core\Database\Database::openConnection('default', 'default')
+#3 [internal function]: Drupal\Core\Database\Database::getConnection('default')
+#4 /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/PhpArrayContainer.php(79): call_user_func_array('Drupal\\Core\\Dat...', Array)
+#5 /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/Container.php(177): Drupal\Component\DependencyInjection\PhpArrayContainer->createService(Array, 'database')
+#6 /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/PhpArrayContainer.php(219): Drupal\Component\DependencyInjection\Container->get('database', 1)
+#7 /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/PhpArrayContainer.php(62): Drupal\Component\DependencyInjection\PhpArrayContainer->resolveServicesAndParameters(Array)
+#8 /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/Container.php(177): Drupal\Component\DependencyInjection\PhpArrayContainer->createService(Array, 'cache.container')
+#9 /home2/easysho1/public_html/web/core/lib/Drupal/Core/DrupalKernel.php(554): Drupal\Component\DependencyInjection\Container->get('cache.container')
+#10 /home2/easysho1/public_html/web/core/lib/Drupal/Core/DrupalKernel.php(928): Drupal\Core\DrupalKernel->getCachedContainerDefinition()
+#11 /home2/easysho1/public_html/web/core/lib/Drupal/Core/DrupalKernel.php(494): Drupal\Core\DrupalKernel->initializeContainer()
+#12 /home2/easysho1/public_html/web/core/lib/Drupal/Core/DrupalKernel.php(702): Drupal\Core\DrupalKernel->boot()
+#13 /home2/easysho1/public_html/web/index.php(19): Drupal\Core\DrupalKernel->handle(Object(Symfony\Component\HttpFoundation\Request))
+#14 {main}
+[30-May-2024 23:39:21 America/Mexico_City] PDOException: SQLSTATE[08004] [1040] Too many connections in /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/PhpArrayContainer.php on line 79 #0 /home2/easysho1/public_html/web/core/modules/mysql/src/Driver/Database/mysql/Connection.php(179): PDO->__construct('mysql:host=loca...', 'easysho1_easysh...', Object(SensitiveParameterValue), Array)
+#1 /home2/easysho1/public_html/web/core/lib/Drupal/Core/Database/Database.php(464): Drupal\mysql\Driver\Database\mysql\Connection::open(Array)
+#2 /home2/easysho1/public_html/web/core/lib/Drupal/Core/Database/Database.php(195): Drupal\Core\Database\Database::openConnection('default', 'default')
+#3 [internal function]: Drupal\Core\Database\Database::getConnection('default')
+#4 /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/PhpArrayContainer.php(79): call_user_func_array('Drupal\\Core\\Dat...', Array)
+#5 /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/Container.php(177): Drupal\Component\DependencyInjection\PhpArrayContainer->createService(Array, 'database')
+#6 /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/PhpArrayContainer.php(219): Drupal\Component\DependencyInjection\Container->get('database', 1)
+#7 /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/PhpArrayContainer.php(62): Drupal\Component\DependencyInjection\PhpArrayContainer->resolveServicesAndParameters(Array)
+#8 /home2/easysho1/public_html/web/core/lib/Drupal/Component/DependencyInjection/Container.php(177): Drupal\Component\DependencyInjection\PhpArrayContainer->createService(Array, 'cache.container')
+#9 /home2/easysho1/public_html/web/core/lib/Drupal/Core/DrupalKernel.php(554): Drupal\Component\DependencyInjection\Container->get('cache.container')
+#10 /home2/easysho1/public_html/web/core/lib/Drupal/Core/DrupalKernel.php(928): Drupal\Core\DrupalKernel->getCachedContainerDefinition()
+#11 /home2/easysho1/public_html/web/core/lib/Drupal/Core/DrupalKernel.php(494): Drupal\Core\DrupalKernel->initializeContainer()
+#12 /home2/easysho1/public_html/web/core/lib/Drupal/Core/DrupalKernel.php(702): Drupal\Core\DrupalKernel->boot()
+#13 /home2/easysho1/public_html/web/index.php(19): Drupal\Core\DrupalKernel->handle(Object(Symfony\Component\HttpFoundation\Request))
+#14 {main}
+[08-Jun-2024 11:34:44 America/Mexico_City] Uncaught PHP Exception Twig\Error\SyntaxError: "Unexpected token "name" of value "contains" ("end of statement block" expected) in "__string_template__8e4c08a10dad81ebb069ce15318da288" at line 9." at /home2/easysho1/public_html/vendor/twig/twig/src/TokenStream.php line 76
+[08-Jun-2024 11:34:57 America/Mexico_City] Uncaught PHP Exception Twig\Error\SyntaxError: "Unexpected token "name" of value "contains" ("end of statement block" expected) in "__string_template__8e4c08a10dad81ebb069ce15318da288" at line 9." at /home2/easysho1/public_html/vendor/twig/twig/src/TokenStream.php line 76
+[08-Jun-2024 11:35:23 America/Mexico_City] Uncaught PHP Exception Twig\Error\SyntaxError: "Unexpected token "name" of value "contains" ("end of statement block" expected) in "__string_template__8e4c08a10dad81ebb069ce15318da288" at line 9." at /home2/easysho1/public_html/vendor/twig/twig/src/TokenStream.php line 76
+[08-Jun-2024 11:36:00 America/Mexico_City] Uncaught PHP Exception Twig\Error\SyntaxError: "Unexpected token "name" of value "contains" ("end of statement block" expected) in "__string_template__748117259b24f25400dbe487e101b10d" at line 9." at /home2/easysho1/public_html/vendor/twig/twig/src/TokenStream.php line 76
