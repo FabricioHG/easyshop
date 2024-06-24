@@ -331,6 +331,13 @@ header > section.py-5.mt-lg-4.region.region-header {
   background-color: #fce582;
   font-size: 22px;
 }
+/*Ocultar las categorias hijas*/
+#edit-field-categoria-target-id--4 ul li ul{
+  display: none;
+}
+#edit-field-categoria-target-id--4 ul{
+  list-style: none;
+}
 
 /*---------------------------------------Dispositivos mobiles ----------------------------------------*/
 

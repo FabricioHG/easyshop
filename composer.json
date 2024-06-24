@@ -36,6 +36,7 @@
         "drupal/jquery_ui_accordion": "^2.1",
         "drupal/paragraphs": "^1.15",
         "drupal/recaptcha": "^3.2",
+        "drupal/selective_better_exposed_filters": "^3.0",
         "drupal/slick": "^2.9",
         "drupal/smtp": "^1.2",
         "drupal/twig_tweak": "^3.2",

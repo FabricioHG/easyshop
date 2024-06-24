@@ -8,6 +8,7 @@ dependencies:
     - image.style.clientes_satisfechos_300_x_600_
     - taxonomy.vocabulary.categorias
   module:
+    - better_exposed_filters
     - commerce_price
     - commerce_product
     - image
@@ -623,7 +624,7 @@ display:
             offset_label: Desplazamiento
           quantity: 9
       exposed_form:
-        type: basic
+        type: bef
         options:
           submit_button: Aplicar
           reset_button: false
@@ -632,6 +633,45 @@ display:
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
+          text_input_required: 'Seleccione cualquier filtro y pulse Aplicar para ver los resultados'
+          text_input_required_format: full_html
+          bef:
+            general:
+              autosubmit: true
+              autosubmit_exclude_textfield: false
+              autosubmit_textfield_delay: 500
+              autosubmit_hide: true
+              input_required: false
+              allow_secondary: true
+              secondary_label: 'Opciones avanzadas'
+              secondary_open: false
+              reset_button_always_show: false
+            filter:
+              field_categoria_target_id:
+                plugin_id: bef
+                advanced:
+                  sort_options: false
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  is_secondary: false
+                select_all_none: false
+                select_all_none_nested: false
+                display_inline: false
+                options_show_only_used: true
+                options_show_only_used_filtered: false
+                options_hide_when_empty: true
+                options_show_items_count: 0
+              created:
+                plugin_id: bef_number
+                advanced:
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  is_secondary: false
+                max: null
+                min: null
       access:
         type: none
         options: {  }
@@ -713,8 +753,8 @@ display:
             group_items: {  }
           reduce_duplicates: true
           vid: categorias
-          type: radios
-          hierarchy: false
+          type: select
+          hierarchy: true
           limit: true
           error_message: true
           all_label: '<Any>'

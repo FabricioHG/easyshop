@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+
 /**
  * @file
  * Functions to support theming in the WS ecommerce theme.
@@ -27,3 +28,65 @@ function ws_ecommerce_preprocess_page(array &$variables): void {
 function ws_ecommerce_preprocess_node(array &$variables): void {
 
 }
+
+
+
+function ws_ecommerce_form_views_exposed_form_alter(&$form, &$form_state, $form_id){
+	
+	$query = \Drupal::entityQuery('taxonomy_term')
+		->accessCheck(TRUE)
+	  	->condition('status', 1)
+	  	->condition('vid', 'categorias') // 'vid' en lugar de 'type' para filtrar por vocabulario
+	  	->sort('changed', 'DESC');
+	$entity_ids = $query->execute();
+
+	//Cargamos el storage de entidades de taxonomias
+	$term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+	
+	$total_prod_por_cat = array();
+
+	foreach($entity_ids as $term_id) {
+		//Cargar todos los id de productos que tengan este id (categoria) y guardarlos en un array
+		$query_prod = \Drupal::entityQuery('commerce_product')
+			->accessCheck(TRUE)
+			->condition('status', 1)
+			->condition('type', 'default')
+			->condition('field_categoria',$term_id);
+			$prod_ids = $query_prod->execute();
+		
+		$cant_prod = count($prod_ids);
+		
+		//Cargar termino para obtener el nombre
+		$term = $term_storage->load($term_id);
+
+		$total_prod_por_cat[$term_id]= $cant_prod;
+
+	}//Fin del foreach
+	//Recorrer el array radios del formulario para agregar los valores
+	foreach ($form['field_categoria_target_id']['#options'] as $key => $value) {
+		//busca el id del termino en el array total_prod_por_cat para agregar el nuevo valor
+		if (isset($total_prod_por_cat[$key])) {
+			$form['field_categoria_target_id']['#options'][$key] = $form['field_categoria_target_id']['#options'][$key].' ('.$total_prod_por_cat[$key].')';
+		}
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

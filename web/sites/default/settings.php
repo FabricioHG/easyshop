@@ -6,6 +6,12 @@
 //     $GLOBALS['request']->server->set('SCRIPT_NAME', '/index.php');
 // }
 
+if (class_exists('Kint')) {
+  // Change the maximum depth to prevent out-of-memory errors.
+  \Kint::$depth_limit= 4;
+}
+
+
 /**
  * @file
  * Drupal site-specific configuration file.
