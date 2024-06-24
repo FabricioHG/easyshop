@@ -1,0 +1,14 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH= /home2/easysho1/public_html 
+    - /bin/cp -R private $DEPLOYPATH
+    - /bin/cp -R vendor $DEPLOYPATH
+    - /bin/cp -R web $DEPLOYPATH
+    - /bin/cp  .editorconfig $DEPLOYPATH
+    - /bin/cp  .gitattributes $DEPLOYPATH
+    - /bin/cp  .gitignore $DEPLOYPATH
+    - /bin/cp  .htaccess $DEPLOYPATH
+    - /bin/cp  composer.json $DEPLOYPATH
+    - /bin/cp  composer.lock $DEPLOYPATH
+    - /bin/cp  .cpanel.yml $DEPLOYPATH
