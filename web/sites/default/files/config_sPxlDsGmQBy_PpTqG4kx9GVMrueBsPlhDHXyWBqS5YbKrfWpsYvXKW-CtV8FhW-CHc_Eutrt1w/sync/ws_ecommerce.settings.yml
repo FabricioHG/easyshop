@@ -33,7 +33,7 @@ region_container_highlighted: ''
 region_class_help: ''
 region_container_help: ''
 region_class_content: col
-region_container_content: ''
+region_container_content: container-xl
 region_class_sidebar_first: 'col-lg-3 me-lg-4 order-first'
 region_container_sidebar_first: ''
 region_class_sidebar_second: col-lg-3

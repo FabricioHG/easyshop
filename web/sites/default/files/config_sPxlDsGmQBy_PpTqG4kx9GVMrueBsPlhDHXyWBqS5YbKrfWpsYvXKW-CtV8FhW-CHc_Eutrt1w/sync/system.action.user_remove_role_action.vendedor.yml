@@ -1,0 +1,14 @@
+uuid: e174e5ae-836c-4fae-9097-46f577182908
+langcode: es
+status: true
+dependencies:
+  config:
+    - user.role.vendedor
+  module:
+    - user
+id: user_remove_role_action.vendedor
+label: 'Elimina el rol Vendedor al(los) usuario(s) seleccionado(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: vendedor

@@ -654,8 +654,8 @@ display:
                   rewrite:
                     filter_rewrite_values: ''
                     filter_rewrite_values_key: false
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
+                  collapsible: true
+                  collapsible_disable_automatic_open: true
                   is_secondary: false
                 select_all_none: false
                 select_all_none_nested: false
@@ -664,14 +664,6 @@ display:
                 options_show_only_used_filtered: false
                 options_hide_when_empty: true
                 options_show_items_count: 0
-              created:
-                plugin_id: bef_number
-                advanced:
-                  collapsible: false
-                  collapsible_disable_automatic_open: false
-                  is_secondary: false
-                max: null
-                min: null
       access:
         type: none
         options: {  }

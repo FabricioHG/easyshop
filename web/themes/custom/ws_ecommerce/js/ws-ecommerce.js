@@ -24,6 +24,21 @@
         }
       });
 
+      /*Ocultar categorias en mobil*/
+      function isMobileDevice() {
+        return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      }
+
+      var $details = $('#edit-field-categoria-target-id-collapsible--4');
+
+      // Ocultar el elemento si es un dispositivo móvil
+      if (isMobileDevice()) {
+         $details.removeAttr('open');
+      }
+      else{
+         $details.attr('open','');
+      }
+
     }
   };
 

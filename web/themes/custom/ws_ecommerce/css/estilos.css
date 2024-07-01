@@ -338,6 +338,11 @@ header > section.py-5.mt-lg-4.region.region-header {
 #edit-field-categoria-target-id--4 ul{
   list-style: none;
 }
+/*Formulario informacion de pago*/
+#edit-form-comment-pane-comentario {
+  height: 50px;
+}
+/*Pagina cart*/
 
 /*---------------------------------------Dispositivos mobiles ----------------------------------------*/
 
@@ -352,6 +357,23 @@ header > section.py-5.mt-lg-4.region.region-header {
   #block-ws-ecommerce-pagoseguro img{
     width: 100%;
     height: auto;
+  }
+  /*Pagina cart*/
+  form#views-form-commerce-cart-form-default-514 div#edit-actions,
+  form#commerce-checkout-flow-custom-checkout-flow div#edit-actions
+  {
+    text-align: center;
+  }
+  form#views-form-commerce-cart-form-default-514 div#edit-actions input#edit-checkout
+   {
+    margin-top: 15px;
+  }
+  form#commerce-checkout-flow-custom-checkout-flow div#edit-actions input#edit-actions-next{
+    margin-bottom: 15px;
+  }
+  /*Pagina order information*/
+  section.col.region.region-content {
+    padding: 30px;
   }
 }
 

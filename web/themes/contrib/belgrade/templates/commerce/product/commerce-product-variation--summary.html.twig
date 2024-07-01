@@ -19,6 +19,7 @@
  * @ingroup themeable
  */
 #}
+{{kint(product_variation|without('title') ) }}
 <div{{ attributes.addClass(['row', 'align-items-center']) }}>
   <div class="d-none d-sm-block col-sm-2 col-xl-3">
     {{- product_variation|without('title') -}}

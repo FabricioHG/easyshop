@@ -41,6 +41,9 @@ configuration:
     review:
       step: payment
       weight: '5'
+    form_comment_pane:
+      step: _disabled
+      weight: '10'
     payment_process:
       capture: true
       step: payment
@@ -63,4 +66,4 @@ configuration:
       auto_submit_review_form: false
       setup_future_usage: ''
       step: _disabled
-      weight: '10'
+      weight: '11'
