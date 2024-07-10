@@ -36,6 +36,7 @@
         "drupal/inline_entity_form": "^1.0@RC",
         "drupal/jquery_ui": "^1.7",
         "drupal/jquery_ui_accordion": "^2.1",
+        "drupal/metatag": "^2.0",
         "drupal/paragraphs": "^1.15",
         "drupal/recaptcha": "^3.2",
         "drupal/selective_better_exposed_filters": "^3.0",
