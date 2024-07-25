@@ -10,6 +10,7 @@ use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use \Drupal\Core\Config\ConfigFactoryInterface;
 use \Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Routing\TrustedRedirectResponse;
 
 /**
  * Provides a WS Mercado Libre form.
@@ -96,9 +97,11 @@ final class MercadoLibreProducts extends FormBase {
     //If publish_products is checked, initiate OAuth flow.
     if ($form_state->getValue('publicar')) {
       $auth_url = "https://auth.mercadolibre.com.mx/authorization?response_type=code&client_id=$client_id&redirect_uri=" . urlencode($redirect_uri);
-      $response = new RedirectResponse($auth_url);
+      
+      $response = new TrustedRedirectResponse($auth_url);
       $response->send();
       exit();
+
     }
 
     $this->messenger()->addStatus($this->t('Ahora los productos que publiques en este sitio tambien seran publicados en tu cuenta de Mercado libre.'));
