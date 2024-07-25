@@ -6,6 +6,7 @@ dependencies:
     - field.field.user.user.commerce_remote_id
     - field.field.user.user.field_mercadolibre_access_token
     - field.field.user.user.field_mercadolibre_refresh_token
+    - field.field.user.user.field_publish_products
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
@@ -37,4 +38,5 @@ hidden:
   customer_profiles: true
   field_mercadolibre_access_token: true
   field_mercadolibre_refresh_token: true
+  field_publish_products: true
   langcode: true

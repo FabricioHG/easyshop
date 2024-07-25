@@ -16,6 +16,10 @@ function ws_mercado_libre_install() {
       'type' => 'string',
       'label' => 'MercadoLibre Refresh Token',
     ],
+    'field_publish_products' => [
+      'type' => 'boolean',
+      'label' => 'Publish Products to Mercado Libre',
+    ],
   ];
 
   foreach ($fields as $field_name => $field_config) {
@@ -52,6 +56,7 @@ function ws_mercado_libre_uninstall() {
   $fields = [
     'field_mercadolibre_access_token',
     'field_mercadolibre_refresh_token',
+    'field_publish_products',
   ];
 
   // Get the storage handler for field configuration and field storage configuration.

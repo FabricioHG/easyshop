@@ -42,6 +42,7 @@ final class MercadoLibreProducts extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, UserInterface $user = NULL): array {
+    $publish_products = $user ? $user->get('field_publish_products')->value : FALSE;
 
     $form['info'] = [
       '#markup' => $this->t('Publicar en Mercado Libre mis productos que publique en este sitio'),
@@ -50,6 +51,7 @@ final class MercadoLibreProducts extends FormBase {
     $form['publicar'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Publicar productos'),
+      '#default_value' => $publish_products,
     ];
 
     $form['actions'] = [
@@ -92,18 +94,19 @@ final class MercadoLibreProducts extends FormBase {
     $client_secret = $config->get('client_secret');
     $redirect_uri = $config->get('url_redirect');
 
+
     \Drupal::messenger()->addMessage(t('client_id %client_id.', ['%client_id' => $client_id]));
     
     //If publish_products is checked, initiate OAuth flow.
     if ($form_state->getValue('publicar')) {
-      $auth_url = "https://auth.mercadolibre.com.mx/authorization?response_type=code&client_id=$client_id&redirect_uri=" . urlencode($redirect_uri);
+      $auth_url = "https://auth.mercadolibre.com.mx/authorization?response_type=code&client_id=$client_id&redirect_uri=" . urlencode($redirect_uri). "&scopes=read,write,offline_access";
       
       $response = new TrustedRedirectResponse($auth_url);
       $response->send();
       exit();
 
     }
-    
+
     \Drupal::messenger()->addMessage($this->t('Settings saved.'));
   }
 
