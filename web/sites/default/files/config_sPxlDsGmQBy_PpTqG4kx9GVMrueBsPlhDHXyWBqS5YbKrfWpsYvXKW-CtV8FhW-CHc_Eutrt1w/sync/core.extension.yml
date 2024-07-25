@@ -103,6 +103,7 @@ module:
   webform: 0
   webform_ui: 0
   webs_systems: 0
+  ws_mercado_libre: 0
   pathauto: 1
   selective_better_exposed_filters: 1
   content_translation: 10

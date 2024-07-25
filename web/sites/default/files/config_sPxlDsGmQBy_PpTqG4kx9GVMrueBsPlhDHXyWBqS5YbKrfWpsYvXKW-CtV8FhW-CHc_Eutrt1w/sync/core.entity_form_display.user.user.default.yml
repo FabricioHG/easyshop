@@ -4,10 +4,13 @@ status: true
 dependencies:
   config:
     - field.field.user.user.commerce_remote_id
+    - field.field.user.user.field_mercadolibre_access_token
+    - field.field.user.user.field_mercadolibre_refresh_token
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
     - image
+    - path
     - user
 _core:
   default_config_hash: FaQ9Ptcpxpg30AtiqRDtl_8zbJArHP1LPfug_s59TOA
@@ -25,6 +28,12 @@ content:
   language:
     weight: 0
     region: content
+  path:
+    type: path
+    weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   timezone:
     weight: 6
     region: content
@@ -39,4 +48,6 @@ content:
 hidden:
   commerce_remote_id: true
   customer_profiles: true
+  field_mercadolibre_access_token: true
+  field_mercadolibre_refresh_token: true
   langcode: true

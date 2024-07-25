@@ -1,0 +1,4 @@
+ws_mercado_libre.user:
+  route_name: ws_mercado_libre.user
+  title: Mercado libre
+  base_route: entity.user.canonical
