@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use GuzzleHttp\Client;
 //use Symfony\Component\HttpFoundation\Response;
 use \Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Routing\TrustedRedirectResponse;
 
 
 
@@ -53,12 +54,12 @@ final class WsMercadoLibreController extends ControllerBase {
   public function notify(Request $request) {
     $user = \Drupal::currentUser();
 
-    $auth_code = $request->query->get('SERVER_GENERATED_AUTHORIZATION_CODE');
+    $auth_code = $request->query->get('code');
 
     if (!$auth_code) {
       \Drupal::messenger()->addError($this->t('Failed to connect to Mercado Libre.'));
       \Drupal::logger('ws_mercado_libre')->notice('Failed to connect to Mercado Libre to user. %user', ['%user' => $user->getAccountName()]);
-      return $this->redirect('ws_mercado_libre.user', ['user' => $user->id()]);
+      return new TrustedRedirectResponse('/user');
       
     }
    
@@ -91,10 +92,12 @@ final class WsMercadoLibreController extends ControllerBase {
     $account->save(); 
 
     \Drupal::messenger()->addMessage($this->t('Successfully connected to Mercado Libre.'));
-    return new TrustedRedirectResponse('/user/' . $user->id()); 
+    return new TrustedRedirectResponse('/user/' . $user->id());
+
   }
   else {
       \Drupal::messenger()->addError($this->t('Failed to connect to Mercado Libre.'));
+
     }
 
   return new TrustedRedirectResponse('/user/' . $user->id() . '/ws-mercado-libre');
