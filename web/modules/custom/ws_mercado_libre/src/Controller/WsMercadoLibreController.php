@@ -91,13 +91,13 @@ final class WsMercadoLibreController extends ControllerBase {
     $account->save(); 
 
     \Drupal::messenger()->addMessage($this->t('Successfully connected to Mercado Libre.'));
-    return $this->redirect('ws_mercado_libre.user', ['user' => $user->id()]); 
+    return new TrustedRedirectResponse('/user/' . $user->id()); 
   }
   else {
       \Drupal::messenger()->addError($this->t('Failed to connect to Mercado Libre.'));
     }
 
-  return $this->redirect('ws_mercado_libre.user', ['user' => $user->id()]);
+  return new TrustedRedirectResponse('/user/' . $user->id() . '/ws-mercado-libre');
     
   }//Fin de notify
 
