@@ -103,9 +103,8 @@ final class MercadoLibreProducts extends FormBase {
       exit();
 
     }
-
-    $this->messenger()->addStatus($this->t('Ahora los productos que publiques en este sitio tambien seran publicados en tu cuenta de Mercado libre.'));
-    $form_state->setRedirect('ws_mercado_libre.user', ['user' => $user->id()]);
+    
+    \Drupal::messenger()->addMessage($this->t('Settings saved.'));
   }
 
   // public function loguearUsuarioMl(){
