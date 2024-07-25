@@ -12,6 +12,7 @@ use GuzzleHttp\Client;
 //use Symfony\Component\HttpFoundation\Response;
 use \Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
+use GuzzleHttp\Exception\RequestException;
 
 
 
@@ -68,6 +69,7 @@ final class WsMercadoLibreController extends ControllerBase {
     $client_secret = $config->get('client_secret');
     $redirect_uri = $config->get('url_redirect');
 
+    try {
     $client = new Client();
     $response = $client->post('https://api.mercadolibre.com/oauth/token', [
       'form_params' => [
@@ -99,7 +101,11 @@ final class WsMercadoLibreController extends ControllerBase {
       \Drupal::messenger()->addError($this->t('Failed to connect to Mercado Libre.'));
       return new TrustedRedirectResponse('/user/' . $user->id() . '/ws-mercado-libre');
     }
-
+  } catch (RequestException $e) {
+    watchdog_exception('ws_mercado_libre', $e);
+      \Drupal::messenger()->addError($this->t('There was an error connecting to Mercado Libre: @message', ['@message' => $e->getMessage()]));
+      return new TrustedRedirectResponse('/user');
+    }
   
     
   }//Fin de notify
