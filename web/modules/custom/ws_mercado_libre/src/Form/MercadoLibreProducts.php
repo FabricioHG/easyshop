@@ -97,7 +97,9 @@ final class MercadoLibreProducts extends FormBase {
     $code_challenge = $this->generateCodeChallenge($code_verifier);
     $_SESSION['code_verifier'] = $code_verifier;
 
-    
+     \Drupal::logger('ws_mercado_libre')->notice('Codigo de verificacion generado %code_verifier.', ['%code_verifier' => $code_verifier]);
+     \Drupal::logger('ws_mercado_libre')->notice('Codigo de chalenge generado %code_challenge.', ['%code_challenge' => $code_challenge]);
+
     //If publish_products is checked, initiate OAuth flow.
     if ($form_state->getValue('publicar') && $redirect_uri != "") {
       $auth_url = "https://auth.mercadolibre.com.mx/authorization?response_type=code&client_id=$client_id&redirect_uri=$redirect_uri&code_challenge=$code_challenge&code_challenge_method=S256";

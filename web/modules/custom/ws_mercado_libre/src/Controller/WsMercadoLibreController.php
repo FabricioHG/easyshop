@@ -70,7 +70,7 @@ final class WsMercadoLibreController extends ControllerBase {
     $redirect_uri = $config->get('url_redirect');
     $code_verifier = $_SESSION['code_verifier']; 
     
-
+    \Drupal::logger('ws_mercado_libre')->notice('Codigo desde notify %code_verifier.', ['%code_verifier' => $code_verifier]);
     
     $client = new Client();
     $response = $client->post('https://api.mercadolibre.com/oauth/token', [
