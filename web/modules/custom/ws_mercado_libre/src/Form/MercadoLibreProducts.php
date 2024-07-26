@@ -93,8 +93,8 @@ final class MercadoLibreProducts extends FormBase {
     $client_id = $config->get('client_id');
     $client_secret = $config->get('client_secret');
     $redirect_uri = $config->get('url_redirect');
-    $code_verifier = generateCodeVerifier();
-    $code_challenge = generateCodeChallenge($code_verifier);
+    $code_verifier = $this->generateCodeVerifier();
+    $code_challenge = $this->generateCodeChallenge($code_verifier);
     $_SESSION['code_verifier'] = $code_verifier;
 
     
