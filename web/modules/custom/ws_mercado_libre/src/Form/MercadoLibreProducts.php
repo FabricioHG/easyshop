@@ -93,19 +93,33 @@ final class MercadoLibreProducts extends FormBase {
     $client_id = $config->get('client_id');
     $client_secret = $config->get('client_secret');
     $redirect_uri = $config->get('url_redirect');
+    $code_verifier = generateCodeVerifier();
+    $code_challenge = generateCodeChallenge($code_verifier);
+    $_SESSION['code_verifier'] = $code_verifier;
 
     
     //If publish_products is checked, initiate OAuth flow.
     if ($form_state->getValue('publicar') && $redirect_uri != "") {
-      $auth_url = "https://auth.mercadolibre.com.mx/authorization?response_type=code&client_id=$client_id&redirect_uri=" . urlencode($redirect_uri);
-      
+      $auth_url = "https://auth.mercadolibre.com.ar/authorization?response_type=code&client_id=$client_id&redirect_uri=$redirect_uri&code_challenge=$code_challenge&code_challenge_method=S256";
+
       $response = new TrustedRedirectResponse($auth_url);
       $response->send();
       exit();
-
+    }
+    else{
+      \Drupal::messenger()->addMessage($this->t('No fue posible conectar con Mercado Libre. Verifique los datos de conexión o comuníquese con el administrador del sitio.'));
     }
 
-    \Drupal::messenger()->addMessage($this->t('Settings saved, conectando con Mercado Libre.'));
+    \Drupal::messenger()->addMessage($this->t('No fue posible conectar con Mercado Libre. Verifique los datos de conexión o comuníquese con el administrador del sitio.'));
+    return new TrustedRedirectResponse('/user');
+  }
+
+  protected function generateCodeVerifier() {
+    return bin2hex(random_bytes(64));
+  }
+
+  protected function generateCodeChallenge($code_verifier) {
+      return rtrim(strtr(base64_encode(hash('sha256', $code_verifier, true)), '+/', '-_'), '=');
   }
 
 }
