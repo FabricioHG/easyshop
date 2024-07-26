@@ -100,7 +100,7 @@ final class MercadoLibreProducts extends FormBase {
     
     //If publish_products is checked, initiate OAuth flow.
     if ($form_state->getValue('publicar') && $redirect_uri != "") {
-      $auth_url = "https://auth.mercadolibre.com.ar/authorization?response_type=code&client_id=$client_id&redirect_uri=$redirect_uri&code_challenge=$code_challenge&code_challenge_method=S256";
+      $auth_url = "https://auth.mercadolibre.com.mx/authorization?response_type=code&client_id=$client_id&redirect_uri=$redirect_uri&code_challenge=$code_challenge&code_challenge_method=S256";
 
       $response = new TrustedRedirectResponse($auth_url);
       $response->send();
