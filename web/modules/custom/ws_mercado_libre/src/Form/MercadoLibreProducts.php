@@ -94,12 +94,10 @@ final class MercadoLibreProducts extends FormBase {
     $client_secret = $config->get('client_secret');
     $redirect_uri = $config->get('url_redirect');
 
-
-    \Drupal::messenger()->addMessage(t('client_id %client_id.', ['%client_id' => $client_id]));
     
     //If publish_products is checked, initiate OAuth flow.
-    if ($form_state->getValue('publicar')) {
-      $auth_url = "https://auth.mercadolibre.com.mx/authorization?response_type=code&client_id=$client_id&redirect_uri=" . urlencode($redirect_uri). "&scopes=read,write,offline_access";
+    if ($form_state->getValue('publicar') && $redirect_uri != "") {
+      $auth_url = "https://auth.mercadolibre.com.mx/authorization?response_type=code&client_id=$client_id&redirect_uri=" . urlencode($redirect_uri);
       
       $response = new TrustedRedirectResponse($auth_url);
       $response->send();
@@ -107,18 +105,8 @@ final class MercadoLibreProducts extends FormBase {
 
     }
 
-    \Drupal::messenger()->addMessage($this->t('Settings saved.'));
+    \Drupal::messenger()->addMessage($this->t('Settings saved, conectando con Mercado Libre.'));
   }
-
-  // public function loguearUsuarioMl(){
-
-  //   $app_id = '';
-  //   $url_notify = '';
-  //   $code_chalenge = '';
-  //   $code_chalenge_method = '';
-  //   https://auth.mercadolibre.com.ar/authorization?response_type=code&client_id=$APP_ID&redirect_uri=$YOUR_URL&code_challenge=$CODE_CHALLENGE&code_challenge_method=$CODE_METHOD
-  
-  // }
 
 }
 

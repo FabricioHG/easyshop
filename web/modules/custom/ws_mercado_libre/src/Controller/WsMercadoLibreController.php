@@ -91,7 +91,7 @@ final class WsMercadoLibreController extends ControllerBase {
     $account = \Drupal\user\Entity\User::load($user->id());
     $account->set('field_mercadolibre_access_token', $access_token);
     $account->set('field_mercadolibre_refresh_token', $refresh_token);
-    $account->set('field_publish_products', $publish_products);
+    $account->set('field_publish_products', TRUE);
     $account->save(); 
 
     \Drupal::messenger()->addMessage($this->t('Successfully connected to Mercado Libre.'));
