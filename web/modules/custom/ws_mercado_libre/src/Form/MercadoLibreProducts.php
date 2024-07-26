@@ -114,11 +114,11 @@ final class MercadoLibreProducts extends FormBase {
     return new TrustedRedirectResponse('/user/' . $user->id() . '/ws-mercado-libre');
   }
 
-  protected function generateCodeVerifier() {
+  public function generateCodeVerifier() {
     return bin2hex(random_bytes(64));
   }
 
-  protected function generateCodeChallenge($code_verifier) {
+  public function generateCodeChallenge($code_verifier) {
       return rtrim(strtr(base64_encode(hash('sha256', $code_verifier, true)), '+/', '-_'), '=');
   }
 
