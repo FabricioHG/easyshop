@@ -111,7 +111,7 @@ final class MercadoLibreProducts extends FormBase {
     }
 
     \Drupal::messenger()->addMessage($this->t('No fue posible conectar con Mercado Libre. Verifique los datos de conexión o comuníquese con el administrador del sitio.'));
-    return new TrustedRedirectResponse('/user/' . $user->id() . '/ws-mercado-libre');
+    $form_state->setRedirect('entity.user.canonical', ['user' => $user->id()]);
   }
 
   public function generateCodeVerifier() {
