@@ -100,21 +100,23 @@ final class MercadoLibreProducts extends FormBase {
     $code_verifier = $this->generateCodeVerifier();
     $code_challenge = $this->generateCodeChallenge($code_verifier);
     $this->session->set('code_verifier', $code_verifier);
+
+    $form_state->setRedirect('ws_mercado_libre.notify');
     
     //If publish_products is checked, initiate OAuth flow.
-    if ($form_state->getValue('publicar') && $redirect_uri != "") {
-      $auth_url = "https://auth.mercadolibre.com.mx/authorization?response_type=code&client_id=$client_id&redirect_uri=$redirect_uri&code_challenge=$code_challenge&code_challenge_method=S256";
+    // if ($form_state->getValue('publicar') && $redirect_uri != "") {
+    //   $auth_url = "https://auth.mercadolibre.com.mx/authorization?response_type=code&client_id=$client_id&redirect_uri=$redirect_uri&code_challenge=$code_challenge&code_challenge_method=S256";
 
-      $response = new TrustedRedirectResponse($auth_url);
-      $response->send();
-      exit();
-    }
-    else{
-      \Drupal::messenger()->addMessage($this->t('No fue posible conectar con Mercado Libre. Verifique los datos de conexión o comuníquese con el administrador del sitio.'));
-    }
+    //   $response = new TrustedRedirectResponse($auth_url);
+    //   $response->send();
+    //   exit();
+    // }
+    // else{
+    //   \Drupal::messenger()->addMessage($this->t('No fue posible conectar con Mercado Libre. Verifique los datos de conexión o comuníquese con el administrador del sitio.'));
+    // }
 
-    \Drupal::messenger()->addMessage($this->t('No fue posible conectar con Mercado Libre. Verifique los datos de conexión o comuníquese con el administrador del sitio.'));
-    $form_state->setRedirect('entity.user.canonical', ['user' => $user->id()]);
+    // \Drupal::messenger()->addMessage($this->t('No fue posible conectar con Mercado Libre. Verifique los datos de conexión o comuníquese con el administrador del sitio.'));
+    // $form_state->setRedirect('entity.user.canonical', ['user' => $user->id()]);
   }
 
   public function generateCodeVerifier() {

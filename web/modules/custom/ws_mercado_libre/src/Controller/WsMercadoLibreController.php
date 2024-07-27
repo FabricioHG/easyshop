@@ -58,6 +58,9 @@ final class WsMercadoLibreController extends ControllerBase {
 
   public function notify(Request $request) {
     $user = \Drupal::currentUser();
+    $code_verifier = $this->session->get('code_verifier');
+    kint($code_verifier);
+    exit;
 
     $auth_code = $request->query->get('code');
 
