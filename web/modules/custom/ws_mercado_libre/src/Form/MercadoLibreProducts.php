@@ -97,6 +97,16 @@ final class MercadoLibreProducts extends FormBase {
     $code_verifier_state = urlencode($code_verifier); 
     $code_challenge = $this->generateCodeChallenge($code_verifier);
 
+    if ($form_state->getValue('publicar') == FALSE ){
+      $user = \Drupal::currentUser();
+      $account = \Drupal\user\Entity\User::load($user->id());
+      $account->set('field_publish_products', FALSE);
+      $account->save(); 
+
+      \Drupal::messenger()->addMessage($this->t('Los productos solo se publicaran en esta pagina'));
+      $form_state->setRedirect('ws_mercado_libre.user', ['user' => $user->id()]);
+      return;
+    }
     
     //If publish_products is checked, initiate OAuth flow.
     if ($form_state->getValue('publicar') && $redirect_uri != "") {
@@ -110,8 +120,6 @@ final class MercadoLibreProducts extends FormBase {
       \Drupal::messenger()->addMessage($this->t('No fue posible conectar con Mercado Libre. Verifique los datos de conexión o comuníquese con el administrador del sitio.'));
     }
 
-    \Drupal::messenger()->addMessage($this->t('No fue posible conectar con Mercado Libre. Verifique los datos de conexión o comuníquese con el administrador del sitio.'));
-    $form_state->setRedirect('entity.user.canonical', ['user' => $user->id()]);
   }
 
   public function generateCodeVerifier() {

@@ -64,7 +64,7 @@ final class WsMercadoLibreController extends ControllerBase {
       return new TrustedRedirectResponse('/user/' . $user->id() . '/ws-mercado-libre');
       
     }
-    \Drupal::logger('ws_mercado_libre')->notice('Code de la url. %code', ['%code' => $auth_code]);
+
     $config = $this->configFactory->get('ws_mercado_libre.settings');
     $client_id = $config->get('client_id');
     $client_secret = $config->get('client_secret');
@@ -87,9 +87,8 @@ final class WsMercadoLibreController extends ControllerBase {
     $data = json_decode($response->getBody(), true);
     $access_token = $data['access_token'];
     $refresh_token = $data['refresh_token'];
+    $expires_in = $data['expires_in'];
 
-    // Elimina el code_verifier de la sesión.
-    unset($_SESSION['code_verifier']);
 
     // Save the tokens to the user's configuration or database.
     $user = \Drupal::currentUser();
@@ -98,6 +97,7 @@ final class WsMercadoLibreController extends ControllerBase {
     $account->set('field_mercadolibre_refresh_token', $refresh_token);
     $account->set('field_publish_products', TRUE);
     $account->save(); 
+    \Drupal::logger('ws_mercado_libre')->notice('Expire in. %expires_in', ['%expires_in' => $expires_in]);
 
     \Drupal::messenger()->addMessage($this->t('Successfully connected to Mercado Libre.'));
     return new TrustedRedirectResponse('/user/' . $user->id());
