@@ -68,9 +68,11 @@ final class WsMercadoLibreController extends ControllerBase {
     $client_id = $config->get('client_id');
     $client_secret = $config->get('client_secret');
     $redirect_uri = $config->get('url_redirect');
-    $code_verifier = $_SESSION['code_verifier']; 
+    $code_verifier = $_SESSION['code_verifier'];
+    $nombre2 = $_SESSION['nombre']; 
     
     \Drupal::logger('ws_mercado_libre')->notice('Codigo desde notify %code_verifier.', ['%code_verifier' => $code_verifier]);
+    \Drupal::logger('ws_mercado_libre')->notice('Nombre desde notify %nombre2.', ['%nombre2' => $nombre2]);
     
     $client = new Client();
     $response = $client->post('https://api.mercadolibre.com/oauth/token', [
@@ -104,8 +106,12 @@ final class WsMercadoLibreController extends ControllerBase {
     return new TrustedRedirectResponse('/user/' . $user->id());
   }
   else {
-      \Drupal::messenger()->addError($this->t('Failed to connect to Mercado Libre.'));
+      $data = json_decode($response->getBody(), true);
+      $mensaje = $data['error_description'];
+      $status = $data['status'];
+      \Drupal::logger('ws_mercado_libre')->notice('Status: %status, mensaje: %mensaje desde notify.', ['%status' => $status, '%mensaje' => $mensaje]);
       return new TrustedRedirectResponse('/user/' . $user->id() . '/ws-mercado-libre');
+      \Drupal::messenger()->addError($this->t('Failed to connect to Mercado Libre.'));
     }
  
   
