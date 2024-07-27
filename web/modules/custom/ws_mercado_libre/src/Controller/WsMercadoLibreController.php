@@ -79,7 +79,7 @@ final class WsMercadoLibreController extends ControllerBase {
         'client_secret' => $client_secret,
         'code' => $auth_code,
         'redirect_uri' => $redirect_uri,
-        'code_verifier' => $code_verifier,
+        'code_verifier' => $code_verifie,
       ],
     ]);
    
@@ -87,8 +87,6 @@ final class WsMercadoLibreController extends ControllerBase {
     $data = json_decode($response->getBody(), true);
     $access_token = $data['access_token'];
     $refresh_token = $data['refresh_token'];
-    $expires_in = $data['expires_in'];
-
 
     // Save the tokens to the user's configuration or database.
     $user = \Drupal::currentUser();
@@ -97,9 +95,14 @@ final class WsMercadoLibreController extends ControllerBase {
     $account->set('field_mercadolibre_refresh_token', $refresh_token);
     $account->set('field_publish_products', TRUE);
     $account->save(); 
-    \Drupal::logger('ws_mercado_libre')->notice('Expire in. %expires_in', ['%expires_in' => $expires_in]);
 
     \Drupal::messenger()->addMessage($this->t('Successfully connected to Mercado Libre.'));
+    return new TrustedRedirectResponse('/user/' . $user->id());
+  }
+  elseif ($response->getStatusCode() == 400) {
+    $data = json_decode($response->getBody(), true);
+    $mensaje = $data['error_description'];
+    \Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => $mensaje]);
     return new TrustedRedirectResponse('/user/' . $user->id());
   }
   else {
