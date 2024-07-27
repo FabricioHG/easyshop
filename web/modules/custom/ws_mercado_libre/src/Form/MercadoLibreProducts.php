@@ -11,7 +11,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use \Drupal\Core\Config\ConfigFactoryInterface;
 use \Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Core\Routing\TrustedRedirectResponse;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Provides a WS Mercado Libre form.
@@ -23,17 +22,14 @@ final class MercadoLibreProducts extends FormBase {
    */
 
   protected $configFactory;
-  protected $session;
 
-  public function __construct(ConfigFactoryInterface $config_factory, SessionInterface $session) {
+  public function __construct(ConfigFactoryInterface $config_factory) {
     $this->configFactory = $config_factory;
-    $this->session = $session;
   }
 
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('config.factory'),
-      $container->get('session')
+      $container->get('config.factory')
     );
   }
 
@@ -98,25 +94,24 @@ final class MercadoLibreProducts extends FormBase {
     $client_secret = $config->get('client_secret');
     $redirect_uri = $config->get('url_redirect');
     $code_verifier = $this->generateCodeVerifier();
+    $code_verifier_state = urlencode($code_verifier); 
     $code_challenge = $this->generateCodeChallenge($code_verifier);
-    $this->session->set('code_verifier', $code_verifier);
 
-    $form_state->setRedirect('ws_mercado_libre.notify');
     
     //If publish_products is checked, initiate OAuth flow.
-    // if ($form_state->getValue('publicar') && $redirect_uri != "") {
-    //   $auth_url = "https://auth.mercadolibre.com.mx/authorization?response_type=code&client_id=$client_id&redirect_uri=$redirect_uri&code_challenge=$code_challenge&code_challenge_method=S256";
+    if ($form_state->getValue('publicar') && $redirect_uri != "") {
+      $auth_url = "https://auth.mercadolibre.com.mx/authorization?response_type=code&client_id=$client_id&redirect_uri=$redirect_uri&code_challenge=$code_challenge&code_challenge_method=S256&state=$code_verifier_state";
 
-    //   $response = new TrustedRedirectResponse($auth_url);
-    //   $response->send();
-    //   exit();
-    // }
-    // else{
-    //   \Drupal::messenger()->addMessage($this->t('No fue posible conectar con Mercado Libre. Verifique los datos de conexión o comuníquese con el administrador del sitio.'));
-    // }
+      $response = new TrustedRedirectResponse($auth_url);
+      $response->send();
+      exit();
+    }
+    else{
+      \Drupal::messenger()->addMessage($this->t('No fue posible conectar con Mercado Libre. Verifique los datos de conexión o comuníquese con el administrador del sitio.'));
+    }
 
-    // \Drupal::messenger()->addMessage($this->t('No fue posible conectar con Mercado Libre. Verifique los datos de conexión o comuníquese con el administrador del sitio.'));
-    // $form_state->setRedirect('entity.user.canonical', ['user' => $user->id()]);
+    \Drupal::messenger()->addMessage($this->t('No fue posible conectar con Mercado Libre. Verifique los datos de conexión o comuníquese con el administrador del sitio.'));
+    $form_state->setRedirect('entity.user.canonical', ['user' => $user->id()]);
   }
 
   public function generateCodeVerifier() {

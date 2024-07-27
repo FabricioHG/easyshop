@@ -13,7 +13,6 @@ use GuzzleHttp\Client;
 use \Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use GuzzleHttp\Exception\RequestException;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 
 
@@ -25,19 +24,16 @@ final class WsMercadoLibreController extends ControllerBase {
 
   protected $formBuilder;
   protected $configFactory;
-  protected $session;
 
-  public function __construct(FormBuilderInterface $form_builder, ConfigFactoryInterface $config_factory, SessionInterface $session) {
+  public function __construct(FormBuilderInterface $form_builder, ConfigFactoryInterface $config_factory) {
     $this->formBuilder = $form_builder;
     $this->configFactory = $config_factory;
-    $this->session = $session;
   }
 
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('form_builder'),
-      $container->get('config.factory'),
-      $container->get('session')
+      $container->get('config.factory')
     );
   }
 
@@ -58,11 +54,9 @@ final class WsMercadoLibreController extends ControllerBase {
 
   public function notify(Request $request) {
     $user = \Drupal::currentUser();
-    $code_verifier = $this->session->get('code_verifier');
-    kint($code_verifier);
-    exit;
 
     $auth_code = $request->query->get('code');
+    $code_verifier = $request->query->get('state');
 
     if (!$auth_code) {
       \Drupal::messenger()->addError($this->t('Failed to connect to Mercado Libre.'));
@@ -70,14 +64,12 @@ final class WsMercadoLibreController extends ControllerBase {
       return new TrustedRedirectResponse('/user/' . $user->id() . '/ws-mercado-libre');
       
     }
-    
+    \Drupal::logger('ws_mercado_libre')->notice('Code de la url. %code', ['%code' => $auth_code]);
     $config = $this->configFactory->get('ws_mercado_libre.settings');
     $client_id = $config->get('client_id');
     $client_secret = $config->get('client_secret');
     $redirect_uri = $config->get('url_redirect');
-    $code_verifier = $this->session->get('code_verifier');
-    
-    \Drupal::logger('ws_mercado_libre')->notice('Codigo desde notify %code_verifier.', ['%code_verifier' => $code_verifier]);
+
     
     $client = new Client();
     $response = $client->post('https://api.mercadolibre.com/oauth/token', [
@@ -96,6 +88,8 @@ final class WsMercadoLibreController extends ControllerBase {
     $access_token = $data['access_token'];
     $refresh_token = $data['refresh_token'];
 
+    // Elimina el code_verifier de la sesión.
+    unset($_SESSION['code_verifier']);
 
     // Save the tokens to the user's configuration or database.
     $user = \Drupal::currentUser();
@@ -109,13 +103,13 @@ final class WsMercadoLibreController extends ControllerBase {
     return new TrustedRedirectResponse('/user/' . $user->id());
   }
   else {
-      return new TrustedRedirectResponse('/user/' . $user->id() . '/ws-mercado-libre');
       \Drupal::messenger()->addError($this->t('Failed to connect to Mercado Libre.'));
+      return new TrustedRedirectResponse('/user/' . $user->id() . '/ws-mercado-libre');
     }
  
+  
     
   }//Fin de notify
-
 
 }//Fin del controlador
 
