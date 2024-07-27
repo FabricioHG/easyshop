@@ -13,7 +13,7 @@ use GuzzleHttp\Client;
 use \Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use GuzzleHttp\Exception\RequestException;
-
+use GuzzleHttp\Exception\ClientException;
 
 
 
