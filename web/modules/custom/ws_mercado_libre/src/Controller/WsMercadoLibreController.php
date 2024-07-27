@@ -89,8 +89,8 @@ final class WsMercadoLibreController extends ControllerBase {
       if ($response) {
         $body = $response->getBody()->getContents();
         $data = json_decode($body, TRUE);
-        $mensaje = $data['error_description'];
-        \Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => print_r($data, TRUE) ]);
+        $mensaje = $data['message'];
+        \Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => $mensaje]);
       }
     }
    
