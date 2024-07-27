@@ -72,7 +72,7 @@ final class WsMercadoLibreController extends ControllerBase {
     $client_id = $config->get('client_id');
     $client_secret = $config->get('client_secret');
     $redirect_uri = $config->get('url_redirect');
-    $code_verifier = $this->session->get('code_verifier');;
+    $code_verifier = $this->session->get('code_verifier');
     
     \Drupal::logger('ws_mercado_libre')->notice('Codigo desde notify %code_verifier.', ['%code_verifier' => $code_verifier]);
     
