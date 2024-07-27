@@ -72,16 +72,27 @@ final class WsMercadoLibreController extends ControllerBase {
 
     
     $client = new Client();
-    $response = $client->post('https://api.mercadolibre.com/oauth/token', [
-      'form_params' => [
-        'grant_type' => 'authorization_code',
-        'client_id' => $client_id,
-        'client_secret' => $client_secret,
-        'code' => $auth_code,
-        'redirect_uri' => $redirect_uri,
-        'code_verifier' => $code_verifie,
-      ],
-    ]);
+    try {
+      $response = $client->post('https://api.mercadolibre.com/oauth/token', [
+        'form_params' => [
+          'grant_type' => 'authorization_code',
+          'client_id' => $client_id,
+          'client_secret' => $client_secret,
+          'code' => $auth_code,
+          'redirect_uri' => $redirect_uri,
+          'code_verifier' => $code_verifie,
+        ],
+      ]);
+    }
+    catch (ClientException $e) {
+      $response = $e->getResponse();
+      if ($response) {
+        $body = $response->getBody()->getContents();
+        $data = json_decode($body, TRUE);
+        $mensaje = $data['error_description'];
+        \Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => $mensaje]);
+      }
+    }
    
   if ($response->getStatusCode() == 200) {
     $data = json_decode($response->getBody(), true);
@@ -97,12 +108,6 @@ final class WsMercadoLibreController extends ControllerBase {
     $account->save(); 
 
     \Drupal::messenger()->addMessage($this->t('Successfully connected to Mercado Libre.'));
-    return new TrustedRedirectResponse('/user/' . $user->id());
-  }
-  elseif ($response->getStatusCode() == 400) {
-    $data = json_decode($response->getBody(), true);
-    $mensaje = $data['error_description'];
-    \Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => $mensaje]);
     return new TrustedRedirectResponse('/user/' . $user->id());
   }
   else {
