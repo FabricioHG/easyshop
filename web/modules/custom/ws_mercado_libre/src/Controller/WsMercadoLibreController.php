@@ -80,7 +80,7 @@ final class WsMercadoLibreController extends ControllerBase {
           'client_secret' => $client_secret,
           'code' => $auth_code,
           'redirect_uri' => $redirect_uri,
-          'code_verifier' => $code_verifie,
+          'code_verifier' => $code_verifier,
         ],
       ]);
     }
@@ -89,8 +89,8 @@ final class WsMercadoLibreController extends ControllerBase {
       if ($response) {
         $body = $response->getBody()->getContents();
         $data = json_decode($body, TRUE);
-        $mensaje = $data['message'];
-        \Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => $mensaje]);
+        $error = $data['error'];
+        \Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => $error]);
       }
     }
    
