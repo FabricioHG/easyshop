@@ -27,4 +27,12 @@ ws_mercado_libre.notify:
     _controller: '\Drupal\ws_mercado_libre\Controller\WsMercadoLibreController::notify'
   requirements:
     _permission: 'access content'
+
+ws_mercado_libre.test_page:
+  path: '/test_page'
+  defaults:
+    _title: 'Pagina de pruebas'
+    _controller: '\Drupal\ws_mercado_libre\Controller\WsMercadoLibreController::test_page'
+  requirements:
+    _permission: 'access content'
   

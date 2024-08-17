@@ -94,30 +94,47 @@ final class WsMercadoLibreController extends ControllerBase {
       }
     }
    
-  if ($response->getStatusCode() == 200) {
-    $data = json_decode($response->getBody(), true);
-    $access_token = $data['access_token'];
-    $refresh_token = $data['refresh_token'];
+    if ($response->getStatusCode() == 200) {
+      $data = json_decode($response->getBody(), true);
+      $access_token = $data['access_token'];
+      $refresh_token = $data['refresh_token'];
 
-    // Save the tokens to the user's configuration or database.
-    $user = \Drupal::currentUser();
-    $account = \Drupal\user\Entity\User::load($user->id());
-    $account->set('field_mercadolibre_access_token', $access_token);
-    $account->set('field_mercadolibre_refresh_token', $refresh_token);
-    $account->set('field_publish_products', TRUE);
-    $account->save(); 
+      // Save the tokens to the user's configuration or database.
+      $user = \Drupal::currentUser();
+      $account = \Drupal\user\Entity\User::load($user->id());
+      $account->set('field_mercadolibre_access_token', $access_token);
+      $account->set('field_mercadolibre_refresh_token', $refresh_token);
+      $account->set('field_publish_products', TRUE);
+      $account->save(); 
 
-    \Drupal::messenger()->addMessage($this->t('Successfully connected to Mercado Libre.'));
-    return new TrustedRedirectResponse('/user/' . $user->id());
-  }
-  else {
-      \Drupal::messenger()->addError($this->t('Failed to connect to Mercado Libre.'));
-      return new TrustedRedirectResponse('/user/' . $user->id() . '/ws-mercado-libre');
+      \Drupal::messenger()->addMessage($this->t('Successfully connected to Mercado Libre.'));
+      return new TrustedRedirectResponse('/user/' . $user->id());
     }
+    else {
+        \Drupal::messenger()->addError($this->t('Failed to connect to Mercado Libre.'));
+        return new TrustedRedirectResponse('/user/' . $user->id() . '/ws-mercado-libre');
+      }
  
   
     
   }//Fin de notify
+
+
+  //Pagina de prueba
+  public function test_page() {
+
+    $mercado_libre_service = \Drupal::service('ws_mercado_libre.mercadolibre_service');
+
+    $token = $mercado_libre_service->isTokenValid();
+    
+
+    $build = [
+      '#markup' => $token,
+    ];
+
+
+    return $build;
+  }
 
 }//Fin del controlador
 

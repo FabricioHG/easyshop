@@ -21,8 +21,9 @@ function belgrade_preprocess_region(&$variables) {
   }
 
   if ($region === 'top_bar') {
-    // Menu toggle text
-    $variables['navigation_toggle_text'] = t(theme_get_setting('navigation_toggle_text'));
+    // Menu toggle
+    $variables['navigation_toggle_text'] = theme_get_setting('navigation_toggle_text');
+    $variables['navigation_toggle_visibility'] = theme_get_setting('navigation_toggle_visibility');
   }
 
   if ($region === 'navigation') {

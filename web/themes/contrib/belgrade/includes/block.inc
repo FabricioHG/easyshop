@@ -12,8 +12,12 @@ use Drupal\block\Entity\Block;
  */
 function belgrade_theme_suggestions_block_alter(array &$suggestions, array $variables) {
   if (isset($variables['elements']['#id']) && isset($variables['elements']['#base_plugin_id'])) {
-    $region = Block::load($variables['elements']['#id'])->getRegion();
-    $suggestions[] = 'block__' . $variables['elements']['#base_plugin_id'] . '__' . $region;
+    if ($block = Block::load($variables['elements']['#id'])) {
+      $region = $block->getRegion();
+      if (!empty($region)) {
+        $suggestions[] = 'block__' . $variables['elements']['#base_plugin_id'] . '__' . $region;
+      }
+    }
   }
 
   if (isset($variables['elements']['content']['#block_content'])) {
