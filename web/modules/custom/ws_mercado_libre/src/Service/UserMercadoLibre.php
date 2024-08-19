@@ -9,6 +9,7 @@ use Drupal\Core\Routing\TrustedRedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ConnectException;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ClientException;
@@ -93,59 +94,38 @@ class UserMercadoLibre
     public function isTokenValid()
     {
     	$token = $this->userEntity->get('field_mercadolibre_access_token')->getValue()[0]['value'];
-    	kint('token '.$token);
-    	exit;
-
+    	
     	// Implementar la lógica para validar el token, por ejemplo, haciendo una solicitud a la API
         try {
-	      $response = $request->get('https://api.mercadolibre.com/users/me', [
-	        'form_params' => [
-	          'grant_type' => 'authorization_code',
-	          'client_id' => $client_id,
-	          'client_secret' => $client_secret,
-	          'code' => $auth_code,
-	          'redirect_uri' => $redirect_uri,
-	          'code_verifier' => $code_verifier,
-	        ],
-	      ]);
-
-	       $response = $client->get('https://api.mercadolibre.com/users/me', [
+	       $response = $this->request->get('https://api.mercadolibre.com/users/me', [
 			    'headers' => [
-			        'Authorization' => 'Bearer '.$this->token,
+			        'Authorization' => 'Bearer '.$token,
 			    ],
 			]);
-
-
 	    }
 	    catch (ClientException $e) {
 	      $response = $e->getResponse();
 	      if ($response) {
 	        $body = $response->getBody()->getContents();
 	        $data = json_decode($body, TRUE);
-	        $error = $data['error'];
-	        \Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => $error]);
+	        $error_message = $data['message'];
+	        \Drupal::logger('ws_mercado_libre')->notice('Error en la solicitud para validar token %mensaje', ['%mensaje' => $error_message]);
+	        return new TrustedRedirectResponse('/user');
 	      }
 	    }
+		catch (\Exception $e) {
+		    // Manejo de cualquier otro tipo de error
+		    \Drupal::logger('ws_mercado_libre')->notice('Error %error', ['%error' => $e->getMessage()]);
+		    return new TrustedRedirectResponse('/user');
+		}
 
-	     if ($response->getStatusCode() == 200) {
-	     	$this->messenger->addMessage($this->t('Token Valido'));
-	      // $data = json_decode($response->getBody(), true);
-	      // $access_token = $data['access_token'];
-	      // $refresh_token = $data['refresh_token'];
-
-	      // // Save the tokens to the user's configuration or database.
-	      // $user = \Drupal::currentUser();
-	      // $account = \Drupal\user\Entity\User::load($user->id());
-	      // $account->set('field_mercadolibre_access_token', $access_token);
-	      // $account->set('field_mercadolibre_refresh_token', $refresh_token);
-	      // $account->set('field_publish_products', TRUE);
-	      // $account->save(); 
-
-	      // \Drupal::messenger()->addMessage($this->t('Successfully connected to Mercado Libre.'));
-	      // return new TrustedRedirectResponse('/user/' . $user->id());
+	    if ($response->getStatusCode() == 200) {
+	    	$body = $response->getBody()->getContents();
+	        $data = json_decode($body, TRUE);
+	        $usuario_id_ml = $data['id'];
+	    	\Drupal::logger('ws_mercado_libre')->notice('token valido, id de usuario %usuario_id_ml', ['%usuario_id_ml' => $usuario_id_ml]);
+	    	return true;
 	     }
-    	
-    	//return true; // Ejemplo simplificado
     }
 
 }

@@ -98,12 +98,14 @@ final class WsMercadoLibreController extends ControllerBase {
       $data = json_decode($response->getBody(), true);
       $access_token = $data['access_token'];
       $refresh_token = $data['refresh_token'];
+      $token_expires_in = $data['expires_in'];
 
       // Save the tokens to the user's configuration or database.
       $user = \Drupal::currentUser();
       $account = \Drupal\user\Entity\User::load($user->id());
       $account->set('field_mercadolibre_access_token', $access_token);
       $account->set('field_mercadolibre_refresh_token', $refresh_token);
+      $account->set('field_mercadolibre_token_expires_in', $token_expires_in);
       $account->set('field_publish_products', TRUE);
       $account->save(); 
 
@@ -129,7 +131,7 @@ final class WsMercadoLibreController extends ControllerBase {
     
 
     $build = [
-      '#markup' => $token,
+      '#markup' => 'funciona',
     ];
 
 

@@ -16,6 +16,10 @@ function ws_mercado_libre_install() {
       'type' => 'string',
       'label' => 'MercadoLibre Refresh Token',
     ],
+    'field_ml_token_expires_in' => [
+      'type' => 'string',
+      'label' => 'Mercado Libre token expires in',
+    ],
     'field_publish_products' => [
       'type' => 'boolean',
       'label' => 'Publish Products to Mercado Libre',
@@ -57,6 +61,7 @@ function ws_mercado_libre_uninstall() {
     'field_mercadolibre_access_token',
     'field_mercadolibre_refresh_token',
     'field_publish_products',
+    'field_ml_token_expires_in',
   ];
 
   // Get the storage handler for field configuration and field storage configuration.
