@@ -63,9 +63,8 @@ class UserMercadoLibre
         return $mensaje;
     }
 
-    public function isTokenActive($token)
+    public function isTokenActive()
     {
-        
         $token_expires_in = $this->userEntity->get('field_ml_token_expires_in')->getValue()[0]['value'];
         if ($token_expires_in <= time()) {
         	\Drupal::logger('ws_mercado_libre')->notice('El token ha expirado');
