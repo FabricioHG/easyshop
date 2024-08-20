@@ -110,7 +110,7 @@ final class WsMercadoLibreController extends ControllerBase {
       $account->save(); 
 
       \Drupal::messenger()->addMessage($this->t('Successfully connected to Mercado Libre.'));
-      \Drupal::logger('ws_mercado_libre')->notice('Token expire in %expires_in', ['%expires_in' => date('d-m-Y h:m:s',$token_expires_in)]);
+      \Drupal::logger('ws_mercado_libre')->notice('Token expire in %expires_in', ['%expires_in' => date('d-m-Y h:i:s',$token_expires_in)]);
       return new TrustedRedirectResponse('/user/' . $user->id());
     }
     else {
