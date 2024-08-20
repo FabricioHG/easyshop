@@ -98,7 +98,7 @@ final class WsMercadoLibreController extends ControllerBase {
       $data = json_decode($response->getBody(), true);
       $access_token = $data['access_token'];
       $refresh_token = $data['refresh_token'];
-      $token_expires_in = $data['expires_in'];
+      $token_expires_in = time() + 21600;
 
       // Save the tokens to the user's configuration or database.
       $user = \Drupal::currentUser();
@@ -110,6 +110,7 @@ final class WsMercadoLibreController extends ControllerBase {
       $account->save(); 
 
       \Drupal::messenger()->addMessage($this->t('Successfully connected to Mercado Libre.'));
+      \Drupal::logger('ws_mercado_libre')->notice('Token expire in %expires_in', ['%expires_in' => date('d-m-Y h:m:s',$token_expires_in)]);
       return new TrustedRedirectResponse('/user/' . $user->id());
     }
     else {
@@ -127,11 +128,16 @@ final class WsMercadoLibreController extends ControllerBase {
 
     $mercado_libre_service = \Drupal::service('ws_mercado_libre.mercadolibre_service');
 
-    $token = $mercado_libre_service->isTokenValid();
+    $token = $mercado_libre_service->isTokenActive();
     
+    if (!empty($token) {
+      $res = "Token activo"
+    }else{
+      $res = "El token expiro";
+    }
 
     $build = [
-      '#markup' => 'funciona',
+      '#markup' => $res,
     ];
 
 
