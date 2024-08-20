@@ -131,7 +131,7 @@ final class WsMercadoLibreController extends ControllerBase {
     $token = $mercado_libre_service->isTokenActive();
     
     if (!empty($token) ) {
-      $res = "Token activo"
+      $res = "Token activo";
     }else{
       $res = "El token expiro";
     }
