@@ -95,7 +95,7 @@ class UserMercadoLibre
     	
     	// Implementar la lógica para validar el token, por ejemplo, haciendo una solicitud a la API
         try {
-	    	$response = $client->post('https://api.mercadolibre.com/oauth/token', [
+	    	$response = $this->request->post('https://api.mercadolibre.com/oauth/token', [
 	        	'form_params' => [
 	          		'grant_type' => 'authorization_code',
 	          		'client_id' => $this->client_id,
