@@ -67,7 +67,6 @@ class UserMercadoLibre
     {
         $token_expires_in = $this->userEntity->get('field_ml_token_expires_in')->getValue()[0]['value'];
         if ($token_expires_in <= time()) {
-        	\Drupal::logger('ws_mercado_libre')->notice('El token ha expirado');
         	return false;
         }
         else{
@@ -89,11 +88,53 @@ class UserMercadoLibre
         return $token;
     }
 
-    public function refreshToken($old_token)
+    public function refreshToken()
     {
-        // Implementar la lógica real para refrescar un token
-        // Este es un ejemplo simplificado
-        return 'refresh token ' . $old_token;
+    	$token = $this->userEntity->get('field_mercadolibre_access_token')->getValue()[0]['value'];
+    	$refresh_token = $this->userEntity->get('field_mercadolibre_refresh_token')->getValue()[0]['value'];
+    	
+    	// Implementar la lógica para validar el token, por ejemplo, haciendo una solicitud a la API
+        try {
+	    	$response = $client->post('https://api.mercadolibre.com/oauth/token', [
+	        	'form_params' => [
+	          		'grant_type' => 'authorization_code',
+	          		'client_id' => $this->client_id,
+	          		'client_secret' => $this->client_secret,
+	          		'refresh_token' => $refresh_token,
+	        	],
+	      	]);
+	    }
+	    catch (ClientException $e) {
+	      $response = $e->getResponse();
+	      if ($response) {
+	        $body = $response->getBody()->getContents();
+	        $data = json_decode($body, TRUE);
+	        $error_message = $data['message'];
+	        \Drupal::logger('ws_mercado_libre')->notice('Error al intentar actualizar el refresh token %mensaje', ['%mensaje' => $error_message]);
+	        return new TrustedRedirectResponse('/user');
+	      }
+	    }
+		catch (\Exception $e) {
+		    // Manejo de cualquier otro tipo de error
+		    \Drupal::logger('ws_mercado_libre')->notice('Error %error', ['%error' => $e->getMessage()]);
+		    return new TrustedRedirectResponse('/user');
+		}
+
+	    if ($response->getStatusCode() == 200) {
+	    	$body = $response->getBody()->getContents();
+	        $data = json_decode($body, TRUE);
+	        $access_token_new = $data['access_token'];
+     		$refresh_token_new = $data['refresh_token'];
+     		$username = $this->userEntity->getName();
+
+	      	// Save the tokens to the user's configuration or database.
+	      	$this->userEntity->set('field_mercadolibre_access_token', $access_token_new);
+	      	$this->userEntity->set('field_mercadolibre_refresh_token', $refresh_token_new);
+	      	$this->userEntity->save(); 
+
+	    	\Drupal::logger('ws_mercado_libre')->notice('Se actualizo el token del usuario %username', ['%username' => $username]);
+	    	return true;
+	     }
     }
 
     public function isTokenValid()
