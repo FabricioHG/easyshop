@@ -111,13 +111,13 @@ class UserMercadoLibre
 	        $data = json_decode($body, TRUE);
 	        $error_message = $data['message'];
 	        \Drupal::logger('ws_mercado_libre')->notice('Error al intentar actualizar el refresh token %mensaje', ['%mensaje' => $error_message]);
-	        return new TrustedRedirectResponse('/user');
+	        return false; //new TrustedRedirectResponse('/user');
 	      }
 	    }
 		catch (\Exception $e) {
 		    // Manejo de cualquier otro tipo de error
 		    \Drupal::logger('ws_mercado_libre')->notice('Error %error', ['%error' => $e->getMessage()]);
-		    return new TrustedRedirectResponse('/user');
+		    return false; //new TrustedRedirectResponse('/user');
 		}
 
 	    if ($response->getStatusCode() == 200) {

@@ -128,12 +128,12 @@ final class WsMercadoLibreController extends ControllerBase {
 
     $mercado_libre_service = \Drupal::service('ws_mercado_libre.mercadolibre_service');
 
-    $token = $mercado_libre_service->isTokenActive();
+    $token = $mercado_libre_service->refreshToken();
     
     if (!empty($token) ) {
-      $res = "Token activo";
+      $res = "Token actualizado";
     }else{
-      $res = "El token expiro";
+      $res = "Problema al actualizar el token";
     }
 
     $build = [
