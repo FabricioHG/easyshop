@@ -97,7 +97,7 @@ class UserMercadoLibre
         try {
 	    	$response = $this->request->post('https://api.mercadolibre.com/oauth/token', [
 	        	'form_params' => [
-	          		'grant_type' => 'authorization_code',
+	          		'grant_type' => 'refresh_token',
 	          		'client_id' => $this->client_id,
 	          		'client_secret' => $this->client_secret,
 	          		'refresh_token' => $refresh_token,
