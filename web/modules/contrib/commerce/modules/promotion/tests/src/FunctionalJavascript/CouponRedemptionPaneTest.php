@@ -277,7 +277,6 @@ class CouponRedemptionPaneTest extends CommerceWebDriverTestBase {
     // Ensure that the payment method ajax works with the coupon ajax.
     $radio_button = $this->getSession()->getPage()->findField('Visa ending in 9999');
     $radio_button->click();
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     $this->submitForm([], 'Continue to review');
     $this->assertSession()->pageTextContains('Visa ending in 9999');

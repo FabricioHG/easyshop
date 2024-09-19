@@ -266,6 +266,14 @@ class PaymentOptionsBuilderTest extends OrderKernelTestBase {
     $this->assertEquals('Credit card', $options[3]->getLabel());
     $this->assertEquals('onsite', $options[3]->getPaymentGatewayId());
     $this->assertEquals('credit_card', $options[3]->getPaymentMethodTypeId());
+
+    // Set expiration date way back in time.
+    $this->order->get('payment_method')->entity->setExpiresTime(1)->save();
+    // Check if expired reusable payment method is still available.
+    $options = $this->paymentOptionsBuilder->buildOptions($this->order);
+    /** @var \Drupal\commerce_payment\PaymentOption[] $options */
+    $options = array_values($options);
+    $this->assertCount(4, $options);
   }
 
   /**

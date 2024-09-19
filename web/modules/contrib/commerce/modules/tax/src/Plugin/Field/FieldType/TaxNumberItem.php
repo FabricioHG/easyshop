@@ -170,7 +170,7 @@ class TaxNumberItem extends FieldItemBase implements TaxNumberItemInterface {
             VerificationResult::STATE_FAILURE,
             VerificationResult::STATE_UNKNOWN,
           ],
-          'message' => $this->t('Invalid verification_state specified.'),
+          'message' => $this->t('Invalid verification state specified.'),
         ],
       ],
     ]);

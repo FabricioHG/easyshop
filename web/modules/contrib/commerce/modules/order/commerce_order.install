@@ -401,3 +401,40 @@ function commerce_order_update_8220() {
 
   return "You have elected to skip the order balance backfill. Please update your database manually with the following SQL:\n   UPDATE commerce_order SET balance__currency_code = total_price__currency_code, balance__number = total_price__number - total_paid__number WHERE total_paid__number IS NOT NULL AND total_price__number IS NOT NULL and balance__number IS NULL;";
 }
+
+/**
+ * Update customer orders list view and change default url rewrite pattern.
+ */
+function commerce_order_update_8221() {
+  $config_factory = \Drupal::configFactory();
+  $view = $config_factory->getEditable('views.view.commerce_user_orders');
+  if ($view->get('display.default.display_options.fields.order_number.alter.path') === 'user/{{ raw_arguments.uid }}/orders/{{ order_id }}') {
+    return "The view is already up-to-date.";
+  }
+
+  if ($view->get('display.default.display_options.fields.order_number.alter.path') === 'user/{{ arguments.uid }}/orders/{{ order_id }}') {
+    $view->set('display.default.display_options.fields.order_number.alter.path', 'user/{{ raw_arguments.uid }}/orders/{{ order_id }}');
+    $view->save(TRUE);
+    return "The views.view.commerce_user_orders view was updated";
+  }
+
+  return "The views.view.commerce_user_orders couldn't be updated as the default path for the title field has been overridden with custom value. Test if rewrite pattern is correct.";
+}
+
+/**
+ * Add the "customer_comments" field to orders.
+ */
+function commerce_order_update_8222() {
+  $storage_definition = BaseFieldDefinition::create('string_long')
+    ->setLabel(t('Customer comments'))
+    ->setDisplayOptions('view', [
+      'type' => 'string',
+      'label' => 'above',
+      'settings' => [],
+    ])
+    ->setDisplayConfigurable('form', TRUE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  $update_manager = \Drupal::entityDefinitionUpdateManager();
+  $update_manager->installFieldStorageDefinition('customer_comments', 'commerce_order', 'commerce_order', $storage_definition);
+}

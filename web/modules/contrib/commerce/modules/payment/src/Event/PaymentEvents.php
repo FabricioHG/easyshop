@@ -14,6 +14,15 @@ final class PaymentEvents {
   const FILTER_PAYMENT_GATEWAYS = 'commerce_payment.filter_payment_gateways';
 
   /**
+   * Name of the event fired when payment options are built for an order.
+   *
+   * @Event
+   *
+   * @see \Drupal\commerce_payment\Event\FilterPaymentOptionsEvent
+   */
+  const FILTER_PAYMENT_OPTIONS = 'commerce_payment.filter_payment_options';
+
+  /**
    * Name of the event fired after loading a payment.
    *
    * @Event

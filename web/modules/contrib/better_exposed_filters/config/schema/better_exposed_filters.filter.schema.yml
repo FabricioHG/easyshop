@@ -14,7 +14,7 @@ better_exposed_filters_filter_widget:
           type: boolean
           label: 'Sort filter options alphabetically'
         placeholder_text:
-          type: string
+          type: label
           label: 'Placeholder text for the filter'
         rewrite:
           type: mapping
@@ -35,6 +35,9 @@ better_exposed_filters_filter_widget:
         is_secondary:
           type: boolean
           label: 'This filter is a secondary option'
+        hide_label:
+          type: boolean
+          label: 'Hide the label'
 
 # BEF exposed filter widgets
 better_exposed_filters.filter.*:

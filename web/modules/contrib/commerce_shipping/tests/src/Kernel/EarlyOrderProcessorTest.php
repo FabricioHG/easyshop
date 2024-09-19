@@ -89,7 +89,7 @@ class EarlyOrderProcessorTest extends ShippingKernelTestBase {
     /** @var \Drupal\commerce_order\Entity\OrderInterface $order */
     $order = Order::create([
       'type' => 'default',
-      'uid' => $this->createUser(['mail' => $this->randomString() . '@example.com']),
+      'uid' => $this->createUser(),
       'store_id' => $this->store->id(),
       'order_items' => [$first_order_item],
     ]);

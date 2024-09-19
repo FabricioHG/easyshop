@@ -28,7 +28,7 @@ class OrderLockingTest extends OrderKernelTestBase {
    */
   protected function setUp(): void {
     parent::setUp();
-    $this->user = $this->createUser(['mail' => 'test@example.com']);
+    $this->user = $this->createUser();
   }
 
   /**

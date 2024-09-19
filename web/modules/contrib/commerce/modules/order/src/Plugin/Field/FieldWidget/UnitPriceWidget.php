@@ -157,7 +157,13 @@ class UnitPriceWidget extends WidgetBase implements ContainerFactoryPluginInterf
     $values = NestedArray::getValue($form_state->getValues(), $path);
     $order_item = $items->getEntity();
     assert($order_item instanceof OrderItemInterface);
-    $unit_price = NULL;
+
+    // Whenever the "Override unit price" checkbox is unchecked, clear the
+    // "overridden_unit_price" flag.
+    if ($order_item->isUnitPriceOverridden() && empty($values['override'])) {
+      $order_item->set('overridden_unit_price', FALSE);
+      return;
+    }
 
     if (!empty($values['override']) || !$this->getSetting('require_confirmation')) {
       // Verify the passed number was numeric before trying to set it.

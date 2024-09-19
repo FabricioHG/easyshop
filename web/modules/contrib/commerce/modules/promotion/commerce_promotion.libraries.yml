@@ -1,5 +1,4 @@
 coupon_redemption_form:
-  version: VERSION
   js:
     js/commerce_promotion.coupon_redemption_form.js: {}
   dependencies:

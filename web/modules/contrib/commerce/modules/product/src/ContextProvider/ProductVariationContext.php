@@ -143,7 +143,7 @@ class ProductVariationContext implements ContextProviderInterface {
     }
 
     if (!($value instanceof ProductVariationInterface)) {
-      if ($this->sampleEntityGenerator) {
+      if ($this->sampleEntityGenerator && !empty($layout_page)) {
         $value = $this->sampleEntityGenerator->get('commerce_product_variation', reset($variation_types));
       }
       else {

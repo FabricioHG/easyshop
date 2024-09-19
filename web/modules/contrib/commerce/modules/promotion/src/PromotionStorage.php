@@ -38,6 +38,7 @@ class PromotionStorage extends CommerceContentEntityStorage implements Promotion
     $date = $order->getCalculationDate()->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
 
     $query = $this->getQuery();
+    $query->addTag('commerce_promotion_available');
     $query->accessCheck(FALSE);
     $or_condition = $query->orConditionGroup()
       ->condition('end_date', $date, '>')

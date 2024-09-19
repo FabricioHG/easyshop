@@ -64,7 +64,7 @@ class MinorUnitsConverterTest extends UnitTestCase {
    * @return array
    *   The test data.
    */
-  public function currencyConversionData() {
+  public static function currencyConversionData() {
     return [
       [new Price(10, 'EUR'), 1000],
       [new Price(1.23, 'USD'), 123],

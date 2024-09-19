@@ -37,6 +37,8 @@ class PriceItem extends FieldItemBase {
 
     $properties['formatted'] = DataDefinition::create('formatted_price')
       ->setLabel(t('Formatted price'))
+      ->setComputed(TRUE)
+      ->setInternal(FALSE)
       ->setRequired(FALSE);
 
     return $properties;

@@ -48,6 +48,13 @@ class PromotionStorageTest extends OrderKernelTestBase {
   protected $orderType;
 
   /**
+   * The usage.
+   *
+   * @var \Drupal\commerce_promotion\PromotionUsageInterface
+   */
+  protected $usage;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
@@ -59,6 +66,7 @@ class PromotionStorageTest extends OrderKernelTestBase {
     $this->installSchema('commerce_promotion', ['commerce_promotion_usage']);
 
     $this->promotionStorage = $this->container->get('entity_type.manager')->getStorage('commerce_promotion');
+    $this->usage = $this->container->get('commerce_promotion.usage');
 
     $this->orderType = OrderType::load('default');
     $order_item = OrderItem::create([
