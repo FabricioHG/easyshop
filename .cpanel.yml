@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home2/easysho1/dev.easyshop.com.mx/
+    - export DEPLOYPATH=/home2/easysho1/public_html/
     - /bin/cp -R private $DEPLOYPATH
     - /bin/cp -R vendor $DEPLOYPATH
     - /bin/cp -R web $DEPLOYPATH
