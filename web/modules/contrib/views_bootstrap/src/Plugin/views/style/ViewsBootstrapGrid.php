@@ -75,7 +75,7 @@ class ViewsBootstrapGrid extends StylePluginBase {
 
     foreach (ViewsBootstrap::getBreakpoints() as $breakpoint) {
       $breakpoint_option = "col_$breakpoint";
-      $prefix = 'col' . ($breakpoint != 'xs' ? '-' . $breakpoint : '');
+      $prefix = ViewsBootstrap::getColumnPrefix($breakpoint);
 
       $form[$breakpoint_option] = [
         '#type' => 'select',

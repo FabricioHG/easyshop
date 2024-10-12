@@ -158,3 +158,62 @@ function views_bootstrap_update_91004(&$sandbox): void {
     }
   }
 }
+
+/**
+ * Set Views Bootstrap carousel caption breakpoint default option.
+ */
+function views_bootstrap_update_91005(&$sandbox): void {
+  $config_factory = \Drupal::configFactory();
+
+  foreach ($config_factory->listAll('views.view.') as $view_config_name) {
+    $view = $config_factory->getEditable($view_config_name);
+    $save = FALSE;
+    $displays = $view->get('display');
+    foreach ($displays as $display_name => &$display) {
+      if (!empty($display['display_options']['style']) && !empty($display['display_options']['style']['options'])) {
+        $style = (string) $display['display_options']['style']['type'];
+
+        // Check for dropdown with default button class.
+        if ($style == 'views_bootstrap_carousel') {
+          $display['display_options']['style']['options']['caption_breakpoints'] = 'd-none d-md-block';
+          \Drupal::logger('views_bootstrap')->notice("Updating options in $display_name for $view_config_name");
+          $save = TRUE;
+        }
+      }
+    }
+    if ($save) {
+      $view->set('display', $displays);
+      $view->save(TRUE);
+    }
+  }
+}
+
+/**
+ * Set Views Bootstrap carousel caption breakpoint default option.
+ */
+function views_bootstrap_update_91006(&$sandbox): void {
+  $config_factory = \Drupal::configFactory();
+
+  foreach ($config_factory->listAll('views.view.') as $view_config_name) {
+    $view = $config_factory->getEditable($view_config_name);
+    $save = FALSE;
+    $displays = $view->get('display');
+    foreach ($displays as $display_name => &$display) {
+      if (!empty($display['display_options']['style']) && !empty($display['display_options']['style']['options'])) {
+        $style = (string) $display['display_options']['style']['type'];
+
+        // Check for ride option.
+        if ($style == 'views_bootstrap_carousel') {
+          $ride_value = $display->display_options['style']['options']['ride'] ?? NULL;
+          $display['display_options']['style']['options']['ride'] = $ride_value === TRUE ? 'carousel' : NULL;
+          \Drupal::logger('views_bootstrap')->notice("Updating options in $display_name for $view_config_name");
+          $save = TRUE;
+        }
+      }
+    }
+    if ($save) {
+      $view->set('display', $displays);
+      $view->save(TRUE);
+    }
+  }
+}

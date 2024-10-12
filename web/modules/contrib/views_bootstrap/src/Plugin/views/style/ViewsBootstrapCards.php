@@ -72,7 +72,7 @@ class ViewsBootstrapCards extends StylePluginBase {
     if ($this->usesFields()) {
       $form['display'] = [
         '#type' => 'radios',
-        '#title' => $this->t('Content Display'),
+        '#title' => $this->t('Content display'),
         '#options' => [
           'fields' => $this->t('Select by fields'),
           'content' => $this->t('Display row content'),
@@ -140,7 +140,7 @@ class ViewsBootstrapCards extends StylePluginBase {
       '#type' => 'checkbox',
       '#title' => $this->t('Use card groups'),
       '#description' => $this->t('Use card groups to render cards as a single, attached element with equal width and height columns. Card groups start off stacked and use display: flex; to become attached with uniform dimensions starting at the sm breakpoint.'),
-      '#default_value' => $this->options['group'],
+      '#default_value' => $this->options['card_group'],
     ];
 
     $form['row_class_custom'] = [
@@ -160,7 +160,7 @@ class ViewsBootstrapCards extends StylePluginBase {
       '#title' => $this->t('Custom col wrapper class'),
       '#description' => $this->t('Additional classes to provide on the col wrapping div. Separated by a space.'),
       '#type' => 'textfield',
-      '#default_value' => $this->options['row_class_custom'],
+      '#default_value' => $this->options['col_class_custom'],
       '#states' => [
         'visible' => [
           ':input[name="style_options[card_group]"]' => ['checked' => FALSE],

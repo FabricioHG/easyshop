@@ -183,8 +183,10 @@ function template_preprocess_views_bootstrap_carousel(array &$vars): void {
   $vars['wrap'] = $options['wrap'];
   $vars['effect'] = $options['effect'];
   $vars['columns'] = $options['columns'];
-  $vars['breakpoints'] = $options['breakpoints'];
+  $prefix = ViewsBootstrap::getColumnPrefix($options['breakpoints']);
+  $vars['breakpoints'] = $prefix . '-' . intval(12 / $options['columns']);
   $vars['use_caption'] = $options['use_caption'];
+  $vars['caption_breakpoints'] = $options['caption_breakpoints'];
   $vars['ride'] = $options['ride'];
   $vars['display'] = 'content';
 

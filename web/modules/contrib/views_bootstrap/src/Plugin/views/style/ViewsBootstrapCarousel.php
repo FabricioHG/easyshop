@@ -43,13 +43,14 @@ class ViewsBootstrapCarousel extends StylePluginBase {
     // General carousel settings.
     $options['interval'] = ['default' => 5000];
     $options['keyboard'] = ['default' => TRUE];
-    $options['ride'] = ['default' => TRUE];
+    $options['ride'] = ['default' => ''];
     $options['navigation'] = ['default' => TRUE];
     $options['indicators'] = ['default' => TRUE];
     $options['pause'] = ['default' => TRUE];
     $options['wrap'] = ['default' => TRUE];
     $options['effect'] = ['default' => 'slide'];
     $options['use_caption'] = ['default' => TRUE];
+    $options['caption_breakpoints'] = ['default' => 'd-none d-md-block'];
     $options['columns'] = ['default' => 1];
     $options['breakpoints'] = ['default' => 'md'];
 
@@ -76,12 +77,8 @@ class ViewsBootstrapCarousel extends StylePluginBase {
 
     $fields = $this->displayHandler->getFieldLabels(TRUE);
 
-    $form['interval'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Interval'),
-      '#description' => $this->t('The amount of time to delay between automatically cycling an item. If false, carousel will not automatically cycle.'),
-      '#default_value' => $this->options['interval'],
-    ];
+    $form['row_class']['#title'] = $this->t('Custom carousel item class');
+    $form['row_class']['#description'] = $this->t('Additional classes to provide on the carousel-item row div. Separated by a space.');
 
     $form['keyboard'] = [
       '#type' => 'checkbox',
@@ -91,10 +88,27 @@ class ViewsBootstrapCarousel extends StylePluginBase {
     ];
 
     $form['ride'] = [
-      '#type' => 'checkbox',
+      '#type' => 'select',
       '#title' => $this->t('Ride (Autoplay)'),
-      '#description' => $this->t('Autoplay the carousel on load.'),
+      '#description' => $this->t('<a href=":docs">See Bootstrap documentation</a>', [':docs' => 'https://getbootstrap.com/docs/5.3/components/carousel/#autoplaying-carousels']),
+      '#empty_option' => $this->t('Do not autoplay'),
+      '#options' => [
+        'carousel' => $this->t('Autoplay the carousel on load'),
+        'true' => $this->t('Autoplay the carousel after user interaction'),
+      ],
       '#default_value' => $this->options['ride'],
+    ];
+
+    $form['interval'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Interval'),
+      '#description' => $this->t('The amount of time to delay between automatically cycling an item.'),
+      '#states' => [
+        'visible' => [
+          ':input[name="style_options[ride]"]' => ['filled' => TRUE],
+        ],
+      ],
+      '#default_value' => $this->options['interval'],
     ];
 
     $form['navigation'] = [
@@ -119,8 +133,23 @@ class ViewsBootstrapCarousel extends StylePluginBase {
     $form['use_caption'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Add captions to your slides for add title and description over the image.'),
-      '#description' => $this->t('<a href=":docs">See Bootstrap documentation</a>', [':docs' => 'https://getbootstrap.com/docs/4.0/components/carousel/#with-captions']),
+      '#description' => $this->t('<a href=":docs">See Bootstrap documentation</a>', [':docs' => 'https://getbootstrap.com/docs/5.3/components/carousel/#captions']),
       '#default_value' => $this->options['use_caption'],
+    ];
+
+    $form['caption_breakpoints'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Hide captions'),
+      '#description' => $this->t('Only show captions for the selected breakpoint and larger.'),
+      '#empty_option' => $this->t('Always Show'),
+      '#options' => [
+        'd-none d-sm-block' => $this->t('Small'),
+        'd-none d-md-block' => $this->t('Medium'),
+        'd-none d-lg-block' => $this->t('Large'),
+        'd-none d-xl-block' => $this->t('Extra Large'),
+        'd-none d-xxl-block' => $this->t('Extra Extra Large'),
+      ],
+      '#default_value' => $this->options['caption_breakpoints'],
     ];
 
     $form['wrap'] = [
@@ -133,9 +162,8 @@ class ViewsBootstrapCarousel extends StylePluginBase {
     $form['effect'] = [
       '#type' => 'select',
       '#title' => $this->t('Effect'),
-      '#description' => $this->t('Transition effect (since bootstrap 4.1). <a href=":docs">See Bootstrap documentation</a>', [':docs' => 'https://getbootstrap.com/docs/4.1/components/carousel/#crossfade']),
+      '#description' => $this->t('Transition effect (since bootstrap 4.1). <a href=":docs">See Bootstrap documentation</a>', [':docs' => 'https://getbootstrap.com/docs/5.3/components/carousel/#crossfade']),
       '#options' => [
-        '' => $this->t('No effect'),
         'slide' => $this->t('Slide'),
         'slide carousel-fade' => $this->t('Fade'),
       ],
@@ -164,6 +192,8 @@ class ViewsBootstrapCarousel extends StylePluginBase {
         'sm' => $this->t('Small'),
         'md' => $this->t('Medium'),
         'lg' => $this->t('Large'),
+        'xl' => $this->t('Extra large'),
+        'xxl' => $this->t('Extra extra large'),
       ],
       '#default_value' => $this->options['breakpoints'],
     ];

@@ -34,7 +34,7 @@ views.style.views_bootstrap_cards:
   mapping:
     display:
       type: string
-      label: "Content Display"
+      label: "Content display"
       options:
         fields: "Select by fields"
         content: "Display row content"
@@ -74,9 +74,12 @@ views.style.views_bootstrap_carousel:
       type: boolean
       label: "Keyboard"
     ride:
-      type: boolean
+      type: string
       label: "Ride (Autoplay)"
-      description: "Autoplay the carousel on load."
+      description: "See Bootstrap documentation"
+      options:
+        'carousel': 'Autoplay the carousel on load'
+        'true': 'Autoplay the carousel after user interaction'
     navigation:
       type: boolean
       label: "Show navigation"
@@ -89,6 +92,15 @@ views.style.views_bootstrap_carousel:
     use_caption:
       type: boolean
       label: "Add captions to your slides for add title and description over the image."
+    caption_breakpoints:
+      type: string
+      label: "Hide captions"
+      options:
+        'd-none d-sm-block': 'Small'
+        'd-none d-md-block': 'Medium'
+        'd-none d-lg-block': 'Large'
+        'd-none d-xl-block': 'Extra Large'
+        'd-none d-xxl-block': 'Extra Extra Large'
     wrap:
       type: boolean
       label: "Wrap"
@@ -101,6 +113,13 @@ views.style.views_bootstrap_carousel:
     breakpoints:
       type: string
       label: "Breakpoints"
+      options:
+        'xs': "Extra Small"
+        'sm': "Small"
+        'md': "Medium"
+        'lg': "Large"
+        'xl': "Extra large"
+        'xxl': "Extra extra large"
     display:
       type: string
       label: "Display"

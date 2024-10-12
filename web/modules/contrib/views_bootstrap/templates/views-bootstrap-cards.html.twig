@@ -58,7 +58,7 @@
         </div>
       </div>
     </div>
-    {% if (key + 1) % columns == 0 %}
+    {% if (key + 1) % columns == 0 and not loop.last %}
       </div><div class="row">
     {% endif %}
   {% endfor %}
