@@ -160,3 +160,7 @@ font.roboto:
       '//fonts.googleapis.com/css?family=Roboto:300,400,400i,700':
         { type: external, minified: true }
       css/fonts/roboto.css: {}
+
+drupal.message:
+  js:
+    js/message.js: {}

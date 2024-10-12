@@ -127,7 +127,10 @@ class ProductVariationListBuilder extends EntityListBuilder implements FormInter
     if ($this->hasTableDrag) {
       $header['weight'] = $this->t('Weight');
     }
-    return $header + parent::buildHeader();
+    $header = $header + parent::buildHeader();
+    $header['copy_link'] = '';
+
+    return $header;
   }
 
   /**
@@ -166,7 +169,16 @@ class ProductVariationListBuilder extends EntityListBuilder implements FormInter
       ];
     }
 
-    return $row + parent::buildRow($entity);
+    $row = $row + parent::buildRow($entity);
+
+    // Add the "Copy variation link" button.
+    $row['copy_link'] = [
+      '#theme' => 'commerce_copy_link',
+      '#link' => $entity->toUrl()->setAbsolute()->toString(),
+      '#title' => $this->t('Copy variation link to clipboard'),
+    ];
+
+    return $row;
   }
 
   /**

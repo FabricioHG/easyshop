@@ -16,13 +16,14 @@
   background-image: url("../icons/787878/drupal-cart.svg");
 }
 .toolbar-tray .toolbar-icon.toolbar-icon-commerce-admin-commerce:active::before,
-.toolbar-tray .toolbar-icon.toolbar-icon-commerce-admin-commerce.is-active::before {
+.toolbar-tray
+  .toolbar-icon.toolbar-icon-commerce-admin-commerce.is-active::before {
   background-image: url("../icons/000000/drupal-cart.svg");
 }
 
 .toolbar .toolbar-icon.toolbar-icon-commerce-inbox span {
   position: absolute;
-  top: .5rem;
+  top: 0.5rem;
   left: 1.375rem;
   display: block;
   display: -webkit-inline-box;
@@ -38,7 +39,7 @@
   border: 1px solid currentColor;
   border-radius: 50%;
   background: white;
-  font-size: .5rem;
+  font-size: 0.5rem;
   -webkit-box-align: center;
   -ms-flex-align: center;
   -webkit-box-pack: center;
@@ -72,7 +73,11 @@
   .toolbar .toolbar-bar .toolbar-tab > .toolbar-icon-commerce-inbox {
     padding-left: 3.25em;
   }
-  [dir="rtl"] .toolbar .toolbar-bar .toolbar-tab > .toolbar-icon-commerce-inbox {
+  [dir="rtl"]
+    .toolbar
+    .toolbar-bar
+    .toolbar-tab
+    > .toolbar-icon-commerce-inbox {
     padding-right: 3.25em;
   }
 }

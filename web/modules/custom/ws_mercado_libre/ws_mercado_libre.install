@@ -1,0 +1,105 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+/**
+ * Implements hook_install().
+ */
+function ws_mercado_libre_install() {
+  $fields = [
+    'field_mercadolibre_access_token' => [
+      'type' => 'string',
+      'label' => 'MercadoLibre Access Token',
+    ],
+    'field_mercadolibre_refresh_token' => [
+      'type' => 'string',
+      'label' => 'MercadoLibre Refresh Token',
+    ],
+    'field_ml_token_expires_in' => [
+      'type' => 'string',
+      'label' => 'Mercado Libre token expires in',
+    ],
+    'field_publish_products' => [
+      'type' => 'boolean',
+      'label' => 'Publish Products to Mercado Libre',
+    ],
+  ];
+
+  foreach ($fields as $field_name => $field_config) {
+    // Check if the field storage configuration exists.
+    $field_storage = \Drupal\field\Entity\FieldStorageConfig::load($field_name);
+    if (!$field_storage) {
+      // Create the field storage configuration.
+      \Drupal\field\Entity\FieldStorageConfig::create([
+        'field_name' => $field_name,
+        'entity_type' => 'user',
+        'type' => $field_config['type'],
+      ])->save();
+    }
+
+    // Check if the field configuration exists.
+    $field_config_entity = \Drupal\field\Entity\FieldConfig::load($field_name);
+    if (!$field_config_entity) {
+      // Create the field configuration.
+      \Drupal\field\Entity\FieldConfig::create([
+        'field_name' => $field_name,
+        'entity_type' => 'user',
+        'bundle' => 'user',
+        'label' => $field_config['label'],
+      ])->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function ws_mercado_libre_uninstall() {
+  // Define the fields to be deleted.
+  $fields = [
+    'field_mercadolibre_access_token',
+    'field_mercadolibre_refresh_token',
+    'field_publish_products',
+    'field_ml_token_expires_in',
+  ];
+
+  // Get the storage handler for field configuration and field storage configuration.
+  $field_config_storage = \Drupal::entityTypeManager()->getStorage('field_config');
+  $field_storage_config_storage = \Drupal::entityTypeManager()->getStorage('field_storage_config');
+
+  foreach ($fields as $field_name) {
+    // Load all field configurations for the given field name and entity type.
+    $field_configs = $field_config_storage->loadMultiple(
+      array_map(
+        function ($bundle) use ($field_name) {
+          return 'user.' . $bundle . '.' . $field_name;
+        },
+        array_keys(\Drupal::service('entity_type.bundle.info')->getBundleInfo('user'))
+      )
+    );
+
+    // Delete all field configurations.
+    foreach ($field_configs as $field_config) {
+      $field_config->delete();
+      \Drupal::messenger()->addMessage(t('Field configuration for %field_name deleted.', ['%field_name' => $field_name]));
+      \Drupal::logger('ws_mercado_libre')->notice('Field configuration for %field_name deleted.', ['%field_name' => $field_name]);
+    }
+
+    // Load the field storage configuration.
+    $field_storage = $field_storage_config_storage->load('user.' . $field_name);
+
+    // Check if the field storage configuration exists and delete it if so.
+    if ($field_storage) {
+      $field_storage->delete();
+      \Drupal::messenger()->addMessage(t('Field storage for %field_name deleted.', ['%field_name' => $field_name]));
+      \Drupal::logger('ws_mercado_libre')->notice('Field storage for %field_name deleted.', ['%field_name' => $field_name]);
+    } else {
+      \Drupal::messenger()->addMessage(t('No field storage found for %field_name.', ['%field_name' => $field_name]));
+      \Drupal::logger('ws_mercado_libre')->notice('No field storage found for %field_name.', ['%field_name' => $field_name]);
+    }
+  }
+}
+
+
+

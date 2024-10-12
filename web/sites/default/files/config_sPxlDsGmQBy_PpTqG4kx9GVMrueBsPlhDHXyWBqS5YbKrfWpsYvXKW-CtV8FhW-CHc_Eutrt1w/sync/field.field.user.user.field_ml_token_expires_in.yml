@@ -1,0 +1,20 @@
+uuid: afd13642-5a54-4c86-87f8-3e9cb6b4c6c3
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_ml_token_expires_in
+  module:
+    - user
+id: user.user.field_ml_token_expires_in
+field_name: field_ml_token_expires_in
+entity_type: user
+bundle: user
+label: 'Mercado Libre token expires in'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

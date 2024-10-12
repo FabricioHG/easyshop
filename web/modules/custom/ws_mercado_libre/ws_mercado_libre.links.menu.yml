@@ -1,0 +1,6 @@
+ws_mercado_libre.settings:
+  title: 'Mercado Libre Settings'
+  description: 'Configure the Client ID and Client Secret for Mercado Libre integration.'
+  parent: system.admin_config_services
+  route_name: ws_mercado_libre.settings
+  weight: 100

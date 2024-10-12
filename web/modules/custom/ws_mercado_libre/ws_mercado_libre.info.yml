@@ -1,0 +1,5 @@
+name: 'WS Mercado Libre'
+type: module
+description: 'Sincronizar publicacion de productos con Mercado Libre'
+package: Webs_systems
+core_version_requirement: ^10 || ^11

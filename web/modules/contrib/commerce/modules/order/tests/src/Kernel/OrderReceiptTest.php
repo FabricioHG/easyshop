@@ -78,7 +78,7 @@ class OrderReceiptTest extends OrderKernelTestBase {
 
     $this->installConfig(['system', 'language']);
     $this->installSchema('locale', ['locales_source', 'locales_target', 'locales_location']);
-    $user = $this->createUser(['mail' => $this->randomString() . '@example.com']);
+    $user = $this->createUser();
 
     foreach (array_keys($this->translations) as $langcode) {
       ConfigurableLanguage::createFromLangcode($langcode)->save();
@@ -262,7 +262,7 @@ class OrderReceiptTest extends OrderKernelTestBase {
    * @return array
    *   The data.
    */
-  public function providerOrderReceiptMultilingualData() {
+  public static function providerOrderReceiptMultilingualData() {
     return [
       [NULL, 'en', '$12.00'],
       [Language::LANGCODE_DEFAULT, 'en', '$12.00'],

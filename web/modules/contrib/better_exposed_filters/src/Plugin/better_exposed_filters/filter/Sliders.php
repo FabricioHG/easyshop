@@ -29,7 +29,7 @@ class Sliders extends FilterWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration() {
+  public function defaultConfiguration(): array {
     return parent::defaultConfiguration() + [
       'min' => 0,
       'max' => 99999,
@@ -43,16 +43,16 @@ class Sliders extends FilterWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public static function isApplicable($filter = NULL, array $filter_options = []) {
-    /** @var \Drupal\views\Plugin\views\filter\FilterPluginBase $filter */
+  public static function isApplicable(mixed $handler = NULL, array $options = []): bool {
+    /** @var \Drupal\views\Plugin\views\filter\FilterPluginBase $handler */
     $is_applicable = FALSE;
 
-    // The date filter handler extends the numeric filter handler so we have
+    // The date filter handler extends the numeric filter handler, so we have
     // to exclude it specifically.
-    $is_numeric_filter = is_a($filter, 'Drupal\views\Plugin\views\filter\NumericFilter');
-    $is_range_filter = is_a($filter, 'Drupal\range\Plugin\views\filter\Range');
-    $is_date_filter = is_a($filter, 'Drupal\views\Plugin\views\filter\Date');
-    if (($is_numeric_filter || $is_range_filter) && !$is_date_filter && !$filter->isAGroup()) {
+    $is_numeric_filter = is_a($handler, 'Drupal\views\Plugin\views\filter\NumericFilter');
+    $is_range_filter = is_a($handler, 'Drupal\range\Plugin\views\filter\Range');
+    $is_date_filter = is_a($handler, 'Drupal\views\Plugin\views\filter\Date');
+    if (($is_numeric_filter || $is_range_filter) && !$is_date_filter && !$handler->isAGroup()) {
       $is_applicable = TRUE;
     }
 
@@ -62,7 +62,7 @@ class Sliders extends FilterWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     /** @var \Drupal\views\Plugin\views\filter\FilterPluginBase $filter */
     $filter = $this->handler;
 
@@ -133,7 +133,7 @@ class Sliders extends FilterWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state): void {
     parent::validateConfigurationForm($form, $form_state);
 
     // Max must be > min.
@@ -151,8 +151,8 @@ class Sliders extends FilterWidgetBase {
       $form_state->setError($form['step'], $this->t('The slider step option for %name cannot have more than 5 decimal places.'));
     }
 
-    // Very small step and a vary large range can go beyond the max value of
-    // an int in PHP. Thus we look for a decimal point when casting the result
+    // Very small step and a very large range can go beyond the max value of
+    // an int in PHP. Thus, we look for a decimal point when casting the result
     // to a string.
     if (strpos((string) ($max - $min) / $step, '.')) {
       $form_state->setError($form['step'], $this->t('The slider range must be evenly divisible by the step option.'));
@@ -162,7 +162,7 @@ class Sliders extends FilterWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public function exposedFormAlter(array &$form, FormStateInterface $form_state) {
+  public function exposedFormAlter(array &$form, FormStateInterface $form_state): void {
     $field_id = $this->getExposedFilterFieldId();
 
     parent::exposedFormAlter($form, $form_state);

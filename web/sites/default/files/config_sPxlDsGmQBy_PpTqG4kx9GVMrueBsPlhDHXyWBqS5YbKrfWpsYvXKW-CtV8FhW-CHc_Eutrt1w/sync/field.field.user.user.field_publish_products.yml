@@ -1,0 +1,22 @@
+uuid: 8dccf168-0b55-4dd0-bf0e-1eed6897bd1d
+langcode: es
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_publish_products
+  module:
+    - user
+id: user.user.field_publish_products
+field_name: field_publish_products
+entity_type: user
+bundle: user
+label: 'Publish Products to Mercado Libre'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: Activado
+  off_label: Desactivado
+field_type: boolean

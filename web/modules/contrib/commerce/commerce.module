@@ -44,6 +44,12 @@ function commerce_theme($existing, $type, $theme, $path) {
         'autoplay' => TRUE,
       ],
     ],
+    'commerce_copy_link' => [
+      'variables' => [
+        'link' => NULL,
+        'title' => NULL,
+      ],
+    ],
   ];
 }
 

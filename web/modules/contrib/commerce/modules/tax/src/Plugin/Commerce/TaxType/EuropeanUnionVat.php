@@ -443,7 +443,8 @@ class EuropeanUnionVat extends LocalTaxTypeBase {
           'id' => 'standard',
           'label' => $labels['standard'],
           'percentages' => [
-            ['number' => '0.24', 'start_date' => '2013-01-01'],
+            ['number' => '0.24', 'start_date' => '2013-01-01', 'end_date' => '2024-08-31'],
+            ['number' => '0.255', 'start_date' => '2024-09-01'],
           ],
           'default' => TRUE,
         ],

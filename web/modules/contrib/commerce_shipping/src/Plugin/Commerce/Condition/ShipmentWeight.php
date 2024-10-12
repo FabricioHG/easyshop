@@ -47,7 +47,7 @@ class ShipmentWeight extends ConditionBase {
     $form['weight'] = [
       '#type' => 'physical_measurement',
       '#measurement_type' => MeasurementType::WEIGHT,
-      '#title' => $this->t('Weight'),
+      '#title' => $this->t('Weight', [], ['context' => 'physical']),
       '#default_value' => $this->configuration['weight'],
       '#required' => TRUE,
     ];

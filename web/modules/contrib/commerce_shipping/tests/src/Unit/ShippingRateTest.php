@@ -33,7 +33,7 @@ class ShippingRateTest extends UnitTestCase {
    * @return array
    *   The definitions.
    */
-  public function invalidDefinitionProvider() {
+  public static function invalidDefinitionProvider() {
     return [
       [[], 'Missing required property shipping_method_id'],
       [['shipping_method_id' => 'standard'], 'Missing required property service'],

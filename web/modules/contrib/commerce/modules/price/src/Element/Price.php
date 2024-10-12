@@ -125,6 +125,9 @@ class Price extends FormElement {
     if (isset($element['#ajax'])) {
       $element['number']['#ajax'] = $element['#ajax'];
     }
+    if (isset($element['#states'])) {
+      $element['number']['#states'] = $element['#states'];
+    }
 
     if (count($currency_codes) == 1) {
       $last_visible_element = 'number';
@@ -147,6 +150,9 @@ class Price extends FormElement {
       ];
       if (isset($element['#ajax'])) {
         $element['currency_code']['#ajax'] = $element['#ajax'];
+      }
+      if (isset($element['#states'])) {
+        $element['currency_code']['#states'] = $element['#states'];
       }
     }
     // Add the help text if specified.

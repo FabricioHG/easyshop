@@ -81,7 +81,7 @@ class ShipmentSubscriber implements EventSubscriberInterface {
    *
    * When a shipment gets deleted, ensure the order no longer references it
    * on destruct(), and make sure the adjustments added by this shipment are
-   * removed. The reason why we're queuing this is to ensure we don't
+   * removed. The reason why we're queueing this is to ensure we don't
    * save the order during an order refresh which potentially causes data loss.
    *
    * @param \Drupal\commerce_shipping\Event\ShipmentEvent $event

@@ -48,7 +48,7 @@ class OrderMultilingualTest extends OrderKernelTestBase {
       'name' => 'Magasin par défaut',
     ])->save();
 
-    $user = $this->createUser(['mail' => $this->randomString() . '@example.com']);
+    $user = $this->createUser();
     $order = Order::create([
       'type' => 'default',
       'store_id' => $this->store->id(),

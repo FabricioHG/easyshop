@@ -383,7 +383,7 @@ class OrderTest extends OrderKernelTestBase {
    * Tests that an order's email updates with the customer.
    */
   public function testOrderEmail() {
-    $customer = $this->createUser(['mail' => 'test@example.com']);
+    $customer = $this->createUser();
     $order_with_customer = Order::create([
       'type' => 'default',
       'state' => 'completed',

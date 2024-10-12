@@ -43,7 +43,7 @@ class ProductMultilingualTest extends CommerceKernelTestBase {
     ConfigurableLanguage::createFromLangcode('fr')->save();
     ConfigurableLanguage::createFromLangcode('sr')->save();
 
-    $user = $this->createUser([], ['administer commerce_product']);
+    $user = $this->createUser(['administer commerce_product']);
     $this->container->get('current_user')->setAccount($user);
   }
 

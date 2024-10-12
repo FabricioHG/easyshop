@@ -171,6 +171,13 @@ function belgrade_form_system_theme_settings_alter(&$form, FormStateInterface $f
     '#collapsible' => true,
   );
 
+  $form['regions']['navigation']['navigation_toggle_visibility'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Disable navigation toggle on Desktop'),
+    '#description' => t('Disables the navigation toggle button for larger screens'),
+    '#default_value' => theme_get_setting('navigation_toggle_visibility')
+  );
+
   $form['regions']['navigation']['navigation_toggle_text'] = array(
     '#type' => 'textfield',
     '#title' => t('Navigation toggle text'),

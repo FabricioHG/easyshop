@@ -346,7 +346,7 @@ class ShippingMethod extends ContentEntityBase implements ShippingMethodInterfac
       ->setDefaultValue('AND');
 
     $fields['weight'] = BaseFieldDefinition::create('integer')
-      ->setLabel(t('Weight'))
+      ->setLabel(t('Weight', [], ['context' => 'physical']))
       ->setDescription(t('The weight of this shipping method in relation to others.'))
       ->setDefaultValue(0)
       ->setDisplayOptions('view', [

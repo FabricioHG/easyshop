@@ -42,9 +42,16 @@ Install as you would normally install a contributed Drupal module. For further
 information, see
 [Installing Drupal Modules](https://www.drupal.org/docs/extending-drupal/installing-drupal-modules).
 
-For Slider functionality if wanting to use internal library place
-https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.js into `libraries/noUiSlider`
+### Use a local version of the Slider library
 
+If you want to use a local library for the Slider functionality instead of loading the library from a CDN, you need to place the library in the `nouislider` directory of one of your Drupal installation's `libraries` folders. To set this up using Composer and [Drupal Core's Scaffolding plugin](https://www.drupal.org/docs/develop/using-composer/using-drupals-composer-scaffold), use the following commands:
+
+1. `composer config --json --merge extra.drupal-scaffold.file-mapping '{"[web-root]/libraries/nouislider/nouislider.min.js": "vendor/leongersen/nouislider/dist/nouislider.min.js"}'`
+2. `composer require -W 'leongersen/nouislider:15.5.1'`
+
+Alternatively, if you don't want to use Composer to manage the library, you could download the library from `https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.js` and place it into `libraries/nouislider` manually.
+
+Make sure to clear all caches for the changes to take effect.
 
 ## Configuration
 

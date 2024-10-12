@@ -20,4 +20,13 @@ class ShipmentItemNormalizer extends NormalizerBase {
     return $object->toArray();
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getSupportedTypes(?string $format): array {
+    return [
+      ShipmentItemDataType::class => TRUE,
+    ];
+  }
+
 }

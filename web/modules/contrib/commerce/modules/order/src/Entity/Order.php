@@ -488,11 +488,12 @@ class Order extends CommerceContentEntityBase implements OrderInterface {
    * @return $this
    */
   protected function recalculateBalance() {
+    $balance = NULL;
     if ($total_price = $this->getTotalPrice()) {
-      // Provide a default without storing it, to avoid having to update
-      // the field if the order currency changes before the order is placed.
-      $this->set('balance', $total_price->subtract($this->getTotalPaid()));
+      $balance = $total_price->subtract($this->getTotalPaid());
     }
+    $this->set('balance', $balance);
+
     return $this;
   }
 
@@ -691,6 +692,21 @@ class Order extends CommerceContentEntityBase implements OrderInterface {
     $date = DrupalDateTime::createFromTimestamp($timestamp, $timezone);
 
     return $date;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCustomerComments(): ?string {
+    return $this->get('customer_comments')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setCustomerComments($comments): static {
+    $this->set('customer_comments', $comments);
+    return $this;
   }
 
   /**
@@ -992,6 +1008,16 @@ class Order extends CommerceContentEntityBase implements OrderInterface {
         'type' => 'timestamp',
         'weight' => 0,
       ])
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['customer_comments'] = BaseFieldDefinition::create('string_long')
+      ->setLabel(t('Customer comments'))
+      ->setDisplayOptions('view', [
+        'type' => 'string',
+        'label' => 'above',
+        'settings' => [],
+      ])
+      ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 
     return $fields;

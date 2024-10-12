@@ -29,7 +29,7 @@
       waitForAjaxComplete(element);
     },
     init(context) {
-      // Everytime a required field value is updated, attempt to trigger the
+      // When a required field value is updated, attempt to trigger the
       // shipping rates recalculation if possible.
       const requiredInputs = document
         .getElementById(this.wrapper)

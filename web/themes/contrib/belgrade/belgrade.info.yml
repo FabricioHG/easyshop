@@ -1,7 +1,7 @@
 name: Belgrade
 description: Bootstrap Drupal theme built for Centarro Commerce
 screenshot: screenshot.png
-core_version_requirement: ^9.2 || ^10
+core_version_requirement: ^9.2 || ^10 || ^11
 engine: twig
 type: theme
 base theme: false
@@ -33,6 +33,8 @@ libraries-extend:
     - belgrade/layout-builder.theme
   commerce_kickstart_layout_builder/cklb-slideshow:
     - belgrade/cklb.slideshow
+  core/drupal.message:
+    - belgrade/drupal.message
 
 libraries-override:
   commerce_cart/cart_block:
@@ -59,7 +61,7 @@ libraries-override:
       theme:
         css/commerce_checkout.form.css: false
 
-# Information added by Drupal.org packaging script on 2024-02-14
-version: '2.0.1'
+# Information added by Drupal.org packaging script on 2024-07-31
+version: '2.0.2'
 project: 'belgrade'
-datestamp: 1707913294
+datestamp: 1722432073

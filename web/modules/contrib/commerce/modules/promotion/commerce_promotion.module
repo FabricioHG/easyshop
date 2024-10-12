@@ -163,3 +163,10 @@ function commerce_promotion_entity_base_field_info(EntityTypeInterface $entity_t
     return $fields;
   }
 }
+
+/**
+ * Implements hook_cron().
+ */
+function commerce_promotion_cron() {
+  \Drupal::service('commerce_promotion.cron')->run();
+}

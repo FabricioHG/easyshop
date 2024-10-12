@@ -1,0 +1,38 @@
+ws_mercado_libre.user:
+  path: '/user/{user}/ws-mercado-libre'
+  defaults:
+    _title: 'Sincronizar publicación de productos en mercado libre'
+    _controller: '\Drupal\ws_mercado_libre\Controller\WsMercadoLibreController::page_config'
+  requirements:
+    _permission: 'access content'
+  options:
+    parameters:
+      user:
+        type: entity:user
+
+ws_mercado_libre.settings:
+  path: '/admin/config/services/mercado-libre'
+  title: 'Mercado Libre Settings'
+  description: 'Configure the Client ID and Client Secret for Mercado Libre integration.'
+  defaults:
+    _form: '\Drupal\ws_mercado_libre\Form\MercadoLibreSettingsForm'
+    _title: 'Mercado Libre Settings'
+  requirements:
+    _permission: 'administer site configuration'
+
+ws_mercado_libre.notify:
+  path: '/user/ws-mercado-libre/notify'
+  defaults:
+    _title: 'Mercado libre notify'
+    _controller: '\Drupal\ws_mercado_libre\Controller\WsMercadoLibreController::notify'
+  requirements:
+    _permission: 'access content'
+
+ws_mercado_libre.test_page:
+  path: '/test_page'
+  defaults:
+    _title: 'Pagina de pruebas'
+    _controller: '\Drupal\ws_mercado_libre\Controller\WsMercadoLibreController::test_page'
+  requirements:
+    _permission: 'access content'
+  

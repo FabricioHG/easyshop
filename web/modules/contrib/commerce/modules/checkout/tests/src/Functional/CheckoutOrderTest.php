@@ -102,7 +102,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
     $cart_link->click();
     $this->submitForm([], 'Checkout');
     $this->assertSession()->pageTextNotContains('Order summary');
-    $this->assertCheckoutProgressStep('Login');
+    $this->assertCheckoutProgressStep('Log in');
 
     /** @var \Drupal\commerce_order\Entity\OrderInterface $order */
     $order = $this->container->get('entity_type.manager')->getStorage('commerce_order')->load(1);
@@ -167,9 +167,9 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
     $this->submitForm([], 'Continue as Guest');
     // Check breadcrumb link functionality.
     $this->assertSession()->elementsCount('css', '.block-commerce-checkout-progress li.checkout-progress--step > a', 1);
-    $this->getSession()->getPage()->findLink('Login')->click();
+    $this->getSession()->getPage()->findLink('Log in')->click();
     $this->assertSession()->pageTextNotContains('Order summary');
-    $this->assertCheckoutProgressStep('Login');
+    $this->assertCheckoutProgressStep('Log in');
 
     $this->submitForm([], 'Continue as Guest');
     $this->assertCheckoutProgressStep('Order information');
@@ -292,7 +292,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
       'login[register][mail]' => 'guest@example.com',
       'login[register][password][pass1]' => 'pass',
       'login[register][password][pass2]' => 'pass',
-    ], 'Create account and continue');
+    ], 'Create new account and continue');
     $this->assertSession()->pageTextContains('Billing information');
     // Check breadcrumbs are not links. (the default setting)
     $this->assertSession()->elementNotExists('css', '.block-commerce-checkout-progress li.checkout-progress--step > a');
@@ -322,7 +322,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
     $this->submitForm([], 'Checkout');
 
     // Checkout as guest.
-    $this->assertCheckoutProgressStep('Login');
+    $this->assertCheckoutProgressStep('Log in');
     $this->submitForm([], 'Continue as Guest');
     $this->assertCheckoutProgressStep('Order information');
     $this->submitForm([
@@ -382,7 +382,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
       'login[register][mail]' => 'guest@example.com',
       'login[register][password][pass1]' => 'pass',
       'login[register][password][pass2]' => 'pass',
-    ], 'Create account and continue');
+    ], 'Create new account and continue');
     $this->assertSession()->pageTextContains('Billing information');
     // Check breadcrumbs are not links. (the default setting)
     $this->assertSession()->elementNotExists('css', '.block-commerce-checkout-progress li.checkout-progress--step > a');
@@ -401,7 +401,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
       'login[register][mail]' => '',
       'login[register][password][pass1]' => 'pass',
       'login[register][password][pass2]' => 'pass',
-    ], 'Create account and continue');
+    ], 'Create new account and continue');
     $this->assertSession()->pageTextContains('Email field is required.');
 
     $this->submitForm([
@@ -409,7 +409,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
       'login[register][mail]' => 'guest@example.com',
       'login[register][password][pass1]' => 'pass',
       'login[register][password][pass2]' => 'pass',
-    ], 'Create account and continue');
+    ], 'Create new account and continue');
     $this->assertSession()->pageTextContains('Username field is required.');
 
     $this->submitForm([
@@ -417,7 +417,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
       'login[register][mail]' => 'guest@example.com',
       'login[register][password][pass1]' => '',
       'login[register][password][pass2]' => '',
-    ], 'Create account and continue');
+    ], 'Create new account and continue');
     $this->assertSession()->pageTextContains('Password field is required.');
 
     $this->submitForm([
@@ -425,7 +425,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
       'login[register][mail]' => 'guest@example.com',
       'login[register][password][pass1]' => 'pass',
       'login[register][password][pass2]' => 'pass',
-    ], 'Create account and continue');
+    ], 'Create new account and continue');
     $this->assertSession()->pageTextContains('The email address guest@example.com is already taken.');
 
     $this->submitForm([
@@ -433,7 +433,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
       'login[register][mail]' => 'guest2@example.com',
       'login[register][password][pass1]' => 'pass',
       'login[register][password][pass2]' => 'pass',
-    ], 'Create account and continue');
+    ], 'Create new account and continue');
     $this->assertSession()->pageTextContains('The username contains an illegal character.');
 
     $this->submitForm([
@@ -441,7 +441,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
       'login[register][mail]' => 'guest2@example.com',
       'login[register][password][pass1]' => 'pass',
       'login[register][password][pass2]' => 'pass',
-    ], 'Create account and continue');
+    ], 'Create new account and continue');
     $this->assertSession()->pageTextContains('The username User name is already taken.');
   }
 
@@ -484,7 +484,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
       'login[register][mail]' => 'guest@example.com',
       'login[register][password][pass1]' => 'pass',
       'login[register][password][pass2]' => 'pass',
-    ], 'Create account and continue');
+    ], 'Create new account and continue');
     $this->assertSession()->pageTextContains('Custom user field field is required.');
 
     $this->submitForm([
@@ -493,7 +493,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
       'login[register][password][pass1]' => 'pass',
       'login[register][password][pass2]' => 'pass',
       'login[register][test_user_field][0][value]' => 'test_user_field_value',
-    ], 'Create account and continue');
+    ], 'Create new account and continue');
     $this->assertSession()->pageTextContains('Billing information');
 
     $accounts = $this->container->get('entity_type.manager')
@@ -517,7 +517,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
     $this->submitForm([], 'Checkout');
 
     // Checkout as guest.
-    $this->assertCheckoutProgressStep('Login');
+    $this->assertCheckoutProgressStep('Log in');
     $this->submitForm([], 'Continue as Guest');
     $this->assertCheckoutProgressStep('Order information');
     $this->submitForm([
@@ -562,7 +562,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
     $cart_link = $this->getSession()->getPage()->findLink('your cart');
     $cart_link->click();
     $this->submitForm([], 'Checkout');
-    $this->assertCheckoutProgressStep('Login');
+    $this->assertCheckoutProgressStep('Log in');
     $this->submitForm([], 'Continue as Guest');
     $this->assertCheckoutProgressStep('Order information');
     $this->submitForm([
@@ -643,7 +643,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
     $this->submitForm([], 'Checkout');
 
     // Checkout as guest.
-    $this->assertCheckoutProgressStep('Login');
+    $this->assertCheckoutProgressStep('Log in');
     $this->submitForm([], 'Continue as Guest');
     $this->assertCheckoutProgressStep('Order information');
     $this->submitForm([
@@ -702,7 +702,7 @@ class CheckoutOrderTest extends CommerceBrowserTestBase {
     $this->submitForm([], 'Checkout');
 
     // Checkout as guest.
-    $this->assertCheckoutProgressStep('Login');
+    $this->assertCheckoutProgressStep('Log in');
     $this->submitForm([], 'Continue as Guest');
     $this->assertCheckoutProgressStep('Order information');
     $this->submitForm([

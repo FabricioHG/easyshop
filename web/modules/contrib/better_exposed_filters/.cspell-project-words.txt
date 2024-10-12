@@ -14,6 +14,7 @@ jkopel
 Keereman
 Keran
 Kopel
+leongersen
 mikeker
 mkeereman
 Mustgrave
@@ -31,3 +32,4 @@ Uviéu
 Valdiciego
 Valdés
 Validatable
+Veri

@@ -659,7 +659,7 @@ class Shipment extends ContentEntityBase implements ShipmentInterface {
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['weight'] = BaseFieldDefinition::create('physical_measurement')
-      ->setLabel(t('Weight'))
+      ->setLabel(t('Weight', [], ['context' => 'physical']))
       ->setRequired(TRUE)
       ->setSetting('measurement_type', 'weight')
       ->setDisplayConfigurable('form', TRUE)

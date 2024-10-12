@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  *
  * @CommerceCheckoutPane(
  *   id = "login",
- *   label = @Translation("Login or continue as guest"),
+ *   label = @Translation("Log in or continue as guest"),
  *   default_step = "login",
  * )
  */
@@ -330,6 +330,7 @@ class Login extends CheckoutPaneBase implements CheckoutPaneInterface, Container
     $pane_form['register']['mail'] = [
       '#type' => 'email',
       '#title' => $this->t('Email address'),
+      '#description' => $this->t('The email address is not made public. It will only be used if you need to be contacted about your account or for opted-in notifications.'),
       '#required' => FALSE,
     ];
     $pane_form['register']['name'] = [
@@ -349,12 +350,11 @@ class Login extends CheckoutPaneBase implements CheckoutPaneInterface, Container
     $pane_form['register']['password'] = [
       '#type' => 'password_confirm',
       '#size' => 60,
-      '#description' => $this->t('Provide a password for the new account in both fields.'),
       '#required' => FALSE,
     ];
     $pane_form['register']['register'] = [
       '#type' => 'submit',
-      '#value' => $this->t('Create account and continue'),
+      '#value' => $this->t('Create new account and continue'),
       '#op' => 'register',
       '#weight' => 50,
     ];

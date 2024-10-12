@@ -39,7 +39,7 @@ services:
 
   commerce_payment.options_builder:
     class: Drupal\commerce_payment\PaymentOptionsBuilder
-    arguments: ['@entity_type.manager', '@string_translation']
+    arguments: ['@entity_type.manager', '@string_translation', '@event_dispatcher']
 
   commerce_payment.order_processor:
     class: Drupal\commerce_payment\PaymentOrderProcessor

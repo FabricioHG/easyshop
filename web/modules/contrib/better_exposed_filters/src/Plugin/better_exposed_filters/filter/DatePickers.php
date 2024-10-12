@@ -4,6 +4,7 @@ namespace Drupal\better_exposed_filters\Plugin\better_exposed_filters\filter;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelTrait;
+use Drupal\Core\Logger\RfcLogLevel;
 
 /**
  * Date picker widget implementation.
@@ -20,11 +21,11 @@ class DatePickers extends FilterWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public static function isApplicable($filter = NULL, array $filter_options = []) {
-    /** @var \Drupal\views\Plugin\views\filter\FilterPluginBase $filter */
+  public static function isApplicable(mixed $handler = NULL, array $options = []): bool {
+    /** @var \Drupal\views\Plugin\views\filter\FilterPluginBase $handler */
     $is_applicable = FALSE;
 
-    if ((is_a($filter, 'Drupal\views\Plugin\views\filter\Date') || !empty($filter->date_handler)) && !$filter->isAGroup()) {
+    if ((is_a($handler, 'Drupal\views\Plugin\views\filter\Date') || !empty($handler->date_handler)) && !$handler->isAGroup()) {
       $is_applicable = TRUE;
     }
 
@@ -32,9 +33,41 @@ class DatePickers extends FilterWidgetBase {
   }
 
   /**
+   * In case of date offsets as a default value, convert to dates.
+   *
+   * @param array $element
+   *   The form element to process.
+   */
+  protected function convertOffsets(array &$element): void {
+    $options = $this->handler->options;
+
+    if ($options['value']['type'] !== 'offset') {
+      return;
+    }
+    unset($options['value']['type']);
+
+    foreach (array_keys($options['value']) as $key) {
+      if (!array_key_exists($key, $element) || !array_key_exists('#default_value', $element[$key])) {
+        continue;
+      }
+
+      // Convert offset initial values to dates.
+      if ($element[$key]['#default_value'] === $options['value'][$key]) {
+        try {
+          $date = new \DateTime($element[$key]['#default_value']);
+          $element[$key]['#default_value'] = $date->format('Y-m-d');
+        }
+        catch (\Exception $e) {
+          $this->getLogger('better_exposed_filters')->log(RfcLogLevel::ERROR, $e->getMessage());
+        }
+      }
+    }
+  }
+
+  /**
    * {@inheritdoc}
    */
-  public function exposedFormAlter(array &$form, FormStateInterface $form_state) {
+  public function exposedFormAlter(array &$form, FormStateInterface $form_state): void {
     $field_id = $this->getExposedFilterFieldId();
 
     // Handle wrapper element added to exposed filters
@@ -108,6 +141,8 @@ class DatePickers extends FilterWidgetBase {
         $element['#attributes']['autocomplete'] = 'off';
       }
     }
+
+    $this->convertOffsets($element);
   }
 
 }

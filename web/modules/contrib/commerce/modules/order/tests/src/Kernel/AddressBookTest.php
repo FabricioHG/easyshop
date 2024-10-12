@@ -61,7 +61,7 @@ class AddressBookTest extends OrderKernelTestBase {
     parent::setUp();
 
     $this->addressBook = $this->container->get('commerce_order.address_book');
-    $this->user = $this->createUser(['mail' => 'user1@example.com']);
+    $this->user = $this->createUser([], NULL, FALSE, ['mail' => 'user1@example.com']);
 
     // Create a default profile for the current user.
     $this->defaultProfile = Profile::create([

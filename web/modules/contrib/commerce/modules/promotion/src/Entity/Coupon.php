@@ -310,11 +310,12 @@ class Coupon extends CommerceContentEntityBase implements CouponInterface {
 
     $fields['code'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Coupon code'))
-      ->setDescription(t('The unique, machine-readable identifier for a coupon.'))
+      ->setDescription(t('The unique, machine-readable identifier for a coupon. Coupon code matching is case-insensitive.'))
       ->addConstraint('CouponCode')
       ->setSettings([
         'max_length' => 50,
         'text_processing' => 0,
+        'display_description' => TRUE,
       ])
       ->setDefaultValue('')
       ->setDisplayOptions('view', [

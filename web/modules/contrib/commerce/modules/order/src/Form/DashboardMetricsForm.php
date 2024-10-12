@@ -140,6 +140,11 @@ class DashboardMetricsForm extends FormBase {
       'month' => new DrupalDateTime('first day of this month'),
       'year' => new DrupalDateTime('first day of january this year'),
     ];
+    // In case the first day of the week is sunday, the "week" date time object
+    // can be instantiated for the wrong week.
+    if ($periods['week'] > $periods['day']) {
+      $periods['week'] = new DrupalDateTime(sprintf('%s last week', $first_day_of_week));
+    }
     $periods = array_map(function (DrupalDateTime $date) use ($active_store) {
       $date->setTime(0, 0, 0);
       if ($active_store instanceof StoreInterface) {
@@ -252,6 +257,10 @@ class DashboardMetricsForm extends FormBase {
       };
       $prior_period = new DrupalDateTime($prior_period, $periods['day']->getTimezone());
       $prior_period->setTime(0, 0, 0);
+      // If the period is 'week', we need to get the appropriate prior week.
+      if ($active_period === 'week' && $prior_period >= $periods[$active_period]) {
+        $prior_period->sub(new \DateInterval('P1W'));
+      }
       $prior_period_timestamp = $prior_period->getTimestamp();
       $form_state->set('prior_period_timestamp', $prior_period_timestamp);
       // We use the "BETWEEN" operator which is inclusive, we deduct 1 second

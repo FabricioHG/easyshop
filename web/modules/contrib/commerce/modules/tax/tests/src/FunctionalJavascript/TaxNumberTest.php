@@ -105,15 +105,17 @@ class TaxNumberTest extends CommerceWebDriverTestBase {
     ]);
     $order_item->save();
 
-    $this->order = Order::create([
+    $order = Order::create([
       'type' => 'default',
+      'order_number' => '1',
       'store_id' => $this->store,
       'uid' => $this->adminUser,
       'billing_profile' => $this->customerProfile,
       'order_items' => [$order_item],
       'state' => 'completed',
     ]);
-    $this->order->save();
+    $order->save();
+    $this->order = $this->reloadEntity($order);
   }
 
   /**

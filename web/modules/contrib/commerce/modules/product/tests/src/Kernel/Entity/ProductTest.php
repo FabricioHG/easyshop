@@ -43,7 +43,7 @@ class ProductTest extends CommerceKernelTestBase {
     $this->installEntitySchema('commerce_product');
     $this->installConfig(['commerce_product']);
 
-    $user = $this->createUser([], ['administer commerce_product']);
+    $user = $this->createUser(['administer commerce_product']);
     $this->user = $this->reloadEntity($user);
     $this->container->get('current_user')->setAccount($user);
   }

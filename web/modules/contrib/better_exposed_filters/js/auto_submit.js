@@ -99,8 +99,8 @@
         var $target = $(e.target);
         var $submit = $target.closest('form').find('[data-bef-auto-submit-click]');
 
-        // Don't submit on changes to excluded elements or a submit element.
-        if ($target.is('[data-bef-auto-submit-exclude], :submit')) {
+        // Don't submit on changes to excluded elements,submit elements, or select2 autocomplete.
+        if ($target.is('[data-bef-auto-submit-exclude], :submit, .select2-search__field, .chosen-search-input')) {
           return true;
         }
 
