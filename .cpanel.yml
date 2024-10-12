@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home3/bellefor/public_html/
+    - export DEPLOYPATH=/home2/easysho1/public_html/
     - /bin/cp -R private $DEPLOYPATH
     - /bin/cp -R vendor $DEPLOYPATH
     - /bin/cp -R web $DEPLOYPATH
