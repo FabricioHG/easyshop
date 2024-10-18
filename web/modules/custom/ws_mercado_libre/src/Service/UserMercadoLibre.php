@@ -125,7 +125,7 @@ class UserMercadoLibre
 	        $data = json_decode($body, TRUE);
 	        $access_token_new = $data['access_token'];
      		$refresh_token_new = $data['refresh_token'];
-     		$token_expires_in = $data['expires_in'];
+     		$token_expires_in = time() + 21600;
      		$username = $this->userEntity->getDisplayName();
 
 	      	// Save the tokens to the user's configuration or database.
