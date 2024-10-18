@@ -14,8 +14,8 @@ configuration:
   payment_method_types:
     - credit_card
   collect_billing_information: true
-  access_token: APP_USR-5148827173146552-052916-d0d203dc570c1eef87f73516c7c27977-135875890
-  public_key: APP_USR-57f88889-9282-4b3c-96b5-d26e67161a50
-  webhook_key: f0c8782bb5741f09921f7162257015132ade7df4a83877cb0e00b1f55b5be91e
+  access_token: '1'
+  public_key: '1'
+  webhook_key: '1'
 conditions: {  }
 conditionOperator: AND

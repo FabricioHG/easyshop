@@ -125,11 +125,15 @@ class UserMercadoLibre
 	        $data = json_decode($body, TRUE);
 	        $access_token_new = $data['access_token'];
      		$refresh_token_new = $data['refresh_token'];
+     		$token_expires_in = $data['expires_in'];
      		$username = $this->userEntity->getDisplayName();
 
 	      	// Save the tokens to the user's configuration or database.
 	      	$this->userEntity->set('field_mercadolibre_access_token', $access_token_new);
 	      	$this->userEntity->set('field_mercadolibre_refresh_token', $refresh_token_new);
+	      	$this->userEntity->set('field_ml_token_expires_in', $token_expires_in);
+
+	      	
 	      	$this->userEntity->save(); 
 
 	    	\Drupal::logger('ws_mercado_libre')->notice('Se actualizo el token del usuario %username', ['%username' => $username]);
