@@ -66,7 +66,7 @@ class UserMercadoLibre
          	}
          }
 
-        $title = "otro". $id_articulo;
+        $title = "otro";
 
         /*Hacer una peticion a la url para obtener prediccion de categorias
         https://api.mercadolibre.com/sites/MLM/domain_discovery/search?q=Item de test - No Ofertar
@@ -89,7 +89,7 @@ class UserMercadoLibre
 
     	if($response->getStatusCode() == 200){
     		$body = $response->getBody()->getContents();
-    		 $data = json_decode($body, TRUE);
+    		$data = json_decode($body, TRUE);
     		kint($data);
     		exit;
     	}
