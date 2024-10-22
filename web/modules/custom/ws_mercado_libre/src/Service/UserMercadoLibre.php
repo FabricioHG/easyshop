@@ -187,7 +187,8 @@ class UserMercadoLibre
     }
 
     public function isTokenValid()
-    {
+    {	
+
     	$token = $this->userEntity->get('field_mercadolibre_access_token')->getValue()[0]['value'];
     	
     	// Implementar la lógica para validar el token, por ejemplo, haciendo una solicitud a la API
@@ -205,7 +206,8 @@ class UserMercadoLibre
 	        $data = json_decode($body, TRUE);
 	        $error_message = $data['message'];
 	        \Drupal::logger('ws_mercado_libre')->notice('Error en la solicitud para validar token %mensaje', ['%mensaje' => $error_message]);
-	        return new TrustedRedirectResponse('/user');
+	        //return new TrustedRedirectResponse('/user');
+	        return false;
 	      }
 	    }
 		catch (\Exception $e) {
