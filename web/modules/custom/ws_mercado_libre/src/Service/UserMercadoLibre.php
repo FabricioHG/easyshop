@@ -21,7 +21,6 @@ class UserMercadoLibre
     protected $user;
     protected $messenger;
     protected $entityTypeManager;
-    protected $request;
     protected $client;
     protected $configFactory;
     protected $client_id;
@@ -31,13 +30,12 @@ class UserMercadoLibre
     protected $config;
 
     // Constructor actualizado para incluir MessengerInterface
-    public function __construct(AccountProxyInterface $user, MessengerInterface $messenger, EntityTypeManagerInterface $entityTypeManager, ClientInterface $client, Request $request, ConfigFactoryInterface $configFactory)
+    public function __construct(AccountProxyInterface $user, MessengerInterface $messenger, EntityTypeManagerInterface $entityTypeManager, ClientInterface $client, ConfigFactoryInterface $configFactory)
     {
         $this->user = $user;
         $this->messenger = $messenger;
         $this->entityTypeManager = $entityTypeManager;
         $this->client = $client;
-        $this->request = $request;
         $this->configFactory = $configFactory;
 
         $this->config = $this->configFactory->get('ws_mercado_libre.settings');

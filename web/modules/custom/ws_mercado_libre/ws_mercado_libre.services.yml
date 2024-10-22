@@ -1,4 +1,4 @@
 services:
   ws_mercado_libre.mercadolibre_service:
     class: 'Drupal\ws_mercado_libre\Service\UserMercadoLibre'
-    arguments: ['@current_user','@messenger','@entity_type.manager','@http_client', '@request_stack', '@config.factory']
+    arguments: ['@current_user','@messenger','@entity_type.manager','@http_client', '@config.factory']
