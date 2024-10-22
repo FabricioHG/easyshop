@@ -55,7 +55,7 @@ class UserMercadoLibre
 
     public function publicarArticulo($id_articulo)
     {	
-        /*Obtener token de usuario*/isTokenActive
+        /*Obtener token de usuario*/
         /*Validar si el token esta activo*/
         if ($this->isTokenValid()) {
          	$token_user = $this->getToken();
@@ -63,7 +63,8 @@ class UserMercadoLibre
          	if (!$this->isTokenActive()) {
          		$this->refreshToken();
          	}else{
-         		\Drupal:: ('Error, el token de usuario para la conexión con mercado libre no es valido');
+         		$this->messenger->addMessage('Error, el token de usuario para la conexión con mercado libre no es valido');
+         		\Drupal::logger('ws_mercado_libre')->notice('Error, el token de usuario para la conexión con mercado libre no es valido');
          	}
          }
 
@@ -87,7 +88,7 @@ class UserMercadoLibre
 		        $this->messenger->addMessage('Error al obtener las categorias del producto');
     		}
     	}
-    	
+
     	if($response->getStatusCode() == 200){
     		$body = $response->getBody();
     		kint($body);
