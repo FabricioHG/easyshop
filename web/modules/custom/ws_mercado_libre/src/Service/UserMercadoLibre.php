@@ -73,11 +73,11 @@ class UserMercadoLibre
         /*Hacer una peticion a la url para obtener prediccion de categorias
         https://api.mercadolibre.com/sites/MLM/domain_discovery/search?q=Item de test - No Ofertar
         */
-        $request = 'GET',"https://api.mercadolibre.com/sites/MLM/domain_discovery/search?q=".$title;
+        $request = "https://api.mercadolibre.com/sites/MLM/domain_discovery/search?q=".$title;
         $headers = ['Authorization' => "Bearer $token_user"];
 
         try{
-        	$response =$this->client->request($request,$headers);
+        	$response =$this->client->request('GET',$request,$headers);
     	}catch(ClientException $e){
     		$response = $e->getResponse();
     		if ($response) {
