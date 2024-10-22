@@ -73,8 +73,6 @@ class UserMercadoLibre
         */
         $request = "https://api.mercadolibre.com/sites/MLM/domain_discovery/search?q=".$title;
         $headers = ['Authorization' => "Bearer $token_user"];
-        kint($token_user);
-        exit;
 
         try{
         	$response =$this->client->request('GET',$request,$headers);
