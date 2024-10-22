@@ -88,8 +88,9 @@ class UserMercadoLibre
     	}
 
     	if($response->getStatusCode() == 200){
-    		$body = $response->getBody();
-    		kint($body);
+    		$body = $response->getBody()->getContents();
+    		 $data = json_decode($body, TRUE);
+    		kint($data);
     		exit;
     	}
         
