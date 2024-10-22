@@ -22,6 +22,7 @@ class UserMercadoLibre
     protected $messenger;
     protected $entityTypeManager;
     protected $request;
+    protected $client;
     protected $configFactory;
     protected $client_id;
     protected $client_secret;
@@ -30,11 +31,12 @@ class UserMercadoLibre
     protected $config;
 
     // Constructor actualizado para incluir MessengerInterface
-    public function __construct(AccountProxyInterface $user, MessengerInterface $messenger, EntityTypeManagerInterface $entityTypeManager, ClientInterface $request, ConfigFactoryInterface $configFactory)
+    public function __construct(AccountProxyInterface $user, MessengerInterface $messenger, EntityTypeManagerInterface $entityTypeManager, ClientInterface $client, Request $request, ConfigFactoryInterface $configFactory)
     {
         $this->user = $user;
         $this->messenger = $messenger;
         $this->entityTypeManager = $entityTypeManager;
+        $this->client = $client;
         $this->request = $request;
         $this->configFactory = $configFactory;
 
@@ -51,13 +53,56 @@ class UserMercadoLibre
         }
     }
 
-    public function publicarArticulo($articulo)
-    {
-        // Construir el mensaje correctamente
-        $mensaje = 'Artículo publicado en ML: ' . $articulo;
+    public function publicarArticulo($id_articulo)
+    {	
+        /*Obtener token de usuario*/isTokenActive
+        /*Validar si el token esta activo*/
+        if ($this->isTokenValid()) {
+         	$token_user = $this->getToken();
+         }else{
+         	if (!$this->isTokenActive()) {
+         		$this->refreshToken();
+         	}else{
+         		\Drupal:: ('Error, el token de usuario para la conexión con mercado libre no es valido');
+         	}
+         }
 
-        // Agregar el mensaje al sistema de mensajería de Drupal
-        $this->messenger->addMessage($mensaje);
+        $title = "otro". $id_articulo;
+
+        /*Hacer una peticion a la url para obtener prediccion de categorias
+        https://api.mercadolibre.com/sites/MLM/domain_discovery/search?q=Item de test - No Ofertar
+        */
+        $request = 'GET',"https://api.mercadolibre.com/sites/MLM/domain_discovery/search?q=".$title;
+        $headers = ['Authorization' => "Bearer $token_user"];
+
+        try{
+        	$response =$this->client->request($request,$headers);
+    	}catch(ClientException $e){
+    		$response = $e->getResponse();
+    		if ($response) {
+    			$body = $response->getBody()->getContents();
+		        $data = json_decode($body, TRUE);
+		        $error = $data['error'];
+		        \Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => $error]);
+		        $this->messenger->addMessage('Error al obtener las categorias del producto');
+    		}
+    	}
+    	
+    	if($response->getStatusCode() == 200){
+    		$body = $response->getBody();
+    		kint($body);
+    		exit;
+    	}
+        
+        // $category_id = $algo;
+        // $price = $algo;
+        // $currency_id = "MXN";
+        // $buying_mode = "buy_it_now";
+        // $condition = "new";
+        // $listing_type_id = "gold_special";
+        // $fotos = $array_fotos;
+        // $descripcion = $algo;
+       
 
         // Devolver el mensaje
         return $mensaje;
@@ -95,7 +140,7 @@ class UserMercadoLibre
     	
     	// Implementar la lógica para validar el token, por ejemplo, haciendo una solicitud a la API
         try {
-	    	$response = $this->request->post('https://api.mercadolibre.com/oauth/token', [
+	    	$response = $this->client->post('https://api.mercadolibre.com/oauth/token', [
 	        	'form_params' => [
 	          		'grant_type' => 'refresh_token',
 	          		'client_id' => $this->client_id,
@@ -147,7 +192,7 @@ class UserMercadoLibre
     	
     	// Implementar la lógica para validar el token, por ejemplo, haciendo una solicitud a la API
         try {
-	       $response = $this->request->get('https://api.mercadolibre.com/users/me', [
+	       $response = $this->client->get('https://api.mercadolibre.com/users/me', [
 			    'headers' => [
 			        'Authorization' => 'Bearer '.$token,
 			    ],
