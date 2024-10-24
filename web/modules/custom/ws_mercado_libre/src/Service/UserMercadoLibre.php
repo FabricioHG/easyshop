@@ -258,6 +258,7 @@ class UserMercadoLibre
     		$body = $response->getBody()->getContents();
     		$data = json_decode($body, TRUE);
     		kint($data);
+    		kint('Prueba');
     		exit;
     		//return $data[0]['category_id'];
     	}else{
