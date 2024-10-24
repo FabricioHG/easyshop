@@ -232,7 +232,39 @@ class UserMercadoLibre
     		kint($data[0]['category_id']);
     		exit;
     		return $data[0]['category_id'];
+    	}else{
+    		\Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => $response->getStatusCode()]);
+		    $this->messenger->addMessage('Error al obtener la categoría para el producto: @error',["@error"=>$response->getStatusCode() ]);
     	}
+    }
+
+    public function obtener_attr_obli($codigo_cat){
+    	$request = "https://api.mercadolibre.com/categories/$codigo_cat/attributes";
+
+    	try{
+        	$response =$this->client->request('GET',$request);
+    	}catch(ClientException $e){
+    		$response = $e->getResponse();
+    		if ($response) {
+    			$body = $response->getBody()->getContents();
+		        $data = json_decode($body, TRUE);
+		        $error = $data['error'];
+		        \Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => $error]);
+		        $this->messenger->addMessage('Error en la conexion al tratar de obtener atributos obligatorios de la categoria');
+    		}
+    	}
+
+    	if($response->getStatusCode() == 200){
+    		$body = $response->getBody()->getContents();
+    		$data = json_decode($body, TRUE);
+    		kint($data);
+    		exit;
+    		//return $data[0]['category_id'];
+    	}else{
+    		\Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => $response->getStatusCode()]);
+		    $this->messenger->addMessage('Error al obtener atributos obligatorios sobre la categoria: @error',["@error"=>$response->getStatusCode() ]);
+    	}
+
     }
 
 }

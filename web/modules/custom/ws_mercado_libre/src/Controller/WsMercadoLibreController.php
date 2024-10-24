@@ -128,9 +128,10 @@ final class WsMercadoLibreController extends ControllerBase {
 
     $mercado_libre_service = \Drupal::service('ws_mercado_libre.mercadolibre_service');
 
-    $token = $mercado_libre_service->predecir_categoria('Cargador inalámbrico 7 en 1 de 30W para iPhone');
+    $codigo_categoria = $mercado_libre_service->predecir_categoria('Cargador inalámbrico 7 en 1 de 30W para iPhone');
+    $atributos_obligatorios = $mercado_libre_service->obtener_attr_obli($codigo_categoria);
     
-    if (!empty($token) ) {
+    if (!empty($atributos_obligatorios) ) {
       $res = "Token actualizado";
     }else{
       $res = "Problema al actualizar el token";
