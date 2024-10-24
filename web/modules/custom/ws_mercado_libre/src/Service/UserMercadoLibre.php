@@ -229,8 +229,6 @@ class UserMercadoLibre
     	if($response->getStatusCode() == 200){
     		$body = $response->getBody()->getContents();
     		$data = json_decode($body, TRUE);
-    		kint($data[0]['category_id']);
-    		exit;
     		return $data[0]['category_id'];
     	}else{
     		\Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => $response->getStatusCode()]);
