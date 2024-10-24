@@ -128,7 +128,7 @@ final class WsMercadoLibreController extends ControllerBase {
 
     $mercado_libre_service = \Drupal::service('ws_mercado_libre.mercadolibre_service');
 
-    $codigo_categoria = $mercado_libre_service->predecir_categoria('Cargador inalámbrico 7 en 1 de 30W para iPhone');
+    $codigo_categoria = $mercado_libre_service->predecir_categoria('AOCHUAN estabilizador de mano de carga inalámbrica');
     $atributos_obligatorios = $mercado_libre_service->obtener_attr_obligatorios($codigo_categoria);
     
     if (!empty($atributos_obligatorios) ) {

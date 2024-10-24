@@ -262,16 +262,12 @@ class UserMercadoLibre
     			}
     			
     		}
-
-    		kint($data);
-    		kint($atributos_obligatorios);
-    		exit;
-    		//return $data[0]['category_id'];
+    		return $atributos_obligatorios;
     	}else{
     		\Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => $response->getStatusCode()]);
 		    $this->messenger->addMessage('Error al obtener atributos obligatorios sobre la categoria: @error',["@error"=>$response->getStatusCode() ]);
     	}
 
     }
-
+    
 }
