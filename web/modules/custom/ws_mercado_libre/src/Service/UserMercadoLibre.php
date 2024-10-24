@@ -53,46 +53,14 @@ class UserMercadoLibre
 
     public function publicarArticulo($id_articulo)
     {	
-        /*Obtener token de usuario*/
-        /*Validar si el token esta activo*/
-        if ($this->isTokenValid()) {
-         	$token_user = $this->getToken();
-         }else{
-         	if (!$this->isTokenActive()) {
-         		$this->refreshToken();
-         	}else{
-         		$this->messenger->addMessage('Error, el token de usuario para la conexión con mercado libre no es valido');
-         		\Drupal::logger('ws_mercado_libre')->notice('Error, el token de usuario para la conexión con mercado libre no es valido');
-         	}
-         }
+       
+    	/*Predecir categoria*/
+    	$codigo_categoria = $this->predecir_categoria();
 
-        $title = "otro";
+    	/*Obtener atributos obigatorios categoria*/
+    	$atributos_obli = $this->obt_atri_obli();
 
-        /*Hacer una peticion a la url para obtener prediccion de categorias
-        https://api.mercadolibre.com/sites/MLM/domain_discovery/search?q=Item de test - No Ofertar
-        */
-        $request = "https://api.mercadolibre.com/sites/MLM/domain_discovery/search?q=".$title;
-        $headers = ['Authorization' => "Bearer $token_user"];
-
-        try{
-        	$response =$this->client->request('GET',$request,$headers);
-    	}catch(ClientException $e){
-    		$response = $e->getResponse();
-    		if ($response) {
-    			$body = $response->getBody()->getContents();
-		        $data = json_decode($body, TRUE);
-		        $error = $data['error'];
-		        \Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => $error]);
-		        $this->messenger->addMessage('Error al obtener las categorias del producto');
-    		}
-    	}
-
-    	if($response->getStatusCode() == 200){
-    		$body = $response->getBody()->getContents();
-    		$data = json_decode($body, TRUE);
-    		kint($data);
-    		exit;
-    	}
+    	/*obtener attributos obligatorios*/
         
         // $category_id = $algo;
         // $price = $algo;
@@ -213,7 +181,8 @@ class UserMercadoLibre
 		catch (\Exception $e) {
 		    // Manejo de cualquier otro tipo de error
 		    \Drupal::logger('ws_mercado_libre')->notice('Error %error', ['%error' => $e->getMessage()]);
-		    return new TrustedRedirectResponse('/user');
+		    //return new TrustedRedirectResponse('/user');
+		    return false;
 		}
 
 	    if ($response->getStatusCode() == 200) {
@@ -223,6 +192,47 @@ class UserMercadoLibre
 	    	\Drupal::logger('ws_mercado_libre')->notice('token valido, id de usuario %usuario_id_ml', ['%usuario_id_ml' => $usuario_id_ml]);
 	    	return true;
 	     }
+    }
+
+    public function predecir_categoria($titulo){
+    	 /*Obtener el token y validar esi esta activo para su uso*/
+        if ($this->isTokenValid()) {
+         	$token_user = $this->getToken();
+         }else{
+         	if (!$this->isTokenActive()) {
+         		$this->refreshToken();
+         	}else{
+         		$this->messenger->addMessage('Error, el token de usuario para la conexión con mercado libre no es valido');
+         		\Drupal::logger('ws_mercado_libre')->notice('Error, el token de usuario para la conexión con mercado libre no es valido');
+         	}
+         }
+
+        /*Hacer una peticion a la url para obtener prediccion de categorias
+        https://api.mercadolibre.com/sites/MLM/domain_discovery/search?q=Item de test - No Ofertar
+        */
+        $request = "https://api.mercadolibre.com/sites/MLM/domain_discovery/search?q=".$titulo;
+        $headers = ['Authorization' => "Bearer $token_user"];
+
+        try{
+        	$response =$this->client->request('GET',$request,$headers);
+    	}catch(ClientException $e){
+    		$response = $e->getResponse();
+    		if ($response) {
+    			$body = $response->getBody()->getContents();
+		        $data = json_decode($body, TRUE);
+		        $error = $data['error'];
+		        \Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => $error]);
+		        $this->messenger->addMessage('Error al obtener las categorias del producto');
+    		}
+    	}
+
+    	if($response->getStatusCode() == 200){
+    		$body = $response->getBody()->getContents();
+    		$data = json_decode($body, TRUE);
+    		kint($data[0]['category_id']);
+    		exit;
+    		return $data[0]['category_id'];
+    	}
     }
 
 }
