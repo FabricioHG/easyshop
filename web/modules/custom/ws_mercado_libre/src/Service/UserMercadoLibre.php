@@ -236,7 +236,7 @@ class UserMercadoLibre
     	}
     }
 
-    public function obtener_attr_obli($codigo_cat){
+    public function obtener_attr_obligatorios($codigo_cat){
     	$request = "https://api.mercadolibre.com/categories/$codigo_cat/attributes";
 
     	try{
@@ -255,8 +255,16 @@ class UserMercadoLibre
     	if($response->getStatusCode() == 200){
     		$body = $response->getBody()->getContents();
     		$data = json_decode($body, TRUE);
+    		$atributos_obligatorios = array();
+    		foreach ($data as $num_attr) {
+    			if (array_key_exists('required',$num_attr['tags'])) {
+    				$atributos_obligatorios[] = $num_attr['id']; 
+    			}
+    			
+    		}
+
     		kint($data);
-    		kint('Prueba');
+    		kint($atributos_obligatorios);
     		exit;
     		//return $data[0]['category_id'];
     	}else{
