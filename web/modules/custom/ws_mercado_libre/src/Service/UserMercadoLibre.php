@@ -62,37 +62,42 @@ class UserMercadoLibre
 
     	$titulo = "Cargador inalámbrico 7 en 1 de 30W para iPhone";
 
-    	$body ='{
-    		"title":$titulo,
-			"category_id":"MLM120235",
-			"price":350,
-			"currency_id":"MXN",
-			"available_quantity":10,
-			"buying_mode":"buy_it_now",
-			"condition":"new",
-			"listing_type_id":"gold_special",
-			"pictures":[
-				{
-					"source":"http://mla-s2-p.mlstatic.com/968521-MLA20805195516_072016-O.jpg"
-				}
-			],
-			"attributes":[
-				{
-					"id":"MODEL",
-				   	"value_name":"Generico"
-				}
-				{
-				    "id":"BRAND",
-				    "value_name":"Generico"
-				}
-			]
-				  
-		}';
+    	$body = [
+		    "title" => $titulo,
+		    "category_id" => "MLM120235",
+		    "price" => 350,
+		    "currency_id" => "MXN",
+		    "available_quantity" => 10,
+		    "buying_mode" => "buy_it_now",
+		    "condition" => "new",
+		    "listing_type_id" => "gold_special",
+		    "pictures" => [
+		        [
+		            "source" => "http://mla-s2-p.mlstatic.com/968521-MLA20805195516_072016-O.jpg"
+		        ]
+		    ],
+		    "attributes" => [
+		        [
+		            "id" => "MODEL",
+		            "value_name" => "Generico"
+		        ],
+		        [
+		            "id" => "BRAND",
+		            "value_name" => "Generico"
+		        ]
+		    ]
+		];
+		$jsonBody = json_encode($body);
 
     	$client = new Client();
     	
     	try{
-    		$response = $client->post('https://api.mercadolibre.com/items',$body);
+    		$response = $client->post('https://api.mercadolibre.com/items', [
+			    'body' => $jsonBody,
+			    'headers' => [
+			        'Content-Type' => 'application/json',
+			    ],
+			]);
     	}catch (ClientException $e) {
 	      $response = $e->getResponse();
 	      if ($response) {
