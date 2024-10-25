@@ -7,7 +7,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-
+use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ConnectException;
 
@@ -51,29 +51,67 @@ class UserMercadoLibre
         }
     }
 
-    public function publicarArticulo($id_articulo)
+    public function publicarArticulo()
     {	
        
     	/*Predecir categoria*/
     	$codigo_categoria = $this->predecir_categoria();
 
     	/*Obtener atributos obigatorios categoria*/
-    	$atributos_obli = $this->obt_atri_obli();
+    	$atributos_obli = $this->obtener_attr_obligatorios();
 
-    	/*obtener attributos obligatorios*/
-        
-        // $category_id = $algo;
-        // $price = $algo;
-        // $currency_id = "MXN";
-        // $buying_mode = "buy_it_now";
-        // $condition = "new";
-        // $listing_type_id = "gold_special";
-        // $fotos = $array_fotos;
-        // $descripcion = $algo;
+    	$titulo = "Cargador inalámbrico 7 en 1 de 30W para iPhone";
+
+    	$body ='{
+    		"title":$titulo,
+			"category_id":"MLM120235",
+			"price":350,
+			"currency_id":"MXN",
+			"available_quantity":10,
+			"buying_mode":"buy_it_now",
+			"condition":"new",
+			"listing_type_id":"gold_special",
+			"pictures":[
+				{
+					"source":"http://mla-s2-p.mlstatic.com/968521-MLA20805195516_072016-O.jpg"
+				}
+			],
+			"attributes":[
+				{
+					"id":"MODEL",
+				   	"value_name":"Generico"
+				}
+				{
+				    "id":"BRAND",
+				    "value_name":"Generico"
+				}
+			]
+				  
+		}';
+
+    	$client = new Client();
+    	
+    	try{
+    		$response = $client->post('https://api.mercadolibre.com/items',$body);
+    	}catch (ClientException $e) {
+	      $response = $e->getResponse();
+	      if ($response) {
+	        $body = $response->getBody()->getContents();
+	        $data = json_decode($body, TRUE);
+	        $error = $data['error'];
+	        \Drupal::logger('ws_mercado_libre')->notice('Error al tratar de publicar el articulo en Mercado Libre, error %error', ['%error' => $error]);
+	        $this->messenger->addMessage('Error al tratar de publicar el articulo en Mercado Libre.');
+	        return false;
+	      }
+	    }
+
+	     if ($response->getStatusCode() == 200) {
+	     	 $this->messenger->addMessage('Se publico el articulo en Mercado Libre.');
+	     	 \Drupal::logger('ws_mercado_libre')->notice('Se publico el articulo %articulo en Mercado libre',["%articulo" => $titulo]);
+	     	
+	     	return true;
+	     }
        
-
-        // Devolver el mensaje
-        return $mensaje;
     }
 
     public function isTokenActive()
@@ -269,5 +307,5 @@ class UserMercadoLibre
     	}
 
     }
-    
+
 }

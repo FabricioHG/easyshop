@@ -128,13 +128,16 @@ final class WsMercadoLibreController extends ControllerBase {
 
     $mercado_libre_service = \Drupal::service('ws_mercado_libre.mercadolibre_service');
 
-    $codigo_categoria = $mercado_libre_service->predecir_categoria('Micrófono Lavalier inalámbrico portátil.');
-    $producto2_titulo = $mercado_libre_service->predecir_categoria('AOCHUAN estabilizador de mano de carga inalámbrica');
-    $atributos_obligatorios = $mercado_libre_service->obtener_attr_obligatorios($codigo_categoria);
-    $atributos_obligatorios2 = $mercado_libre_service->obtener_attr_obligatorios($producto2_titulo);
-    kint($atributos_obligatorios);
-    kint($atributos_obligatorios2);
+    //$codigo_categoria = $mercado_libre_service->predecir_categoria('Micrófono Lavalier inalámbrico portátil.');
+    //$producto2_titulo = $mercado_libre_service->predecir_categoria('AOCHUAN estabilizador de mano de carga inalámbrica');
+    //$atributos_obligatorios = $mercado_libre_service->obtener_attr_obligatorios($codigo_categoria);
+    //$atributos_obligatorios2 = $mercado_libre_service->obtener_attr_obligatorios($producto2_titulo);
+
+    $publicar_articulo = $mercado_libre_service->publicarArticulo();
+
+    kint($publicar_articulo);
     exit;
+    
     if (!empty($atributos_obligatorios) ) {
       $res = "Token actualizado";
     }else{
