@@ -60,6 +60,18 @@ class UserMercadoLibre
     	/*Obtener atributos obigatorios categoria*/
     	//$atributos_obli = $this->obtener_attr_obligatorios();
 
+    	 /*Obtener el token y validar esi esta activo para su uso*/
+        if ($this->isTokenValid()) {
+         	$token_user = $this->getToken();
+         }else{
+         	if (!$this->isTokenActive()) {
+         		$this->refreshToken();
+         	}else{
+         		$this->messenger->addMessage('Error, el token de usuario para la conexión con mercado libre no es valido');
+         		\Drupal::logger('ws_mercado_libre')->notice('Error, el token de usuario para la conexión con mercado libre no es valido');
+         	}
+         }
+
     	$titulo = "Cargador inalámbrico 7 en 1 de 30W para iPhone";
 
     	$body = [
@@ -96,6 +108,7 @@ class UserMercadoLibre
 			    'body' => $jsonBody,
 			    'headers' => [
 			        'Content-Type' => 'application/json',
+			        'Authorization' => "Bearer $token_user",
 			    ],
 			]);
     	}catch (ClientException $e) {
