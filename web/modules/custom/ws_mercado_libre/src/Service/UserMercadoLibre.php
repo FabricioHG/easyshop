@@ -55,10 +55,10 @@ class UserMercadoLibre
     {	
        
     	/*Predecir categoria*/
-    	$codigo_categoria = $this->predecir_categoria();
+    	//$codigo_categoria = $this->predecir_categoria();
 
     	/*Obtener atributos obigatorios categoria*/
-    	$atributos_obli = $this->obtener_attr_obligatorios();
+    	//$atributos_obli = $this->obtener_attr_obligatorios();
 
     	$titulo = "Cargador inalámbrico 7 en 1 de 30W para iPhone";
 
