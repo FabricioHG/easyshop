@@ -63,7 +63,7 @@ class UserMercadoLibre
     	 /*Obtener el token y validar esi esta activo para su uso*/
         if ($this->isTokenValid()) {
          	$token_user = $this->getToken();
-         }else{
+        }else{
          	if (!$this->isTokenActive()) {
          		$this->refreshToken();
          	}else{
@@ -124,6 +124,12 @@ class UserMercadoLibre
 	    }
 
 	     if ($response->getStatusCode() == 200) {
+	     	/*Revisando si hay respuesta*/
+		
+		    $data = json_decode($response->getBody(), true);
+			kint($data);
+			exit;	  
+	    
 	     	 $this->messenger->addMessage('Se publico el articulo en Mercado Libre.');
 	     	 \Drupal::logger('ws_mercado_libre')->notice('Se publico el articulo %articulo en Mercado libre',["%articulo" => $titulo]);
 	     	
@@ -230,6 +236,7 @@ class UserMercadoLibre
 	        $data = json_decode($body, TRUE);
 	        $error_message = $data['message'];
 	        \Drupal::logger('ws_mercado_libre')->notice('Error en la solicitud para validar token %mensaje', ['%mensaje' => $error_message]);
+	        $this->messenger->addMessage('Error en la solicitud para validar token. Revisar los mensajes de registro.');
 	        //return new TrustedRedirectResponse('/user');
 	        return false;
 	      }
@@ -237,6 +244,7 @@ class UserMercadoLibre
 		catch (\Exception $e) {
 		    // Manejo de cualquier otro tipo de error
 		    \Drupal::logger('ws_mercado_libre')->notice('Error %error', ['%error' => $e->getMessage()]);
+		     $this->messenger->addMessage('Error en la solicitud para validar token. Revisar los mensajes de registro.');
 		    //return new TrustedRedirectResponse('/user');
 		    return false;
 		}
