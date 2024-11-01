@@ -53,13 +53,6 @@ class UserMercadoLibre
 
     public function publicarArticulo()
     {	
-       
-    	/*Predecir categoria*/
-    	//$codigo_categoria = $this->predecir_categoria();
-
-    	/*Obtener atributos obigatorios categoria*/
-    	//$atributos_obli = $this->obtener_attr_obligatorios();
-
     	 /*Obtener el token y validar esi esta activo para su uso*/
         if ($this->isTokenValid()) {
          	$token_user = $this->getToken();
@@ -71,6 +64,12 @@ class UserMercadoLibre
          		\Drupal::logger('ws_mercado_libre')->notice('Error, el token de usuario para la conexión con mercado libre no es valido');
          	}
          }
+
+        /*Predecir categoria*/
+    	//$codigo_categoria = $this->predecir_categoria();
+
+    	/*Obtener atributos obigatorios categoria*/
+    	//$atributos_obli = $this->obtener_attr_obligatorios();
 
     	$titulo = "Cargador inalámbrico 7 en 1 de 30W para iPhone";
 
