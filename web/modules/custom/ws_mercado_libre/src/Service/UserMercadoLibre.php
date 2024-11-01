@@ -123,6 +123,8 @@ class UserMercadoLibre
 	      }
 	    }
 	    kint('antes de get-code()');
+	    kint($response);
+	    exit;
 	     if ($response->getStatusCode() == 200) {
 	     	/*Revisando si hay respuesta*/
 		
