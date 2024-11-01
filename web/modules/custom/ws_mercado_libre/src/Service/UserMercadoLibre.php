@@ -122,7 +122,7 @@ class UserMercadoLibre
 	        return false;
 	      }
 	    }
-
+	    kint('antes de get-code()');
 	     if ($response->getStatusCode() == 200) {
 	     	/*Revisando si hay respuesta*/
 		
