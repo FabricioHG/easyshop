@@ -122,28 +122,16 @@ class UserMercadoLibre
 	        return false;
 	      }
 	    }
-	    kint('antes de get-code()');
-	    kint($response);
-	    kint($response->getStatusCode());
-	    kint($response->getReasonPhrase());
-	    kint($response->getBody());
-	    exit;
-
 
 	     if ($response->getStatusCode() == 201) {
 	     	/*Revisando si hay respuesta*/
-		
-		    $data = json_decode($response->getBody(), true);
-			kint($data);
-			exit;	  
-	    
-	     	 $this->messenger->addMessage('Se publico el articulo en Mercado Libre.');
-	     	 \Drupal::logger('ws_mercado_libre')->notice('Se publico el articulo %articulo en Mercado libre',["%articulo" => $titulo]);
-	     	
+		    $data = json_decode($response->getBody(), true);  
+	     	$this->messenger->addMessage('Se publico el articulo en Mercado Libre.');
+	     	\Drupal::logger('ws_mercado_libre')->notice('Se publico el articulo %articulo en Mercado libre',["%articulo" => $titulo]);
 	     	return true;
 	     }
 
-	   //\Drupal::logger('ws_mercado_libre')->notice('Se publico el articulo %articulo en Mercado libre',["%articulo" => $titulo]);  
+	   \Drupal::logger('ws_mercado_libre')->notice('Error, se obtuvo una respuesta inesperada al publicar el producto: %respuesta',["%articulo" => $response->getReasonPhrase() ]);  
        return false;
     }
 
