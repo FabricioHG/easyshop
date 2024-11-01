@@ -124,8 +124,12 @@ class UserMercadoLibre
 	    }
 	    kint('antes de get-code()');
 	    kint($response);
+	    kint($response->getStatusCode());
 	    kint($response->getReasonPhrase());
+	    kint($response->getBody());
 	    exit;
+
+
 	     if ($response->getStatusCode() == 201) {
 	     	/*Revisando si hay respuesta*/
 		
@@ -139,6 +143,7 @@ class UserMercadoLibre
 	     	return true;
 	     }
 
+	   //\Drupal::logger('ws_mercado_libre')->notice('Se publico el articulo %articulo en Mercado libre',["%articulo" => $titulo]);  
        retun false;
     }
 
