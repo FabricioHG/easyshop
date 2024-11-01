@@ -124,8 +124,9 @@ class UserMercadoLibre
 	    }
 	    kint('antes de get-code()');
 	    kint($response);
+	    kint($response->getReasonPhrase());
 	    exit;
-	     if ($response->getStatusCode() == 200) {
+	     if ($response->getStatusCode() == 201) {
 	     	/*Revisando si hay respuesta*/
 		
 		    $data = json_decode($response->getBody(), true);
@@ -137,7 +138,8 @@ class UserMercadoLibre
 	     	
 	     	return true;
 	     }
-       
+
+       retun false;
     }
 
     public function isTokenActive()
