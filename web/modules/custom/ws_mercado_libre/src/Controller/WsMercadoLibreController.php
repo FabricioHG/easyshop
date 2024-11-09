@@ -133,11 +133,11 @@ final class WsMercadoLibreController extends ControllerBase {
     //$atributos_obligatorios = $mercado_libre_service->obtener_attr_obligatorios($codigo_categoria);
     //$atributos_obligatorios2 = $mercado_libre_service->obtener_attr_obligatorios($producto2_titulo);
 
-    $publicar_articulo = $mercado_libre_service->publicarArticulo();
+    $categorias = $mercado_libre_service->predecir_categoria("cafetera");
 
-    kint($publicar_articulo);
+    kint($categorias);
     exit;
-    
+
     if (!empty($atributos_obligatorios) ) {
       $res = "Token actualizado";
     }else{
