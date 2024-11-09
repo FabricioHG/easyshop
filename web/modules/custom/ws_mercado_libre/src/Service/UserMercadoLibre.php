@@ -65,12 +65,6 @@ class UserMercadoLibre
          	}
          }
 
-        /*Predecir categoria*/
-    	//$codigo_categoria = $this->predecir_categoria();
-
-    	/*Obtener atributos obigatorios categoria*/
-    	//$atributos_obli = $this->obtener_attr_obligatorios();
-
     	$titulo = "Cargador inalámbrico 7 en 1 de 30W para iPhone";
 
     	$body = [
@@ -287,9 +281,13 @@ class UserMercadoLibre
     	}
 
     	if($response->getStatusCode() == 200){
+    		$categorias = [];
     		$body = $response->getBody()->getContents();
     		$data = json_decode($body, TRUE);
-    		return $data[0]['category_id'];
+    		foreach ($data as  $categoria) {
+    			$categorias[$categoria['category_id']] = $categoria['domain_name'];
+    		}
+    		return $categorias;
     	}else{
     		\Drupal::logger('ws_mercado_libre')->notice('Mensaje %mensaje', ['%mensaje' => $response->getStatusCode()]);
 		    $this->messenger->addMessage('Error al obtener la categoría para el producto: @error',["@error"=>$response->getStatusCode() ]);

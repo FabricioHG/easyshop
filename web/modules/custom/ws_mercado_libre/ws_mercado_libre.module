@@ -5,3 +5,22 @@
  * Primary module hooks for WS Mercado Libre module.
  */
 
+// function ws_mercado_libre_form_commerce_product_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id){
+// 	$base_form = $form_state->getBuildInfo()['base_form_id'];
+ 	
+// 	//Obtener el valor del campo de cada usuario para saber si quiere publicar en ML
+// 	$storage_user = \Drupal::entityTypeManager()->getStorage('user');
+// 	$current_user_id = \Drupal::currentUser()->id();
+// 	$node_user = $storage_user->load($current_user_id);
+// 	$publicar_en_ml = $node_user->get('field_publish_products')->value;
+
+// 	if($publicar_en_ml === "1"){
+// 		//obtener campos obligatorios (atributos)
+// 		$servicio_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
+// 		$categoria_sugerida = $servicio_ml->predecir_categoria('titulo');
+// 		$atributos_obligatorios = $servicio_ml->obtener_attr_obligatorios('categoria_predecida');
+
+		
+// 	}
+// }
+
