@@ -34,12 +34,12 @@ function ws_mercado_libre_form_commerce_product_form_alter(&$form, \Drupal\Core\
 	 	//Hacer contenedor de campos de mercado libre
  		$form['data_categoria_ml']=[
  			'#type'=>'fieldset',
- 			'#title'=>'Datos para anuncion en Mercado libre',
+ 			'#title'=>'Datos para publicar en Mercado libre',
  		];
  		$form['data_categoria_ml']['categoria_ml'] = [
  			'#type'=> 'select',
  			'#title'=> 'Categoria en Mercado libre',
- 			'#option' => [],
+ 			'#options' => [],
  			'#id'=> 'selec_categoria_ml'
  		];
 
@@ -60,7 +60,7 @@ function backCategoria(array &$form, \Drupal\Core\Form\FormStateInterface $form_
 	\Drupal::logger('ws_mercado_libre')->notice('contenido de variable %titulo',['%titulo'=>$contenido_variable ]); // Registra un mensaje en el registro de Drupal.
    
 
-    $form['categoria_ml']['#option']=$contenido_variable;
+    $form['categoria_ml']['#options']=$contenido_variable;
 
      return $form['categoria_ml'];
 }
