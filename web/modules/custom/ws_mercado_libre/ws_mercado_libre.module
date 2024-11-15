@@ -30,6 +30,7 @@ function ws_mercado_libre_form_commerce_product_form_alter(&$form, \Drupal\Core\
 	    	],
 
 	 	];
+
 	 	// Desactivar la caché de formulario
 	 	$form_state->setCached(FALSE);   
 
@@ -51,7 +52,15 @@ function ws_mercado_libre_form_commerce_product_form_alter(&$form, \Drupal\Core\
 }
 
 function backCategoria(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+     
      $titulo = $form_state->getValue('title')[0]['value'];
+     if (preg_match('/[a-zA-Z]/', $titulo)) {
+     	$titulo = $titulo;
+     }
+     else{
+     	$titulo = 'Otro';
+     }
+
      $service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
      $categorias = $service_ml->predecir_categoria($titulo);
 
