@@ -51,7 +51,7 @@ function ws_mercado_libre_form_commerce_product_form_alter(&$form, \Drupal\Core\
 function backCategoria(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
      $titulo = $form_state->getValue('title')[0]['value'];
      $service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
-     $categorias = $service->predecir_categoria($titulo);
+     $categorias = $service_ml->predecir_categoria($titulo);
 
      //Revisar que tiene la variable en informes
      $contenido_variable = print_r($categorias,true);
