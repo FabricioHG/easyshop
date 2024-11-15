@@ -29,7 +29,9 @@ function ws_mercado_libre_form_commerce_product_form_alter(&$form, \Drupal\Core\
 	        	'message' => 'Prediciendo categoria...',
 	    	],
 
-	 	];   
+	 	];
+	 	// Desactivar la caché de formulario
+	 	$form_state->setCached(FALSE);   
 
 	 	//Hacer contenedor de campos de mercado libre
  		$form['data_categoria_ml']=[
@@ -54,13 +56,17 @@ function backCategoria(array &$form, \Drupal\Core\Form\FormStateInterface $form_
      $categorias = $service_ml->predecir_categoria($titulo);
 
      //Revisar que tiene la variable en informes
-     $contenido_variable = print_r($categorias,true);
+     //$contenido_variable = print_r($categorias,true);
 
-    // // Realiza el procesamiento y devuelve un elemento del formulario.
-	\Drupal::logger('ws_mercado_libre')->notice('contenido de variable %titulo',['%titulo'=>$contenido_variable ]); // Registra un mensaje en el registro de Drupal.
+    // Realiza el procesamiento y devuelve un elemento del formulario.
+	//\Drupal::logger('ws_mercado_libre')->notice('contenido de variable %titulo',['%titulo'=>$contenido_variable ]); // Registra un mensaje en el registro de Drupal.
    
 
-    $form['categoria_ml']['#options']=$contenido_variable;
+    $form['categoria_ml']=[
+    	'#type' => 'select',
+    	'#options'=>$categorias,
+    	'#id'=> 'selec_categoria_ml'
+    ];
 
      return $form['categoria_ml'];
 }
