@@ -20,8 +20,20 @@ targetEntityType: user
 bundle: user
 mode: default
 content:
+  field_publish_products:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 2
+    region: content
   member_for:
-    weight: 5
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
     region: content
   user_picture:
     type: image
@@ -40,5 +52,4 @@ hidden:
   field_mercadolibre_access_token: true
   field_mercadolibre_refresh_token: true
   field_ml_token_expires_in: true
-  field_publish_products: true
   langcode: true

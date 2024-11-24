@@ -6,6 +6,8 @@
  */
 
 function ws_mercado_libre_form_commerce_product_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id){
+	
+
 	$base_form = $form_state->getBuildInfo()['base_form_id'];
 	$form['#attached']['library'][] = 'ws_mercado_libre/ws_mercado_libre.callajax';
  	
@@ -14,45 +16,60 @@ function ws_mercado_libre_form_commerce_product_form_alter(&$form, \Drupal\Core\
 	 $current_user_id = \Drupal::currentUser()->id();
 	 $node_user = $storage_user->load($current_user_id);
 	 $publicar_en_ml = $node_user->get('field_publish_products')->value;
-
+	 
+	
 	if($publicar_en_ml === "1"){
 		//obtener campos obligatorios (atributos)
 	 	$servicio_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
-
+	 	
 	 	/*Hacer que el titulo funcione con ajax*/
 	 	$form['title']['widget'][0]['value']['#ajax']=[
 	 		'callback' => 'backCategoria',
-			'wrapper' => 'selec_categoria_ml',
+			'wrapper' => 'idcategoriaml',
 			'event' => 'blur',
 			'progress' => [
-	        	'type' => 'throbber',
-	        	'message' => 'Prediciendo categoria...',
-	    	],
+	        		'type' => 'throbber',
+	        		'message' => 'Prediciendo categoria...',
+	    		],
 
 	 	];
 
-	 	// Desactivar la caché de formulario
-	 	$form_state->setCached(FALSE);   
-
 	 	//Hacer contenedor de campos de mercado libre
- 		$form['data_categoria_ml']=[
- 			'#type'=>'fieldset',
- 			'#title'=>'Datos para publicar en Mercado libre',
+	 	$form['cont_categoria_ml']=[
+ 			'#type'=>'container',
+ 			'#attributes' => ['id' => 'idcategoriaml'],
+
  		];
- 		$form['data_categoria_ml']['categoria_ml'] = [
+ 		$form['cont_atributos_ml']=[
+ 			'#type'=>'container',
+ 			'#attributes' => ['id' => 'idatributosml'],
+ 		];
+
+ 		// Configurar las opciones iniciales para el select.        	
+ 		$form['cont_categoria_ml']['categoria_ml'] = [
  			'#type'=> 'select',
  			'#title'=> 'Categoria en Mercado libre',
- 			'#options' => [],
- 			'#id'=> 'selec_categoria_ml'
- 		];
+ 			'#options' => $form_state->get('categorias') ?? ['' => '- Seleccione una opción -'],
+ 			'#validated' => TRUE,
+ 			'#ajax'=>[
+ 				'callback' => 'backAtributos',
+				'wrapper' => 'idatributosml',
+				'event' => 'change',
+				'progress' => [
+	        			'type' => 'throbber',
+	        			'message' => 'Obteniendo atributos obligatorios de la categoria...',
+	    			],
+ 			],
 
-
+ 		];	
+ 		
 	}
 
+	
 }
 
+
 function backCategoria(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
-     
      $titulo = $form_state->getValue('title')[0]['value'];
      if (preg_match('/[a-zA-Z]/', $titulo)) {
      	$titulo = $titulo;
@@ -64,18 +81,40 @@ function backCategoria(array &$form, \Drupal\Core\Form\FormStateInterface $form_
      $service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
      $categorias = $service_ml->predecir_categoria($titulo);
 
-     //Revisar que tiene la variable en informes
-     //$contenido_variable = print_r($categorias,true);
+    
+    	// Guardar las categorías en el estado del formulario.
+    $form_state->set('categorias', $categorias);
 
-    // Realiza el procesamiento y devuelve un elemento del formulario.
-	//\Drupal::logger('ws_mercado_libre')->notice('contenido de variable %titulo',['%titulo'=>$contenido_variable ]); // Registra un mensaje en el registro de Drupal.
-   
-
-    $form['categoria_ml']=[
-    	'#type' => 'select',
-    	'#options'=>$categorias,
-    	'#id'=> 'selec_categoria_ml'
-    ];
-
-     return $form['categoria_ml'];
+    // Actualizar las opciones del select y el valor seleccionado.
+    $form['cont_categoria_ml']['categoria_ml']['#options'] = $categorias;
+    
+     $form_state->setRebuild(TRUE);
+     return $form['cont_categoria_ml'];
 }
+
+
+function backAtributos(array &$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+	// \Drupal::logger('ws_mercado_libre')->notice('Valores actuales del form_state: <pre>@values</pre>', [
+	//     '@values' => var_export($form_state->getValues(), TRUE),
+	// ]);
+
+	$codigo_cat = $form_state->getValue('cont_categoria_ml')['categoria_ml'];
+
+	$service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
+     $atributos = $service_ml->obtener_attr_obligatorios($codigo_cat);
+
+     foreach ($atributos as $key => $value) {
+     	$form['cont_atributos_ml'][$value]=[
+ 			'#type'=>'textfield',
+ 			'#title'=>$value,
+ 		];
+     }
+	
+     \Drupal::logger('ws_mercado_libre')->notice('contenido atributos %codigo',['%codigo'=>  var_export($atributos, true) ]); // Registra un mensaje en el 
+	 	
+ 	return $form['cont_atributos_ml'];
+
+
+}
+
+
