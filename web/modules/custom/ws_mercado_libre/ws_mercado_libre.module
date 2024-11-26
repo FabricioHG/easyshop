@@ -103,8 +103,6 @@ function backAtributos(array &$form, \Drupal\Core\Form\FormStateInterface $form_
 }
 
 function ws_mercado_libre_commerce_product_presave(\Drupal\Core\Entity\EntityInterface $entity) {
-   kint($entity);
-   exit();
 
     if ($entity instanceof \Drupal\Core\Entity\ContentEntityInterface) {
     		if ($entity->isNew()) {
