@@ -2,10 +2,10 @@
 
 namespace Drupal\Tests\physical\Kernel;
 
+use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
 use Drupal\physical\Comparator\MeasurementComparator;
 use Drupal\physical\Length;
 use SebastianBergmann\Comparator\Factory as PhpUnitComparatorFactory;

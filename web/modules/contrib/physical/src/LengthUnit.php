@@ -13,6 +13,8 @@ final class LengthUnit implements UnitInterface {
   const KILOMETER = 'km';
   const INCH = 'in';
   const FOOT = 'ft';
+  const MILLIGRAM = 'mg';
+  const MICROGRAM = 'µg';
   const NAUTICAL_MILE = 'M';
 
   /**
@@ -26,7 +28,10 @@ final class LengthUnit implements UnitInterface {
       self::KILOMETER => t('km'),
       self::INCH => t('in'),
       self::FOOT => t('ft'),
+      self::MILLIGRAM => t('mg'),
+      self::MICROGRAM => t('µg'),
       self::NAUTICAL_MILE => t('M'),
+
     ];
   }
 
@@ -49,6 +54,8 @@ final class LengthUnit implements UnitInterface {
       self::KILOMETER => '1000',
       self::INCH => '0.0254',
       self::FOOT => '0.3048',
+      self::MILLIGRAM => '0.001',
+      self::MICROGRAM => '0.000001',
       self::NAUTICAL_MILE => '1852',
     ];
 
@@ -60,8 +67,15 @@ final class LengthUnit implements UnitInterface {
    */
   public static function assertExists($unit) {
     $allowed_units = [
-      self::MILLIMETER, self::CENTIMETER, self::METER, self::KILOMETER,
-      self::INCH, self::FOOT, self::NAUTICAL_MILE,
+      self::MILLIMETER,
+      self::CENTIMETER,
+      self::METER,
+      self::KILOMETER,
+      self::INCH,
+      self::FOOT,
+      self::MILLIGRAM,
+      self::MICROGRAM,
+      self::NAUTICAL_MILE,
     ];
     if (!in_array($unit, $allowed_units)) {
       throw new \InvalidArgumentException(sprintf('Invalid length unit "%s" provided.', $unit));

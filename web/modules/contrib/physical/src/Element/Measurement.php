@@ -51,7 +51,7 @@ class Measurement extends FormElement {
         [$class, 'preRenderGroup'],
       ],
       '#input' => TRUE,
-      '#theme_wrappers' => ['container'],
+      '#theme_wrappers' => ['form_element'],
     ];
   }
 
@@ -92,7 +92,6 @@ class Measurement extends FormElement {
 
     $element['number'] = [
       '#type' => 'physical_number',
-      '#title' => $element['#title'],
       '#default_value' => $default_value ? $default_value['number'] : NULL,
       '#required' => $element['#required'],
       '#size' => $element['#size'],
@@ -114,7 +113,6 @@ class Measurement extends FormElement {
     }
 
     if (count($units) === 1) {
-      $last_visible_element = 'number';
       $unit_keys = array_keys($units);
       $unit = reset($unit_keys);
       $unit_label = $units[$unit];
@@ -126,7 +124,6 @@ class Measurement extends FormElement {
       $element['number']['#field_suffix'] = $unit_label;
     }
     else {
-      $last_visible_element = 'unit';
       $element['unit'] = [
         '#type' => 'select',
         '#options' => $units,
@@ -134,11 +131,6 @@ class Measurement extends FormElement {
         '#title_display' => 'invisible',
         '#field_suffix' => '',
       ];
-    }
-
-    // Add the help text if specified.
-    if (!empty($element['#description'])) {
-      $element[$last_visible_element]['#field_suffix'] .= '<div class="description">' . $element['#description'] . '</div>';
     }
 
     return $element;

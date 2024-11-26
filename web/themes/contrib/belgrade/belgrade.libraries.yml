@@ -4,15 +4,25 @@ global:
     theme:
       css/main.css: { weight: -1000 }
   js:
-    '//cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js':
+    'https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js':
+      { type: external, minified: true, weight: -1001 }
+    '//cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js':
       { type: external, minified: true, weight: -1000 }
     js/main.js: { weight: 0 }
   dependencies:
-    - core/jquery
     - core/once
     - core/drupal
     - core/drupalSettings
     - belgrade/color
+
+color-picker:
+  version: VERSION
+  js:
+    js/color-picker.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - core/drupal.announce
 
 throbber:
   js:

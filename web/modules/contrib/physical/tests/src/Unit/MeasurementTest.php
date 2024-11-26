@@ -2,9 +2,9 @@
 
 namespace Drupal\Tests\physical\Unit;
 
+use Drupal\Tests\UnitTestCase;
 use Drupal\physical\Length;
 use Drupal\physical\Measurement;
-use Drupal\Tests\UnitTestCase;
 
 /**
  * Tests the measurement base class.

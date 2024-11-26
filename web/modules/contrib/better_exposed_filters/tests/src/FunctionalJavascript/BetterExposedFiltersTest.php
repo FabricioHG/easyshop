@@ -51,7 +51,7 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
     $this->createNode([
       'title' => 'Page One',
       'field_bef_boolean' => '',
-      'field_bef_email' => 'bef-test@drupal.org',
+      'field_bef_email' => '1bef-test@drupal.org',
       'field_bef_integer' => '1',
       'field_bef_letters' => 'Aardvark',
       // Seattle.
@@ -61,7 +61,7 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
     $this->createNode([
       'title' => 'Page Two',
       'field_bef_boolean' => '',
-      'field_bef_email' => 'bef-test@drupal.org',
+      'field_bef_email' => '2bef-test2@drupal.org',
       'field_bef_integer' => '2',
       'field_bef_letters' => 'Bumble & the Bee',
       // Vancouver.
@@ -73,8 +73,54 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
 
   /**
    * Tests if filtering via auto-submit works.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function testAutoSubmit() {
+  public function testAutoSubmitMinLength(): void {
+    $view = Views::getView('bef_test');
+
+    // Enable auto-submit, but disable for text fields.
+    $this->setBetterExposedOptions($view, [
+      'general' => [
+        'autosubmit' => TRUE,
+        'autosubmit_exclude_textfield' => FALSE,
+        'autosubmit_textfield_minimum_length' => 3,
+      ],
+    ]);
+
+    // Visit the bef-test page.
+    $this->drupalGet('bef-test');
+
+    $session = $this->getSession();
+    $page = $session->getPage();
+
+    // Ensure that the content we're testing for is present.
+    $html = $page->getHtml();
+    $this->assertStringContainsString('Page One', $html);
+    $this->assertStringContainsString('Page Two', $html);
+
+    // Enter value in email field.
+    $field_bef_email = $page->find('css', '.form-item-field-bef-email-value input');
+    $field_bef_email->setValue('1');
+    // Verify that auto submit didn't run, due to less than 4 characters.
+    $html = $page->getHtml();
+    $this->assertStringContainsString('Page One', $html);
+    $this->assertStringContainsString('Page Two', $html);
+
+    $field_bef_email = $page->find('css', '.form-item-field-bef-email-value input');
+    $field_bef_email->setValue('1bef');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $html = $page->getHtml();
+    $this->assertStringContainsString('Page One', $html);
+    $this->assertStringNotContainsString('Page Two', $html);
+  }
+
+  /**
+   * Tests if filtering via auto-submit works.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function testAutoSubmit(): void {
     $view = Views::getView('bef_test');
     $display = &$view->storage->getDisplay('default');
 
@@ -100,7 +146,6 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
     // Search for "Page One".
     $field_bef_integer = $page->findField('field_bef_integer_value');
     $field_bef_integer->setValue('1');
-    $field_bef_integer->blur();
     $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Verify that only the "Page One" Node is present.
@@ -111,7 +156,6 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
     // Enter value in email field.
     $field_bef_email = $page->find('css', '.form-item-field-bef-email-value input');
     $field_bef_email->setValue('qwerty@test.com');
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
     // Verify nothing has changed.
     $html = $page->getHtml();
@@ -169,9 +213,8 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
     // Enter value in email field.
     $field_bef_email = $page->find('css', '.form-item-field-bef-email-value input');
     $field_bef_email->setValue('qwerty@test.com');
-    $this->assertSession()->assertWaitOnAjaxRequest();
 
-    // Veri fy nothing has changed.
+    // Verify nothing has changed.
     $html = $page->getHtml();
     $this->assertStringContainsString('Page One', $html);
     $this->assertStringNotContainsString('Page Two', $html);
@@ -189,7 +232,7 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
   /**
    * Tests placing exposed filters inside a collapsible field-set.
    */
-  public function testSecondaryOptions() {
+  public function testSecondaryOptions(): void {
     $view = Views::getView('bef_test');
 
     // Enable auto-submit, but disable for text fields.
@@ -217,6 +260,13 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
             'is_secondary' => TRUE,
           ],
         ],
+        'field_bef_integer_value' => [
+          'plugin_id' => 'default',
+          'advanced' => [
+            'is_secondary' => TRUE,
+            'collapsible' => TRUE,
+          ],
+        ],
       ],
     ]);
 
@@ -230,6 +280,7 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
     $secondary_options = $page->find('css', '.bef--secondary');
     $this->assertFalse($secondary_options->hasAttribute('open'));
     $secondary_options->hasField('field_bef_boolean_value');
+    $this->assertTrue($secondary_options->hasField('field_bef_integer_value'), 'Integer field should be present in secondary options');
 
     // Submit form and set a value for the boolean field.
     $secondary_options->click();
@@ -278,6 +329,32 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
     $details_summary = $page->find('css', '#edit-field-bef-email-value-collapsible summary');
     $this->assertTrue($details_summary->hasAttribute('aria-expanded'));
     $this->assertEquals('false', $details_summary->getAttribute('aria-expanded'));
+  }
+
+  /**
+   * Tests when remember last selection is used.
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function testRememberLastSelection(): void {
+    $this->drupalLogin($this->createUser());
+    $this->drupalGet('bef-test');
+    $this->getSession()->getPage()->fillField('field_bef_email_value', 'bef-test2@drupal.org');
+    $this->getSession()->getPage()->pressButton('Apply');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $this->assertSession()->fieldValueEquals('field_bef_email_value', 'bef-test2@drupal.org');
+
+    // Now go back and verify email was remembered.
+    $this->drupalGet('bef-test');
+    $this->assertSession()->fieldValueEquals('field_bef_email_value', 'bef-test2@drupal.org');
+
+    // Click Reset button.
+    $this->getSession()->getPage()->pressButton('Reset');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+
+    // Verify field cleared.
+    $this->assertSession()->fieldValueEquals('field_bef_email_value', '');
   }
 
 }

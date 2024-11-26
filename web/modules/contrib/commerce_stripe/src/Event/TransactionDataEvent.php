@@ -8,8 +8,10 @@ use Drupal\Component\EventDispatcher\Event;
 /**
  * Defines the transaction data event.
  *
- * @deprecated Will be removed in 2.x.
+ * @deprecated in commerce_stripe:8.x-1.0 and is removed from commerce_stripe:2.0.0.
  * Use Drupal\commerce_stripe\Event\PaymentIntentEvent.
+ *
+ * @see https://www.drupal.org/project/commerce_stripe/issues/3412438
  *
  * This enables other modules to add transaction data and metadata to the
  * transaction that will be sent to Stripe.
@@ -55,7 +57,10 @@ class TransactionDataEvent extends Event {
    * @return array
    *   The transaction data.
    *
-   * @deprecated Transaction data is no longer influenced by this event.
+   * @deprecated in commerce_stripe:8.x-1.0 and is removed from commerce_stripe:2.0.0.
+   * Use Drupal\commerce_stripe\Event\PaymentIntentEvent.
+   *
+   * @see https://www.drupal.org/project/commerce_stripe/issues/3412438
    */
   public function getTransactionData() {
     return $this->transactionData;
@@ -69,7 +74,10 @@ class TransactionDataEvent extends Event {
    *
    * @return $this
    *
-   * @deprecated Transaction data is no longer influenced by this event.
+   * @deprecated in commerce_stripe:8.x-1.0 and is removed from commerce_stripe:2.0.0.
+   * Use Drupal\commerce_stripe\Event\PaymentIntentEvent.
+   *
+   * @see https://www.drupal.org/project/commerce_stripe/issues/3412438
    */
   public function setTransactionData(array $transaction_data) {
     $this->transactionData = $transaction_data;

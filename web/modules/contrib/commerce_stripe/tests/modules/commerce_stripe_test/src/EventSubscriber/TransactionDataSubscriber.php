@@ -6,6 +6,9 @@ use Drupal\commerce_stripe\Event\StripeEvents;
 use Drupal\commerce_stripe\Event\TransactionDataEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
+/**
+ * Transaction data subscriber.
+ */
 class TransactionDataSubscriber implements EventSubscriberInterface {
 
   /**
@@ -13,6 +16,7 @@ class TransactionDataSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents() {
     return [
+      // @phpstan-ignore-next-line
       StripeEvents::TRANSACTION_DATA => 'addTransactionData',
     ];
   }
@@ -22,6 +26,8 @@ class TransactionDataSubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\commerce_stripe\Event\TransactionDataEvent $event
    *   The transaction data event.
+   *
+   * @phpstan-ignore-next-line
    */
   public function addTransactionData(TransactionDataEvent $event) {
     $payment = $event->getPayment();

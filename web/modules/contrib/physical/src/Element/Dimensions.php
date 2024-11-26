@@ -123,7 +123,6 @@ class Dimensions extends FormElement {
     }
 
     if (count($units) === 1) {
-      $last_visible_element = 'height';
       $unit_keys = array_keys($units);
       $unit = reset($unit_keys);
       $unit_label = $units[$unit];
@@ -135,7 +134,6 @@ class Dimensions extends FormElement {
       $element['height']['#field_suffix'] = $unit_label;
     }
     else {
-      $last_visible_element = 'unit';
       $element['unit'] = [
         '#type' => 'select',
         '#options' => $units,
@@ -143,11 +141,6 @@ class Dimensions extends FormElement {
         '#title_display' => 'invisible',
         '#field_suffix' => '',
       ];
-    }
-
-    // Add the help text if specified.
-    if (!empty($element['#description'])) {
-      $element[$last_visible_element]['#field_suffix'] .= '<div class="description">' . $element['#description'] . '</div>';
     }
 
     return $element;

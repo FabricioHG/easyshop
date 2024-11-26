@@ -26,7 +26,7 @@ final class MeasurementType {
       self::LENGTH => t('Length'),
       self::TEMPERATURE => t('Temperature'),
       self::VOLUME => t('Volume'),
-      self::WEIGHT => t('Weight'),
+      self::WEIGHT => t('Weight', [], ['context' => 'physical']),
       self::PRESSURE => t('Pressure'),
     ];
   }

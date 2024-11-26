@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\physical\Functional;
 
-use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\language\Entity\ConfigurableLanguage;
 
 /**
  * Tests the physical_measurement form element.

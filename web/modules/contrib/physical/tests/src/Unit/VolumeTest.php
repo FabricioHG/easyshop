@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\physical\Unit;
 
-use Drupal\physical\Volume;
 use Drupal\Tests\UnitTestCase;
+use Drupal\physical\Volume;
 
 /**
  * Tests the volume class.

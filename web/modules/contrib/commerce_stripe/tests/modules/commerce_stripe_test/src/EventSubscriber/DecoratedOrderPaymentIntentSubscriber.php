@@ -6,6 +6,9 @@ use Drupal\commerce_stripe\EventSubscriber\OrderPaymentIntentSubscriber;
 use Stripe\Exception\ApiErrorException as StripeError;
 use Stripe\PaymentIntent;
 
+/**
+ * Decorated Order PaymentIntent Subscriber.
+ */
 class DecoratedOrderPaymentIntentSubscriber extends OrderPaymentIntentSubscriber {
 
   /**

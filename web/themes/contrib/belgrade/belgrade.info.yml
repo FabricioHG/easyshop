@@ -61,7 +61,7 @@ libraries-override:
       theme:
         css/commerce_checkout.form.css: false
 
-# Information added by Drupal.org packaging script on 2024-07-31
-version: '2.0.2'
+# Information added by Drupal.org packaging script on 2024-11-18
+version: '2.0.4'
 project: 'belgrade'
-datestamp: 1722432073
+datestamp: 1731931239

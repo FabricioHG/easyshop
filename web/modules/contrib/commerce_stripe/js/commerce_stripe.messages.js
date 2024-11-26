@@ -1,11 +1,13 @@
-(function ($, Drupal) {
-  'use strict';
+(($, Drupal) => {
   Drupal.commerceStripe = {
-    displayError: function (errorMessage) {
-      $('#payment-errors').html(Drupal.theme('commerceStripeError', errorMessage));
-    }
-  }
-  Drupal.theme.commerceStripeError = function (message) {
-    return $('<div class="messages messages--error"></div>').html(message);
-  }
+    displayError(errorMessage) {
+      $('#payment-errors').html(
+        Drupal.theme('commerceStripeError', errorMessage),
+      );
+    },
+  };
+  Drupal.theme.commerceStripeError = (message) =>
+    $('<div class="payment-messages payment-messages--error"></div>').html(
+      message,
+    );
 })(jQuery, Drupal);

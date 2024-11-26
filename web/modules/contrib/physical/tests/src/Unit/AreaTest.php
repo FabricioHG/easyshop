@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\physical\Unit;
 
-use Drupal\physical\Area;
 use Drupal\Tests\UnitTestCase;
+use Drupal\physical\Area;
 
 /**
  * Tests the area class.

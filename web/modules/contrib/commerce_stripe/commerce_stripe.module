@@ -5,10 +5,13 @@
  * Provides Commerce integration for Stripe Payments.
  */
 
+use Drupal\commerce_payment\Entity\PaymentGateway;
+use Drupal\commerce_stripe\Plugin\Commerce\PaymentGateway\Stripe;
 use Drupal\commerce_stripe\Plugin\Commerce\PaymentGateway\StripePaymentElementInterface;
 use Drupal\commerce_stripe\PluginForm\Stripe\PaymentMethodAddForm;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\commerce_payment\Entity\PaymentGateway;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -65,12 +68,11 @@ function commerce_stripe_theme() {
  */
 function commerce_stripe_library_info_build() {
   $libraries = [];
-
   $stripe_src = 'https://js.stripe.com/v3/';
+  $stripe_config = Drupal::service('config.factory')->getEditable('commerce_stripe.settings');
 
-  // @todo get this value from global or payment gateway settings.
-  $use_fraud_detection = TRUE;
-  if (!$use_fraud_detection) {
+  $user_fraud_signals = $stripe_config->get('collect_user_fraud_signals') ?? TRUE;
+  if (!$user_fraud_signals) {
     $stripe_src .= '?advancedFraudSignals=false';
   }
 
@@ -80,6 +82,9 @@ function commerce_stripe_library_info_build() {
       $stripe_src => [
         'type' => 'external',
         'minified' => TRUE,
+        'attributes' => [
+          'defer' => 'defer',
+        ],
       ],
     ],
   ];
@@ -88,12 +93,60 @@ function commerce_stripe_library_info_build() {
 }
 
 /**
+ * Implements hook_library_info_alter().
+ */
+function commerce_stripe_library_info_alter(array &$libraries, $module) {
+  if ($module === 'commerce_stripe' && isset($libraries['messages'])) {
+    // Adds a dependency on the payment_messages library only if it is defined.
+    if (Drupal::service('library.discovery')->getLibraryByName('commerce_payment', 'payment_messages')) {
+      $libraries['messages']['dependencies'][] = 'commerce_payment/payment_messages';
+    }
+  }
+}
+
+/**
  * Implements hook_page_attachments().
  */
 function commerce_stripe_page_attachments(array &$page) {
   // Adds Stripe.js to all pages except admin and ajax requests.
-  $is_admin = \Drupal::service('router.admin_context')->isAdminRoute();
-  if (!$is_admin && !\Drupal::request()->isXmlHttpRequest()) {
-    $page['#attached']['library'][] = 'commerce_stripe/stripe';
+  $is_admin_route = Drupal::service('router.admin_context')->isAdminRoute();
+  if (!$is_admin_route && !Drupal::request()->isXmlHttpRequest()) {
+    $stripe_config = Drupal::service('config.factory')->get('commerce_stripe.settings');
+    $load_on_every_page = $stripe_config->get('load_on_every_page') ?? FALSE;
+    if ($load_on_every_page) {
+      $page['#attached']['library'][] = 'commerce_stripe/stripe';
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_views_view_field().
+ */
+function commerce_stripe_preprocess_views_view_field(&$variables) {
+  // Link a Stripe payment's Remote ID in the order payments tab to the related
+  // payment in the Stripe dashboard.
+  if ($variables['view']->id() === 'commerce_order_payments' && $variables['field']->field === 'remote_id') {
+    if (!Drupal::currentUser()->hasPermission('view stripe dashboard links')) {
+      return;
+    }
+    $stripe_config = Drupal::service('config.factory')->get('commerce_stripe.settings');
+    $link_payments = $stripe_config->get('link_payments_remote_id') ?? FALSE;
+    if (!$link_payments) {
+      return;
+    }
+    /** @var \Drupal\commerce_payment\Entity\PaymentInterface $payment */
+    $payment = $variables['row']->_entity;
+    $plugin = $payment->getPaymentGateway()->getPlugin();
+    if ($plugin instanceof Stripe ||
+      $plugin instanceof StripePaymentElementInterface) {
+      $redirect_url = $payment->getPaymentGatewayMode() === 'test' ? 'test/payments' : 'payments';
+      $variables['output'] = Link::fromTextAndUrl(
+        $payment->getRemoteId(),
+        Url::fromUri(
+          "https://dashboard.stripe.com/login?redirect=$redirect_url/" . $payment->getRemoteId(),
+          ['attributes' => ['target' => '_blank']]
+        )
+      );
+    }
   }
 }

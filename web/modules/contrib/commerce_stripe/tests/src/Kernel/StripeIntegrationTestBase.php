@@ -5,6 +5,9 @@ namespace Drupal\Tests\commerce_stripe\Kernel;
 use Drupal\commerce_payment\Entity\PaymentGateway;
 use Drupal\Tests\commerce_order\Kernel\OrderKernelTestBase;
 
+/**
+ * Stripe integration test base.
+ */
 abstract class StripeIntegrationTestBase extends OrderKernelTestBase {
 
   /**

@@ -51,7 +51,7 @@ class UserMercadoLibre
         }
     }
 
-    public function publicarArticulo()
+    public function publicarArticulo($titulo)
     {	
     	 /*Obtener el token y validar esi esta activo para su uso*/
         if ($this->isTokenValid()) {
@@ -65,7 +65,7 @@ class UserMercadoLibre
          	}
          }
 
-    	$titulo = "Cargador inalámbrico 7 en 1 de 30W para iPhone";
+    	//$titulo = "Cargador inalámbrico 7 en 1 de 30W para iPhone";
 
     	$body = [
 		    "title" => $titulo,
@@ -316,7 +316,7 @@ class UserMercadoLibre
     		$atributos_obligatorios = array();
     		foreach ($data as $num_attr) {
     			if (array_key_exists('required',$num_attr['tags'])) {
-    				$atributos_obligatorios[] = $num_attr['id']; 
+    				$atributos_obligatorios[$num_attr['id']] = $num_attr['name']; 
     			}
     			
     		}

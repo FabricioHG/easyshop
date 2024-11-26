@@ -2,6 +2,8 @@
 
 namespace Drupal\commerce_stripe;
 
+use Drupal\commerce_payment\Entity\PaymentInterface;
+use Drupal\commerce_payment\Entity\PaymentMethodInterface;
 use Drupal\commerce_payment\Exception\AuthenticationException;
 use Drupal\commerce_payment\Exception\DeclineException;
 use Drupal\commerce_payment\Exception\HardDeclineException;
@@ -24,45 +26,43 @@ class ErrorHelper {
    *
    * @param \Stripe\Exception\ApiErrorException $exception
    *   The Stripe exception.
+   * @param \Drupal\commerce_payment\Entity\PaymentInterface|\Drupal\commerce_payment\Entity\PaymentMethodInterface|null $payment
+   *   The payment or payment method responsible for the exception.
    *
    * @throws \Drupal\commerce_payment\Exception\PaymentGatewayException
    *   The Commerce exception.
    */
-  public static function handleException(ApiErrorException $exception) {
+  public static function handleException(ApiErrorException $exception, PaymentInterface|PaymentMethodInterface|null $payment = NULL) {
     $message = "Stripe error '" . $exception->getStripeCode() . "': " . $exception->getMessage();
     if ($exception instanceof CardException) {
       \Drupal::logger('commerce_stripe')->warning($message . ' ' . $exception->getDeclineCode() . '.');
-      if ($exception->getStripeCode() == 'card_declined' && $exception->getDeclineCode() == 'card_not_supported') {
+      if ($exception->getStripeCode() === 'card_declined' && $exception->getDeclineCode() === 'card_not_supported') {
         // Stripe only supports Visa/MasterCard/Amex for non-USD transactions.
         // @todo Find a better way to communicate this to the customer.
         $message = t('Your card is not supported. Please use a Visa, MasterCard, or American Express card.');
         \Drupal::messenger()->addWarning($message);
-        throw new HardDeclineException($message, $exception->getCode(), $exception);
+        throw HardDeclineException::createForPayment($payment, $message, $exception->getCode(), $exception);
       }
-      else {
-        throw new DeclineException('We encountered an error processing your card details. Please verify your details and try again.', $exception->getCode(), $exception);
-      }
+      throw DeclineException::createForPayment($payment, 'We encountered an error processing your card details. Please verify your details and try again.', $exception->getCode(), $exception);
     }
-    elseif ($exception instanceof RateLimitException) {
+    if ($exception instanceof RateLimitException) {
       \Drupal::logger('commerce_stripe')->warning($message);
-      throw new InvalidRequestException('Too many requests.', $exception->getCode(), $exception);
+      throw InvalidRequestException::createForPayment($payment, 'Too many requests.', $exception->getCode(), $exception);
     }
-    elseif ($exception instanceof StripeInvalidRequestException) {
+    if ($exception instanceof StripeInvalidRequestException) {
       \Drupal::logger('commerce_stripe')->warning($message);
-      throw new InvalidRequestException('Invalid parameters were supplied to Stripe\'s API.', $exception->getCode(), $exception);
+      throw InvalidRequestException::createForPayment($payment, 'Invalid parameters were supplied to Stripe\'s API.', $exception->getCode(), $exception);
     }
-    elseif ($exception instanceof StripeAuthenticationException) {
+    if ($exception instanceof StripeAuthenticationException) {
       \Drupal::logger('commerce_stripe')->warning($message);
-      throw new AuthenticationException('Stripe authentication failed.', $exception->getCode(), $exception);
+      throw AuthenticationException::createForPayment($payment, 'Stripe authentication failed.', $exception->getCode(), $exception);
     }
-    elseif ($exception instanceof ApiConnectionException) {
+    if ($exception instanceof ApiConnectionException) {
       \Drupal::logger('commerce_stripe')->warning($message);
-      throw new InvalidResponseException('Network communication with Stripe failed.', $exception->getCode(), $exception);
+      throw InvalidResponseException::createForPayment($payment, 'Network communication with Stripe failed.', $exception->getCode(), $exception);
     }
-    else {
-      \Drupal::logger('commerce_stripe')->warning($message);
-      throw new InvalidResponseException('There was an error with Stripe request.', $exception->getCode(), $exception);
-    }
+    \Drupal::logger('commerce_stripe')->warning($message);
+    throw InvalidResponseException::createForPayment($payment, 'There was an error with Stripe request.', $exception->getCode(), $exception);
   }
 
   /**
@@ -73,13 +73,15 @@ class ErrorHelper {
    *
    * @param object $result
    *   The Stripe result object.
+   * @param \Drupal\commerce_payment\Entity\PaymentInterface|\Drupal\commerce_payment\Entity\PaymentMethodInterface|null $payment
+   *   The payment or payment method responsible for the exception.
    *
    * @throws \Drupal\commerce_payment\Exception\PaymentGatewayException
    *   The Commerce exception.
    */
-  public static function handleErrors($result) {
+  public static function handleErrors($result, PaymentInterface|PaymentMethodInterface|null $payment = NULL) {
     $result_data = $result->toArray();
-    if ($result_data['status'] == 'succeeded') {
+    if ($result_data['status'] === 'succeeded') {
       return;
     }
 
@@ -91,11 +93,10 @@ class ErrorHelper {
       // a HardDeclineException).
       $hard_decline_codes = ['processing_error', 'missing', 'card_declined'];
       if (in_array($failure_code, $hard_decline_codes)) {
-        throw new HardDeclineException($result_data['failure_message'], $failure_code);
+        throw HardDeclineException::createForPayment($payment, $result_data['failure_message'], $failure_code);
       }
-      else {
-        throw new InvalidRequestException($result_data['failure_message'], $failure_code);
-      }
+
+      throw InvalidRequestException::createForPayment($payment, $result_data['failure_message'], $failure_code);
     }
   }
 

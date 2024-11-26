@@ -43,7 +43,7 @@ abstract class BetterExposedFiltersWidgetBase extends PluginBase implements Bett
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration(): array {
+  public function defaultConfiguration() {
     return [
       'plugin_id' => $this->pluginId,
     ];

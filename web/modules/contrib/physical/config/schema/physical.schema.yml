@@ -67,3 +67,18 @@ field.widget.settings.physical_measurement_default:
       sequence:
         type: string
         label: 'Unit'
+
+field.formatter.settings.physical_base:
+  type: mapping
+  mapping:
+    output_unit:
+      type: string
+      label: 'Output unit'
+
+field.formatter.settings.physical_dimensions_default:
+  type: field.formatter.settings.physical_base
+  label: 'Default dimension formatter settings'
+
+field.formatter.settings.physical_measurement_default:
+  type: field.formatter.settings.physical_base
+  label: 'Default measurement formatter settings'
