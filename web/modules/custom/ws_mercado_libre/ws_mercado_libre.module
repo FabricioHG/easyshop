@@ -116,10 +116,10 @@ function ws_mercado_libre_commerce_product_presave(\Drupal\Core\Entity\EntityInt
         		/*Hacer el array con los datos del formulario para enviar a la funcion*/
 
         		/*Llamar al servicio de mercado libre para apublicar pasando un array con los datos del producto*/
-        		$service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
-        		if ($service_ml->publicarArticulo($titulo)) {
+        		//$service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
+        		//if ($service_ml->publicarArticulo($titulo)) {
         			\Drupal::logger('ws_mercado_libre')->notice('Se publico el articulo, mensaje desde presave');
-        		}
+        		//}
 
     		//}   
 
