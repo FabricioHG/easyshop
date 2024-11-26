@@ -105,7 +105,7 @@ function backAtributos(array &$form, \Drupal\Core\Form\FormStateInterface $form_
 function ws_mercado_libre_commerce_product_presave(\Drupal\Core\Entity\EntityInterface $entity) {
 
     if ($entity instanceof \Drupal\Core\Entity\ContentEntityInterface) {
-    		if ($entity->isNew()) {
+    		//if ($entity->isNew()) {
     			/*Cargar la entidad*/
     			$id_entiad = $entity->id();
         		$order_storage = \Drupal::entityTypeManager()->getStorage('commerce_product');
@@ -121,7 +121,7 @@ function ws_mercado_libre_commerce_product_presave(\Drupal\Core\Entity\EntityInt
         			\Drupal::logger('ws_mercado_libre')->notice('Se publico el articulo, mensaje desde presave');
         		}
 
-    		}   
+    		//}   
 
         
        // \Drupal::logger('ws_mercado_libre')->notice('titulo: @titulo',['@titulo'=> var_export($titulo, true)]);
