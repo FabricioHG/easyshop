@@ -111,7 +111,8 @@ function ws_mercado_libre_commerce_product_presave(\Drupal\Core\Entity\EntityInt
         		$order_storage = \Drupal::entityTypeManager()->getStorage('commerce_product');
         		$order = $order_storage->load($id_entiad);
         		/*obtener datos del formulario*/
-        		$titulo = $order->get('title')->getValue()[0]['value'];
+        		$titulo_array = $order->get('title')->getValue();
+        		$titulo = $titulo_array[0]['value'];
 
         		/*Hacer el array con los datos del formulario para enviar a la funcion*/
 
