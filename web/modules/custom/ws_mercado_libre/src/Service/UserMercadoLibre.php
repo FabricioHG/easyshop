@@ -28,7 +28,7 @@ class UserMercadoLibre
     protected $redirect_uri;
     protected $userEntity;
     protected $config;
-
+        
     // Constructor actualizado para incluir MessengerInterface
     public function __construct(AccountProxyInterface $user, MessengerInterface $messenger, EntityTypeManagerInterface $entityTypeManager, ClientInterface $client, ConfigFactoryInterface $configFactory)
     {
@@ -51,7 +51,7 @@ class UserMercadoLibre
         }
     }
 
-    public function publicarArticulo($titulo)
+    public function publicarArticulo($data_product)
     {	
     	 /*Obtener el token y validar esi esta activo para su uso*/
         if ($this->isTokenValid()) {
@@ -65,34 +65,35 @@ class UserMercadoLibre
          	}
          }
 
-    	//$titulo = "Cargador inalámbrico 7 en 1 de 30W para iPhone";
+    	/*Obtener los atributos del producto*/
+		$atributos = [];
 
-    	$body = [
-		    "title" => $titulo,
-		    "category_id" => "MLM120235",
-		    "price" => 350,
-		    "currency_id" => "MXN",
-		    "available_quantity" => 10,
-		    "buying_mode" => "buy_it_now",
-		    "condition" => "new",
-		    "listing_type_id" => "gold_special",
-		    "pictures" => [
-		        [
-		            "source" => "http://mla-s2-p.mlstatic.com/968521-MLA20805195516_072016-O.jpg"
-		        ]
-		    ],
-		    "attributes" => [
-		        [
-		            "id" => "MODEL",
-		            "value_name" => "Generico"
-		        ],
-		        [
-		            "id" => "BRAND",
-		            "value_name" => "Generico"
-		        ]
-		    ]
-		];
-		$jsonBody = json_encode($body);
+    	// $body = [
+		//     "title" => $data_product['titulo'],
+		//     "category_id" => $data_product['codigo_categoria'],
+		//     "price" => 350,
+		//     "currency_id" => "MXN",
+		//     "available_quantity" => 10,
+		//     "buying_mode" => "buy_it_now",
+		//     "condition" => "new",
+		//     "listing_type_id" => "gold_special",
+		//     "pictures" => [
+		//         [
+		//             "source" => "http://mla-s2-p.mlstatic.com/968521-MLA20805195516_072016-O.jpg"
+		//         ]
+		//     ],
+		//     "attributes" => [
+		//         [
+		//             "id" => "MODEL",
+		//             "value_name" => "Generico"
+		//         ],
+		//         [
+		//             "id" => "BRAND",
+		//             "value_name" => "Generico"
+		//         ]
+		//     ]
+		// ];
+		$jsonBody = json_encode($data_product);
 
     	$client = new Client();
     	
