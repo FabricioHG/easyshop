@@ -54,16 +54,16 @@ class UserMercadoLibre
     public function publicarArticulo($data_product)
     {	
     	 /*Obtener el token y validar esi esta activo para su uso*/
-        if ($this->isTokenValid()) {
-         	$token_user = $this->getToken();
-        }else{
-         	if (!$this->isTokenActive()) {
-         		$this->refreshToken();
-         	}else{
-         		$this->messenger->addMessage('Error, el token de usuario para la conexión con mercado libre no es valido');
-         		\Drupal::logger('ws_mercado_libre')->notice('Error, el token de usuario para la conexión con mercado libre no es valido');
-         	}
-         }
+        // if ($this->isTokenValid()) {
+        //  	$token_user = $this->getToken();
+        // }else{
+        //  	if (!$this->isTokenActive()) {
+        //  		$this->refreshToken();
+        //  	}else{
+        //  		$this->messenger->addMessage('Error, el token de usuario para la conexión con mercado libre no es valido');
+        //  		\Drupal::logger('ws_mercado_libre')->notice('Error, el token de usuario para la conexión con mercado libre no es valido');
+        //  	}
+        //  }
 
     	/*Obtener los atributos del producto*/
 		$atributos = [];
@@ -94,6 +94,9 @@ class UserMercadoLibre
 		//     ]
 		// ];
 		$jsonBody = json_encode($data_product);
+
+		kint($jsonBody);
+		exit;
 
     	$client = new Client();
     	
