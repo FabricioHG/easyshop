@@ -155,22 +155,30 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
     /*Ya cargadas las entidades de las imagenes, obtener el url complero con dominio para agregar en el campo picture de ML */
 	$file_url = \Drupal::service('file_url_generator');
 	foreach ($campos_imagen as $key => $campo_img) {
-		$ulrs_img[] = $file_url->generateAbsoluteString($campo_img->getFileUri());
+		$ulrs_img[] = [
+			'url' => $file_url->generateAbsoluteString($campo_img->getFileUri()),
+		]; 
 	}
 	/*obtener valores de los atributos generados automaticamente para agregarlos a ML*/
 	$atributos_array = $form_state->getValue('cont_datos_ml')['cont_atributos_ml'];
+	foreach ($atributos_array as $key => $attr) {
+		$atributos[] = [
+			'id' => $key,
+			'value_name' => $attr,
+		];
+	}
 	
         		/*obtener datos del formulario y hacer el array con los datos para enviar a la funcion*/
-				$data_product['titulo'] = $form_state->getValue('title')[0]['value'];
-				$data_product['codigo_categoria'] = $form_state->getValue('cont_datos_ml')['cont_categoria_ml']['categoria_ml'];
-				$data_product['precio_ml'] = $form_state->getValue('cont_datos_ml')['precio_producto_ml']['number'];
+				$data_product['title'] = $form_state->getValue('title')[0]['value'];
+				$data_product['category_id'] = $form_state->getValue('cont_datos_ml')['cont_categoria_ml']['categoria_ml'];
+				$data_product['price'] = $form_state->getValue('cont_datos_ml')['precio_producto_ml']['number'];
 				$data_product['currency_id'] = 'MXN';
 				$data_product['available_quantity'] = 20;
 				$data_product['buying_mode'] = 'buy_it_now';
 				$data_product['condition'] = 'new';
 				$data_product['listing_type_id'] = 'gold_special';
 				$data_product['pictures'] = $ulrs_img;
-				$data_product['attributes'] = $atributos_array;
+				$data_product['attributes'] = $atributos;
 
         		/*Llamar al servicio de mercado libre para apublicar pasando un array con los datos del producto*/
         		
