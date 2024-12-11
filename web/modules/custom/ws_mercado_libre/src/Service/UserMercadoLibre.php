@@ -68,32 +68,32 @@ class UserMercadoLibre
     	/*Obtener los atributos del producto*/
 		$atributos = [];
 
-    	// $body = [
-		//     "title" => $data_product['titulo'],
-		//     "category_id" => $data_product['codigo_categoria'],
-		//     "price" => 350,
-		//     "currency_id" => "MXN",
-		//     "available_quantity" => 10,
-		//     "buying_mode" => "buy_it_now",
-		//     "condition" => "new",
-		//     "listing_type_id" => "gold_special",
-		//     "pictures" => [
-		//         [
-		//             "source" => "http://mla-s2-p.mlstatic.com/968521-MLA20805195516_072016-O.jpg"
-		//         ]
-		//     ],
-		//     "attributes" => [
-		//         [
-		//             "id" => "MODEL",
-		//             "value_name" => "Generico"
-		//         ],
-		//         [
-		//             "id" => "BRAND",
-		//             "value_name" => "Generico"
-		//         ]
-		//     ]
-		// ];
-		$jsonBody = json_encode($data_product);
+    	$body = [
+		    "title" => $data_product['titulo'],
+		    "category_id" => $data_product['codigo_categoria'],
+		    "price" => $data_product['price'],
+		    "currency_id" => $data_product['currency_id'],
+		    "available_quantity" => $data_product['available_quantity'],
+		    "buying_mode" => $data_product['buying_mode'],
+		    "condition" => $data_product['condition'],
+		    "listing_type_id" => $data_product['listing_type_id'],
+		    "pictures" => [
+		        [
+		            "source" => "http://mla-s2-p.mlstatic.com/968521-MLA20805195516_072016-O.jpg"
+		        ]
+		    ],
+		    "attributes" => [
+		        [
+		            "id" => "MODEL",
+		            "value_name" => "Generico"
+		        ],
+		        [
+		            "id" => "BRAND",
+		            "value_name" => "Generico"
+		        ]
+		    ]
+		];
+		$jsonBody = json_encode($body);
 		
 		// kint($jsonBody);
 		// exit;

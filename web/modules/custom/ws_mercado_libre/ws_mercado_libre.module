@@ -177,7 +177,7 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 				$data_product['buying_mode'] = 'buy_it_now';
 				$data_product['condition'] = 'new';
 				$data_product['listing_type_id'] = 'gold_special';
-				$data_product['pictures'] = ["source" => "http://mla-s2-p.mlstatic.com/968521-MLA20805195516_072016-O.jpg"];
+				$data_product['pictures'] = $ulrs_img;
 				$data_product['attributes'] = $atributos;
 
         		/*Llamar al servicio de mercado libre para apublicar pasando un array con los datos del producto*/
