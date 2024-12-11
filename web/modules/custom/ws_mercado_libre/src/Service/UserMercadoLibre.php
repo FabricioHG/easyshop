@@ -65,6 +65,9 @@ class UserMercadoLibre
          	}
          }
 
+    	/*Obtener los atributos del producto*/
+		$atributos = [];
+
     	$body = [
 		    "title" => $data_product['title'],
 		    "category_id" => $data_product['category_id'],
@@ -75,9 +78,37 @@ class UserMercadoLibre
 		    "condition" => $data_product['condition'],
 		    "listing_type_id" => $data_product['listing_type_id'],
 		    "pictures" => $data_product['pictures'],
-		    "attributes" => $data_product['attributes'],
+		    "attributes" => [
+		        [
+		            "id" => "MODEL",
+		            "value_name" => "Generico"
+		        ],
+		        [
+		            "id" => "BRAND",
+		            "value_name" => "Generico"
+		        ]
+		    ]
 		];
+		// $body_2 = [
+		//     "title" => $data_product['title'],
+		//     "category_id" => $data_product['category_id'],
+		//     "price" => $data_product['price'],
+		//     "currency_id" => $data_product['currency_id'],
+		//     "available_quantity" => $data_product['available_quantity'],
+		//     "buying_mode" => $data_product['buying_mode'],
+		//     "condition" => $data_product['condition'],
+		//     "listing_type_id" => $data_product['listing_type_id'],
+		//     "pictures" => $data_product['pictures'],
+		//     "attributes" =>  $data_product['attributes']
+		// ];
+		$jsonBody = json_encode($body);
 		
+		// $jsonBody_2 = json_encode($body_2);
+
+		// kint($jsonBody);
+		// kint($jsonBody_2);
+		// exit;
+
     	$client = new Client();
     	
     	try{
