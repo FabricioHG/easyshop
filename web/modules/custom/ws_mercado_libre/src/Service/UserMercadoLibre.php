@@ -78,16 +78,7 @@ class UserMercadoLibre
 		    "condition" => $data_product['condition'],
 		    "listing_type_id" => $data_product['listing_type_id'],
 		    "pictures" => $data_product['pictures'],
-		    "attributes" => [
-		        [
-		            "id" => "MODEL",
-		            "value_name" => "Generico"
-		        ],
-		        [
-		            "id" => "BRAND",
-		            "value_name" => "Generico"
-		        ]
-		    ]
+		    "attributes" => $data_product['attributes'],
 		];
 		$jsonBody = json_encode($body);
 
