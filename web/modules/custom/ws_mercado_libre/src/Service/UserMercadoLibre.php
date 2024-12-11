@@ -77,11 +77,7 @@ class UserMercadoLibre
 		    "buying_mode" => $data_product['buying_mode'],
 		    "condition" => $data_product['condition'],
 		    "listing_type_id" => $data_product['listing_type_id'],
-		    "pictures" => [
-		        [
-		            "source" => "http://mla-s2-p.mlstatic.com/968521-MLA20805195516_072016-O.jpg"
-		        ]
-		    ],
+		    "pictures" => $data_product['pictures'],
 		    "attributes" => [
 		        [
 		            "id" => "MODEL",
