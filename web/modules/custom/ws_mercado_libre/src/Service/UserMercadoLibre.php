@@ -78,16 +78,7 @@ class UserMercadoLibre
 		    "condition" => $data_product['condition'],
 		    "listing_type_id" => $data_product['listing_type_id'],
 		    "pictures" => $data_product['pictures'],
-		    "attributes" => [
-		        [
-		            "id" => "MODEL",
-		            "value_name" => "Generico"
-		        ],
-		        [
-		            "id" => "BRAND",
-		            "value_name" => "Generico"
-		        ]
-		    ]
+		    "attributes" => $data_product['attributes'],
 		];
 		// $body_2 = [
 		//     "title" => $data_product['title'],
@@ -103,9 +94,9 @@ class UserMercadoLibre
 		// ];
 		
 		$jsonBody = json_encode($body);
-		$jsonBody_2 = json_encode($body_2);
+		//$jsonBody_2 = json_encode($body_2);
 
-		kint($jsonBody);
+		//kint($jsonBody);
 		// kint($jsonBody_2);
 		// exit;
 
