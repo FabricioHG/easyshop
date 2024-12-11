@@ -95,8 +95,8 @@ class UserMercadoLibre
 		// ];
 		$jsonBody = json_encode($data_product);
 		
-		kint($jsonBody);
-		exit;
+		// kint($jsonBody);
+		// exit;
     	
 		$client = new Client();
     	
