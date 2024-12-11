@@ -179,7 +179,7 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 				$data_product['condition'] = 'new';
 				$data_product['listing_type_id'] = 'gold_special';
 				$data_product['pictures'] = $ulrs_img;
-				$data_product['attributes'] = $atributos;
+				$data_product['attributes'] = array_reverse( $atributos );
 
 				
 
