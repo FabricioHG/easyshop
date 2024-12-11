@@ -156,7 +156,7 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 	$file_url = \Drupal::service('file_url_generator');
 	foreach ($campos_imagen as $key => $campo_img) {
 		$ulrs_img[] = [
-			'url' => $file_url->generateAbsoluteString($campo_img->getFileUri()),
+			'source' => $file_url->generateAbsoluteString($campo_img->getFileUri()),
 		]; 
 	}
 	/*obtener valores de los atributos generados automaticamente para agregarlos a ML*/
