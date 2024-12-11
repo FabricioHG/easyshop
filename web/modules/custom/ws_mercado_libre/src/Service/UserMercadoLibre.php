@@ -70,13 +70,13 @@ class UserMercadoLibre
 
     	$body = [
 		    "title" => $data_product['title'],
-		    "category_id" => "MLM120235",
-		    "price" => 350,
-		    "currency_id" => "MXN",
-		    "available_quantity" => 10,
-		    "buying_mode" => "buy_it_now",
-		    "condition" => "new",
-		    "listing_type_id" => "gold_special",
+		    "category_id" => $data_product['category_id'],
+		    "price" => $data_product['price'],
+		    "currency_id" => $data_product['currency_id'],
+		    "available_quantity" => $data_product['available_quantity'],
+		    "buying_mode" => $data_product['buying_mode'],
+		    "condition" => $data_product['condition'],
+		    "listing_type_id" => $data_product['listing_type_id'],
 		    "pictures" => [
 		        [
 		            "source" => "http://mla-s2-p.mlstatic.com/968521-MLA20805195516_072016-O.jpg"
