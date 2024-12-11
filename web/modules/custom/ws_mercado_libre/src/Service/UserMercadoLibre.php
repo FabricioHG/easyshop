@@ -95,7 +95,10 @@ class UserMercadoLibre
 		// ];
 		$jsonBody = json_encode($data_product);
 		
-    	$client = new Client();
+		kint($jsonBody);
+		exit;
+    	
+		$client = new Client();
     	
     	try{
     		$response = $client->post('https://api.mercadolibre.com/items', [
