@@ -291,7 +291,8 @@ class UserMercadoLibre
     		$body = $response->getBody()->getContents();
     		$data = json_decode($body, TRUE);
     		foreach ($data as  $categoria) {
-    			$categorias[$categoria['category_id']] = $categoria['domain_name'];
+    			$categorias['categoria_select'][$categoria['category_id']] = $categoria['domain_name'];
+				$categorias['atributos_implicitos'][$categoria['category_id']] = $categoria['attributes'];
     		}
     		return $categorias;
     	}else{
