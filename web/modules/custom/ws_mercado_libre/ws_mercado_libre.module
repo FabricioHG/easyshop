@@ -215,8 +215,6 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 				$data_product['pictures'] = $ulrs_img;
 				$data_product['attributes'] = array_reverse( $atributos );
 
-				
-
         		/*Llamar al servicio de mercado libre para apublicar pasando un array con los datos del producto*/
         		
 				$service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
