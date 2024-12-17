@@ -10,131 +10,132 @@ use Drupal\file\Entity\File;
  * Primary module hooks for WS Mercado Libre module.
  */
 
-function ws_mercado_libre_form_commerce_product_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id){
-	$base_form = $form_state->getBuildInfo()['base_form_id'];
-	$form['#attached']['library'][] = 'ws_mercado_libre/ws_mercado_libre.callajax';
-	//Obtener el valor del campo de cada usuario para saber si quiere publicar en ML
-	 $storage_user = \Drupal::entityTypeManager()->getStorage('user');
-	 $current_user_id = \Drupal::currentUser()->id();
-	 $node_user = $storage_user->load($current_user_id);
-	 $publicar_en_ml = $node_user->get('field_publish_products')->value;
-	 
-	if($publicar_en_ml === "1"){
-		//obtener campos obligatorios (atributos)
-	 	$servicio_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
-	 	
-	 	/*Hacer que el titulo funcione con ajax*/
-	 	$form['title']['widget'][0]['value']['#ajax']=[
-	 		'callback' => 'backCategoria',
-			'wrapper' => 'contdatosml',
-			'event' => 'blur',
-			'progress' => [
-	        		'type' => 'throbber',
-	        		'message' => 'Prediciendo categoria...',
-	    		],
-
-	 	];
+function ws_mercado_libre_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id){
+	if ($form_id === "commerce-product-default-edit-form") {
+		$base_form = $form_state->getBuildInfo()['base_form_id'];
+		$form['#attached']['library'][] = 'ws_mercado_libre/ws_mercado_libre.callajax';
+		//Obtener el valor del campo de cada usuario para saber si quiere publicar en ML
+		$storage_user = \Drupal::entityTypeManager()->getStorage('user');
+		$current_user_id = \Drupal::currentUser()->id();
+		$node_user = $storage_user->load($current_user_id);
+		$publicar_en_ml = $node_user->get('field_publish_products')->value;
 		
-		//Hacer contenedor de campos de mercado libre
-	 	$form['cont_datos_ml']=[
- 			'#type'=>'fieldset',
- 			'#title' => "Datos Para publicar en Mercado Libre",
- 			'#attributes' => ['id' => 'contdatosml'],
- 			'#weight'=>20,
- 		];
-	 	$form['cont_datos_ml']['cont_categoria_ml']=[
- 			'#type'=>'container',
- 			'#attributes' => ['id' => 'idcategoriaml'],
-
- 		];
- 		$form['cont_datos_ml']['cont_atributos_ml']=[
- 			'#type'=>'container',
-			'#attributes' => ['id' => 'idatributosml'],
- 		];	
- 		// Configurar las opciones iniciales para el select.        	
- 		$form['cont_datos_ml']['cont_categoria_ml']['categoria_ml'] = [
- 			'#type'=> 'select',
- 			'#title'=> 'Categoria en Mercado libre',
- 			'#default_value'=>"",
- 			'#options' => $form_state->get('categorias') ?? ["" => '- Seleccione una opción -'],
- 			'#validated' => TRUE,
- 			'#required'=> TRUE,
- 			'#ajax'=>[
- 				'callback' => 'backAtributos',
-				'wrapper' => 'idatributosml',
-				'event' => 'change',
+		if($publicar_en_ml === "1"){
+			//obtener campos obligatorios (atributos)
+			$servicio_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
+			
+			/*Hacer que el titulo funcione con ajax*/
+			$form['title']['widget'][0]['value']['#ajax']=[
+				'callback' => 'backCategoria',
+				'wrapper' => 'contdatosml',
+				'event' => 'blur',
 				'progress' => [
-	        			'type' => 'throbber',
-	        			'message' => 'Obteniendo atributos obligatorios de la categoria...',
-	    			],
- 			],
- 		];
-		 $form['cont_datos_ml']['cont_atributos_ml']['atributos_impli']=[
-			'#type'=>'hidden',
-			'#value' => $form_state->getValue(['cont_datos_ml','cont_atributos_ml','atributos_impli']) ?? '',
-			'#parents' => ['cont_datos_ml','cont_atributos_ml','atributos_impli'],
-		
-		];
-		$form['cont_datos_ml']['precio_producto_ml'] = [
-			'#type' => 'commerce_price',
-			'#title' => 'Precio en Mercado Libre',
-			'#default_value' => [
-				'number' => '0.00',
-				'currency_code'=> 'MXN',
-			],
-			'#weight'=>20,
-		];
+						'type' => 'throbber',
+						'message' => 'Prediciendo categoria...',
+					],
 
-		
-		
-		// 	RECONSTRUIR EL FORMULARIO SI ESTA DENTRO DEL AJAX PARA QUE EL FORM AGREGUE LOS CAMPOS NUEVOS
-		if ($form_state->getTriggeringElement()['#name'] === "cont_datos_ml[cont_categoria_ml][categoria_ml]" ) {
-			if ($form_state->isRebuilding()) {
-				$codigo_cat = $form_state->getValue(['cont_datos_ml', 'cont_categoria_ml', 'categoria_ml']);
-				
-				$atributos_implicitos_json = $form_state->getUserInput()['cont_datos_ml']['cont_atributos_ml']['atributos_impli'];
-				$decode_categoria = json_decode($atributos_implicitos_json, true);
-				$atributos_cat_selecionada = $decode_categoria[$codigo_cat];
+			];
+			
+			//Hacer contenedor de campos de mercado libre
+			$form['cont_datos_ml']=[
+				'#type'=>'fieldset',
+				'#title' => "Datos Para publicar en Mercado Libre",
+				'#attributes' => ['id' => 'contdatosml'],
+				'#weight'=>20,
+			];
+			$form['cont_datos_ml']['cont_categoria_ml']=[
+				'#type'=>'container',
+				'#attributes' => ['id' => 'idcategoriaml'],
 
-				/* Obtener atributos obligatorios de la categoria seleccionada */
-				$service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
-   				$atributos_obligatorios = $service_ml->obtener_attr_obligatorios($codigo_cat);
-				
-				//De los atributos implicitos que vienen con la categoria, comparar si alguno son obligatorios y agregarles el valor
-				foreach (array_keys($atributos_obligatorios) as $key) {
-					foreach ($atributos_cat_selecionada as $attribute) {
-						if($attribute['id'] == $key){
-							$form['cont_datos_ml']['cont_atributos_ml'][$key] = [
-								'#type' => 'textfield',	
-								'#title' => $atributos_obligatorios[$key],
-								'#default_value' => $attribute['value_name'],
-								'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $key],
-							];
-        					break;
+			];
+			$form['cont_datos_ml']['cont_atributos_ml']=[
+				'#type'=>'container',
+				'#attributes' => ['id' => 'idatributosml'],
+			];	
+			// Configurar las opciones iniciales para el select.        	
+			$form['cont_datos_ml']['cont_categoria_ml']['categoria_ml'] = [
+				'#type'=> 'select',
+				'#title'=> 'Categoria en Mercado libre',
+				'#default_value'=>"",
+				'#options' => $form_state->get('categorias') ?? ["" => '- Seleccione una opción -'],
+				'#validated' => TRUE,
+				'#required'=> TRUE,
+				'#ajax'=>[
+					'callback' => 'backAtributos',
+					'wrapper' => 'idatributosml',
+					'event' => 'change',
+					'progress' => [
+							'type' => 'throbber',
+							'message' => 'Obteniendo atributos obligatorios de la categoria...',
+						],
+				],
+			];
+			$form['cont_datos_ml']['cont_atributos_ml']['atributos_impli']=[
+				'#type'=>'hidden',
+				'#value' => $form_state->getValue(['cont_datos_ml','cont_atributos_ml','atributos_impli']) ?? '',
+				'#parents' => ['cont_datos_ml','cont_atributos_ml','atributos_impli'],
+			
+			];
+			$form['cont_datos_ml']['precio_producto_ml'] = [
+				'#type' => 'commerce_price',
+				'#title' => 'Precio en Mercado Libre',
+				'#default_value' => [
+					'number' => '0.00',
+					'currency_code'=> 'MXN',
+				],
+				'#weight'=>20,
+			];
+
+			
+			
+			// 	RECONSTRUIR EL FORMULARIO SI ESTA DENTRO DEL AJAX PARA QUE EL FORM AGREGUE LOS CAMPOS NUEVOS
+			if ($form_state->getTriggeringElement()['#name'] === "cont_datos_ml[cont_categoria_ml][categoria_ml]" ) {
+				if ($form_state->isRebuilding()) {
+					$codigo_cat = $form_state->getValue(['cont_datos_ml', 'cont_categoria_ml', 'categoria_ml']);
+					
+					$atributos_implicitos_json = $form_state->getUserInput()['cont_datos_ml']['cont_atributos_ml']['atributos_impli'];
+					$decode_categoria = json_decode($atributos_implicitos_json, true);
+					$atributos_cat_selecionada = $decode_categoria[$codigo_cat];
+
+					/* Obtener atributos obligatorios de la categoria seleccionada */
+					$service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
+					$atributos_obligatorios = $service_ml->obtener_attr_obligatorios($codigo_cat);
+					
+					//De los atributos implicitos que vienen con la categoria, comparar si alguno son obligatorios y agregarles el valor
+					foreach (array_keys($atributos_obligatorios) as $key) {
+						foreach ($atributos_cat_selecionada as $attribute) {
+							if($attribute['id'] == $key){
+								$form['cont_datos_ml']['cont_atributos_ml'][$key] = [
+									'#type' => 'textfield',	
+									'#title' => $atributos_obligatorios[$key],
+									'#default_value' => $attribute['value_name'],
+									'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $key],
+								];
+								break;
+							}
+							else{
+								$form['cont_datos_ml']['cont_atributos_ml'][$key] = [
+									'#type' => 'textfield',	
+									'#title' => $atributos_obligatorios[$key],
+									'#default_value' => 'sin valor',
+									'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $key],
+								];
+							}
 						}
-						else{
-							$form['cont_datos_ml']['cont_atributos_ml'][$key] = [
-								'#type' => 'textfield',	
-								'#title' => $atributos_obligatorios[$key],
-								'#default_value' => 'sin valor',
-								'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $key],
-							];
-						}
+							
 					}
-						
+					//\Drupal::logger('debud')->notice('Atributos de categoria seleccionada %valores',['%valores'=> print_r($atributos_cat_selecionada, true)]);
+					//\Drupal::logger('debud')->notice('Atributos obligatorios %atributos',['%atributos'=> print_r($atributos_obligatorios, true)]);
 				}
-				//\Drupal::logger('debud')->notice('Atributos de categoria seleccionada %valores',['%valores'=> print_r($atributos_cat_selecionada, true)]);
-				//\Drupal::logger('debud')->notice('Atributos obligatorios %atributos',['%atributos'=> print_r($atributos_obligatorios, true)]);
+					
 			}
-				
+
+			$form['#validate'][] = 'limpiarCamposNuevos';
+			
+			$form['actions']['submit']['#submit'][] = 'enviar_producto_ml';
+
 		}
-
-		$form['#validate'][] = 'limpiarCamposNuevos';
-		
-		$form['actions']['submit']['#submit'][] = 'enviar_producto_ml';
-
 	}
-	
 	
 }
 
@@ -201,7 +202,13 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 			'id' => $key,
 			'value_name' => $attr,
 		];
+	}
+	if (!empty($atributos)) {
+		$atributos_ajustados = array_reverse( $atributos );
+	}else{
+		$atributos_ajustados = array();
 	}	
+	
         		/*obtener datos del formulario y hacer el array con los datos para enviar a la funcion*/
 				$data_product['title'] = $form_state->getValue('title')[0]['value'];
 				$data_product['category_id'] = $form_state->getValue('cont_datos_ml')['cont_categoria_ml']['categoria_ml'];
@@ -213,7 +220,7 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 				$data_product['description'] = $form_state->getValue('body')[0]['value'];;
 				$data_product['listing_type_id'] = 'gold_special';
 				$data_product['pictures'] = $ulrs_img;
-				$data_product['attributes'] = array_reverse( $atributos );
+				$data_product['attributes'] = $atributos_ajustados;
 
         		/*Llamar al servicio de mercado libre para apublicar pasando un array con los datos del producto*/
         		
