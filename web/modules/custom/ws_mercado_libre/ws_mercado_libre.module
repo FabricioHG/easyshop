@@ -195,14 +195,13 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 	}
 	/*obtener valores de los atributos generados automaticamente para agregarlos a ML*/
 	$atributos_array = $form_state->getValue('cont_datos_ml')['cont_atributos_ml'];
+	unset($atributos_array["atributos_impli"]);
 	foreach ($atributos_array as $key => $attr) {
 		$atributos[] = [
 			'id' => $key,
 			'value_name' => $attr,
 		];
-	}
-	
-	
+	}	
         		/*obtener datos del formulario y hacer el array con los datos para enviar a la funcion*/
 				$data_product['title'] = $form_state->getValue('title')[0]['value'];
 				$data_product['category_id'] = $form_state->getValue('cont_datos_ml')['cont_categoria_ml']['categoria_ml'];
