@@ -11,7 +11,7 @@ use Drupal\file\Entity\File;
  */
 
 function ws_mercado_libre_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id){
-	if ($form_id === "commerce-product-default-edit-form") {
+	if ($form_id === "commerce_product_default_add_form") {
 		$base_form = $form_state->getBuildInfo()['base_form_id'];
 		$form['#attached']['library'][] = 'ws_mercado_libre/ws_mercado_libre.callajax';
 		//Obtener el valor del campo de cada usuario para saber si quiere publicar en ML
