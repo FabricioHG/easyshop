@@ -90,7 +90,7 @@ function ws_mercado_libre_form_alter(&$form, \Drupal\Core\Form\FormStateInterfac
 			
 			// 	RECONSTRUIR EL FORMULARIO SI ESTA DENTRO DEL AJAX PARA QUE EL FORM AGREGUE LOS CAMPOS NUEVOS
 			if ($form_state->getTriggeringElement()['#name'] === "cont_datos_ml[cont_categoria_ml][categoria_ml]" ) {
-				if ($form_state->isRebuilding()) {
+				//if ($form_state->isRebuilding()) {
 					$codigo_cat = $form_state->getValue(['cont_datos_ml', 'cont_categoria_ml', 'categoria_ml']);
 					
 					$atributos_implicitos_json = $form_state->getUserInput()['cont_datos_ml']['cont_atributos_ml']['atributos_impli'];
@@ -126,7 +126,7 @@ function ws_mercado_libre_form_alter(&$form, \Drupal\Core\Form\FormStateInterfac
 					}
 					//\Drupal::logger('debud')->notice('Atributos de categoria seleccionada %valores',['%valores'=> print_r($atributos_cat_selecionada, true)]);
 					//\Drupal::logger('debud')->notice('Atributos obligatorios %atributos',['%atributos'=> print_r($atributos_obligatorios, true)]);
-				}
+				//}
 					
 			}
 
