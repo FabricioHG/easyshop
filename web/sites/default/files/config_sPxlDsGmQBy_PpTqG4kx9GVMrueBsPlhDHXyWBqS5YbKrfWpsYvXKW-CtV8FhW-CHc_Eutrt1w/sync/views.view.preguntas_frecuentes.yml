@@ -157,6 +157,7 @@ display:
         type: mini
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 10
           total_pages: null
           id: 0
@@ -274,7 +275,15 @@ display:
     display_plugin: page
     position: 1
     display_options:
-      display_extenders: {  }
+      display_extenders:
+        simple_sitemap_display_extender:
+          variants:
+            default:
+              index: true
+              priority: '0.5'
+              changefreq: monthly
+              arguments: {  }
+              max_links: 100
       path: preguntas-frecuentes
     cache_metadata:
       max-age: -1

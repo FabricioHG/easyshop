@@ -44,6 +44,6 @@
 
 .text-white .product {
   --beo-primary: #fff;
-  --beo-white: #41449f;
-  --beo-body-color: $white;
+  --beo-white: var(--beo-dark);
+  --beo-body-color: #fff;
 }

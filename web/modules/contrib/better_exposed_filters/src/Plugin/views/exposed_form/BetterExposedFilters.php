@@ -2,7 +2,6 @@
 
 namespace Drupal\better_exposed_filters\Plugin\views\exposed_form;
 
-use Drupal\better_exposed_filters\Plugin\BetterExposedFiltersWidgetManager;
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -11,6 +10,7 @@ use Drupal\Core\Form\SubformState;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\ElementInfoManagerInterface;
 use Drupal\Core\Url;
+use Drupal\better_exposed_filters\Plugin\BetterExposedFiltersWidgetManager;
 use Drupal\views\Plugin\views\exposed_form\InputRequired;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -94,6 +94,7 @@ class BetterExposedFilters extends InputRequired {
         'autosubmit' => FALSE,
         'autosubmit_exclude_textfield' => FALSE,
         'autosubmit_textfield_delay' => 500,
+        'autosubmit_textfield_minimum_length' => 3,
         'autosubmit_hide' => FALSE,
         'input_required' => FALSE,
         'allow_secondary' => FALSE,
@@ -238,6 +239,20 @@ class BetterExposedFilters extends InputRequired {
       '#title' => $this->t('Delay for textfield autosubmit'),
       '#description' => $this->t('Configure a delay in ms before triggering autosubmit on textfields.'),
       '#default_value' => $bef_options['general']['autosubmit_textfield_delay'],
+      '#min' => 0,
+      '#states' => [
+        'visible' => [
+          ':input[name="exposed_form_options[bef][general][autosubmit]"]' => ['checked' => TRUE],
+          ':input[name="exposed_form_options[bef][general][autosubmit_exclude_textfield]"]' => ['checked' => FALSE],
+        ],
+      ],
+    ];
+
+    $form['bef']['general']['autosubmit_textfield_minimum_length'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Textfield autosubmit minimum length'),
+      '#description' => $this->t('Configure a minimum textfield length before triggering autosubmit on textfields.'),
+      '#default_value' => $bef_options['general']['autosubmit_textfield_minimum_length'],
       '#min' => 0,
       '#states' => [
         'visible' => [
@@ -725,7 +740,7 @@ class BetterExposedFilters extends InputRequired {
 
     // Grab BEF options and allow modules/theme to modify them before
     // processing.
-    $bef_options = $this->options['bef'];
+    $bef_options = &$this->options['bef'];
     $this->moduleHandler->alter('better_exposed_filters_options', $bef_options, $this->view, $this->displayHandler);
 
     // Apply auto-submit values.
@@ -735,6 +750,7 @@ class BetterExposedFilters extends InputRequired {
           'data-bef-auto-submit-full-form' => '',
           'data-bef-auto-submit' => '',
           'data-bef-auto-submit-delay' => $bef_options['general']['autosubmit_textfield_delay'],
+          'data-bef-auto-submit-minimum-length' => $bef_options['general']['autosubmit_textfield_minimum_length'],
         ],
       ]);
       $form['actions']['submit']['#attributes']['data-bef-auto-submit-click'] = '';
@@ -885,9 +901,12 @@ class BetterExposedFilters extends InputRequired {
     // remember settings.
     $display_id = ($this->view->display_handler->isDefaulted('filters')) ? 'default' : $this->view->current_display;
 
-    if (isset($_SESSION['views'][$this->view->storage->id()][$display_id])) {
-      unset($_SESSION['views'][$this->view->storage->id()][$display_id]);
+    $session = $this->view->getRequest()->getSession();
+    $views_session = $session->get('views', []);
+    if (isset($views_session[$this->view->storage->id()][$display_id])) {
+      unset($views_session[$this->view->storage->id()][$display_id]);
     }
+    $session->set('views', $views_session);
 
     // Set the form to allow redirect.
     if (empty($this->view->live_preview) && !$this->request->isXmlHttpRequest()) {

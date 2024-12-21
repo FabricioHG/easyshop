@@ -10,20 +10,25 @@
   background-color: var(--beo-light);
 }
 
-#drupal-off-canvas .form-item {
+#drupal-off-canvas:not(.drupal-off-canvas-reset) .form-item,
+#drupal-off-canvas-wrapper .form-item {
   width: 100%;
 }
-#drupal-off-canvas .blb_breakpoint_cols.form-check-input:checked + label {
+#drupal-off-canvas:not(.drupal-off-canvas-reset) .blb_breakpoint_cols.form-check-input:checked + label,
+#drupal-off-canvas-wrapper .blb_breakpoint_cols.form-check-input:checked + label {
   color: var(--beo-white) !important;
   background-color: #277abd !important;
 }
-#drupal-off-canvas .inline-block-list li {
+#drupal-off-canvas:not(.drupal-off-canvas-reset) .inline-block-list li,
+#drupal-off-canvas-wrapper .inline-block-list li {
   border-bottom: 0;
 }
-#drupal-off-canvas .layout-builder-lock-section-settings .form-checkboxes label {
+#drupal-off-canvas:not(.drupal-off-canvas-reset) .layout-builder-lock-section-settings .form-checkboxes label,
+#drupal-off-canvas-wrapper .layout-builder-lock-section-settings .form-checkboxes label {
   font-size: 0.875rem;
 }
-#drupal-off-canvas .layout-builder-lock-section-settings .form-checkboxes .form-check {
+#drupal-off-canvas:not(.drupal-off-canvas-reset) .layout-builder-lock-section-settings .form-checkboxes .form-check,
+#drupal-off-canvas-wrapper .layout-builder-lock-section-settings .form-checkboxes .form-check {
   padding-left: 1rem;
 }
 

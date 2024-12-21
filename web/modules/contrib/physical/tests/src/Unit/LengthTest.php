@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\physical\Unit;
 
-use Drupal\physical\Length;
 use Drupal\Tests\UnitTestCase;
+use Drupal\physical\Length;
 
 /**
  * Tests the length class.

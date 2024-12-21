@@ -152,10 +152,10 @@ $body-text-align:           null !default;
 //
 // Style anchor elements.
 
-$link-color:                              var(--#{$prefix}primary);
+$link-color:                              $primary !default;
 $link-decoration:                         none;
 $link-shade-percentage:                   20%;
-$link-hover-color:                        var(--#{$prefix}primary-hover);
+$link-hover-color:                        shift-color($link-color, $link-shade-percentage) !default;
 $link-hover-decoration:                   null !default;
 
 $stretched-link-pseudo-element:           after !default;
@@ -350,6 +350,7 @@ $mark-bg:                     #fcf8e3 !default;
 // Customizes the `.table` component with basic values, each used across all table variations.
 
 $table-cell-vertical-align:   middle;
+$table-bg:                    transparent;
 $table-color:                 inherit;
 
 // Buttons + Forms
@@ -560,7 +561,6 @@ $breadcrumb-divider-color:          var(--#{$prefix}primary);
 
 // Offcanvas
 
-// scss-docs-start offcanvas-variables
 $offcanvas-padding-y:               $spacer * 2;
 $offcanvas-padding-x:               $spacer * 2;
 $offcanvas-horizontal-width:        430px;

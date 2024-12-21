@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\physical\Unit;
 
-use Drupal\physical\Temperature;
 use Drupal\Tests\UnitTestCase;
+use Drupal\physical\Temperature;
 
 /**
  * Tests the temperature class.

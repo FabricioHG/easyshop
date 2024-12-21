@@ -72,7 +72,10 @@ class PaymentIntentTest extends StripeIntegrationTestBase {
     $order->setData('stripe_intent', Argument::containingString('pi_'))->willReturn($order->reveal());
     $order->save()->willReturn(NULL);
 
-    $intent = $plugin->createPaymentIntent($order->reveal(), ['capture_method' => $capture ? 'automatic' : 'manual', 'metadata' => $metadata], $passed_payment);
+    $intent = $plugin->createPaymentIntent($order->reveal(), [
+      'capture_method' => $capture ? 'automatic' : 'manual',
+      'metadata' => $metadata,
+    ], $passed_payment);
     $this->assertEquals($capture ? 'automatic' : 'manual', $intent->capture_method);
     $this->assertEquals($initial_status, $intent->status);
     $this->assertEquals($intent->currency, 'usd');
@@ -272,16 +275,53 @@ class PaymentIntentTest extends StripeIntegrationTestBase {
    */
   public function dataProviderCreatePaymentIntent() {
     // 3DS 2 authentication must be completed for the payment to be successful.
-    yield ['pm_card_threeDSecure2Required', TRUE, PaymentIntent::STATUS_REQUIRES_CONFIRMATION, PaymentIntent::STATUS_REQUIRES_ACTION, FALSE];
-    yield ['pm_card_threeDSecure2Required', FALSE, PaymentIntent::STATUS_REQUIRES_CONFIRMATION, PaymentIntent::STATUS_REQUIRES_ACTION, FALSE];
+    yield [
+      'pm_card_threeDSecure2Required',
+      TRUE,
+      PaymentIntent::STATUS_REQUIRES_CONFIRMATION,
+      PaymentIntent::STATUS_REQUIRES_ACTION,
+      FALSE,
+    ];
+    yield [
+      'pm_card_threeDSecure2Required',
+      FALSE,
+      PaymentIntent::STATUS_REQUIRES_CONFIRMATION,
+      PaymentIntent::STATUS_REQUIRES_ACTION,
+      FALSE,
+    ];
     // 3DS authentication may still be performed, but is not required.
-    yield ['pm_card_threeDSecureOptional', TRUE, PaymentIntent::STATUS_REQUIRES_CONFIRMATION, PaymentIntent::STATUS_SUCCEEDED, FALSE];
-    // 3DS is supported for this card, but this card is not enrolled in 3D Secure
-    yield ['pm_card_visa', TRUE, PaymentIntent::STATUS_REQUIRES_CONFIRMATION, PaymentIntent::STATUS_SUCCEEDED, FALSE];
+    yield [
+      'pm_card_threeDSecureOptional',
+      TRUE,
+      PaymentIntent::STATUS_REQUIRES_CONFIRMATION,
+      PaymentIntent::STATUS_SUCCEEDED,
+      FALSE,
+    ];
+    // 3DS is supported for this card,
+    // but this card is not enrolled in 3D Secure.
+    yield [
+      'pm_card_visa',
+      TRUE,
+      PaymentIntent::STATUS_REQUIRES_CONFIRMATION,
+      PaymentIntent::STATUS_SUCCEEDED,
+      FALSE,
+    ];
     // 3DS is not supported on this card and cannot be invoked.
-    yield ['pm_card_amex_threeDSecureNotSupported', TRUE, PaymentIntent::STATUS_REQUIRES_CONFIRMATION, PaymentIntent::STATUS_SUCCEEDED, FALSE];
+    yield [
+      'pm_card_amex_threeDSecureNotSupported',
+      TRUE,
+      PaymentIntent::STATUS_REQUIRES_CONFIRMATION,
+      PaymentIntent::STATUS_SUCCEEDED,
+      FALSE,
+    ];
     // A payment was passed, so we use that payment gateway token instead.
-    yield ['pm_card_amex_threeDSecureNotSupported', TRUE, PaymentIntent::STATUS_REQUIRES_CONFIRMATION, PaymentIntent::STATUS_SUCCEEDED, TRUE];
+    yield [
+      'pm_card_amex_threeDSecureNotSupported',
+      TRUE,
+      PaymentIntent::STATUS_REQUIRES_CONFIRMATION,
+      PaymentIntent::STATUS_SUCCEEDED,
+      TRUE,
+    ];
   }
 
   /**

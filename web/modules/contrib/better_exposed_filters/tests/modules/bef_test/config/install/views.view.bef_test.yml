@@ -553,7 +553,7 @@ display:
         type: bef
         options:
           submit_button: Apply
-          reset_button: false
+          reset_button: true
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
           expose_sort_order: true
@@ -641,7 +641,7 @@ display:
         options:
           perm: 'access content'
       cache:
-        type: tag
+        type: none
         options: {  }
       empty: {  }
       sorts:
@@ -711,7 +711,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: string
-          operator: '='
+          operator: contains
           value: ''
           group: 1
           exposed: true
@@ -723,7 +723,7 @@ display:
             operator: field_bef_email_value_op
             identifier: field_bef_email_value
             required: false
-            remember: false
+            remember: true
             multiple: false
             remember_roles:
               authenticated: authenticated

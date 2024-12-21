@@ -1,5 +1,5 @@
 general:
-  version: 6.x
+  version: VERSION
   css:
     theme:
       css/better_exposed_filters.css: {}
@@ -9,7 +9,7 @@ general:
     - core/drupal
     - core/jquery
 auto_submit:
-  version: 6.x
+  version: VERSION
   js:
     js/auto_submit.js: {}
   dependencies:
@@ -17,7 +17,7 @@ auto_submit:
     - core/once
     - core/drupal.debounce
 select_all_none:
-  version: 6.x
+  version: VERSION
   js:
     js/bef_select_all_none.js: {}
   dependencies:
@@ -26,7 +26,7 @@ select_all_none:
     - core/once
 
 sliders:
-  version: 6.x
+  version: VERSION
   js:
     js/bef_sliders.js: {}
   dependencies:
@@ -36,7 +36,7 @@ sliders:
     - core/once
 
 datepickers:
-  version: 6.x
+  version: VERSION
   js:
     js/bef_datepickers.js: {}
   dependencies:
@@ -45,7 +45,7 @@ datepickers:
     - core/jquery
 
 links_use_ajax:
-  version: 6.x
+  version: VERSION
   js:
     js/bef_links_use_ajax.js: {}
   dependencies:
@@ -54,7 +54,17 @@ links_use_ajax:
 
 nouislider_internal:
   js:
-    /libraries/noUiSlider/nouislider.min.js: { minified: true }
+    /libraries/nouislider/nouislider.min.js: { minified: true }
+  css:
+    component:
+      /libraries/nouislider/nouislider.min.css: { minified: true }
+
+nouislider_internal_npm:
+  js:
+    /libraries/nouislider/dist/nouislider.min.js: { minified: true }
+  css:
+    component:
+      /libraries/nouislider/dist/nouislider.min.css: { minified: true }
 
 nouislider_external:
   remote: https://refreshless.com/nouislider/

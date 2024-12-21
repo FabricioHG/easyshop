@@ -3,73 +3,93 @@
  * Defines behaviors for the Stripe Payment Element payment method form.
  */
 
-(function ($, Drupal, drupalSettings) {
-
-  'use strict';
-
+(($, Drupal, drupalSettings, Stripe) => {
   /**
    * Attaches the commerceStripePaymentElement behavior.
    */
   Drupal.behaviors.commerceStripePaymentElement = {
-    attach: function (context) {
-      if (!drupalSettings.commerceStripePaymentElement || !drupalSettings.commerceStripePaymentElement.publishableKey) {
+    attach(context) {
+      if (
+        !drupalSettings.commerceStripePaymentElement ||
+        !drupalSettings.commerceStripePaymentElement.publishableKey
+      ) {
         return;
       }
 
       const settings = drupalSettings.commerceStripePaymentElement;
-      $(once('stripe-processed', '#' + settings.elementId, context)).each(function () {
-        var $form = $(this).closest('form');
+      function processStripeForm() {
+        const $form = $(this).closest('form');
+        const $primaryButton = $form.find(':input.button--primary');
 
+        const stripeOptions = {};
+        if (settings.apiVersion) {
+          stripeOptions.apiVersion = settings.apiVersion;
+        }
         // Create a Stripe client.
-        var stripe = Stripe(settings.publishableKey);
+        const stripe = Stripe(settings.publishableKey, stripeOptions);
 
         // Show Stripe Payment Element form.
         if (settings.showPaymentForm) {
           // Create an instance of Stripe Elements.
-          var elements = stripe.elements(settings.createElementsOptions);
-          var paymentElement = elements.create('payment', settings.paymentElementOptions);
-          paymentElement.mount('#' + settings.elementId);
+          const elements = stripe.elements(settings.createElementsOptions);
+          const paymentElement = elements.create(
+            'payment',
+            settings.paymentElementOptions,
+          );
+          paymentElement.mount(`#${settings.elementId}`);
+          paymentElement.on('ready', () => {
+            $primaryButton.prop('disabled', false).removeClass('is-disabled');
+          });
 
-          $form.on('submit.stripe_payment_element', function (e) {
+          $form.on('submit.stripe_payment_element', (e) => {
             e.preventDefault();
-            $form.find(':input.button--primary').prop('disabled', true);
-            // Confirm the card payment.
-            stripe.confirmPayment({
+            $primaryButton.prop('disabled', true);
+            let stripeConfirm = stripe.confirmPayment;
+            if (settings.intentType === 'setup') {
+              stripeConfirm = stripe.confirmSetup;
+            }
+            stripeConfirm({
               elements,
               confirmParams: {
-                return_url: settings.returnUrl
-              }
-            }).then(function (result) {
+                return_url: settings.returnUrl,
+              },
+            }).then((result) => {
               if (result.error) {
                 // Inform the user if there was an error.
                 // Display the message error in the payment form.
                 Drupal.commerceStripe.displayError(result.error.message);
                 // Allow the customer to re-submit the form.
-                $form.find(':input.button--primary').prop('disabled', false);
+                $primaryButton.prop('disabled', false);
               }
             });
           });
         }
         // Confirm a payment by payment method.
         else {
-          var allowSubmit = false;
-          $form.on('submit.stripe_payment_element', function (e) {
-            $form.find(":input.button--primary").prop("disabled", true);
+          $primaryButton.prop('disabled', false).removeClass('is-disabled');
+          let allowSubmit = false;
+          $form.on('submit.stripe_payment_element', () => {
+            $primaryButton.prop('disabled', true);
             if (!allowSubmit) {
-              $form.find(":input.button--primary").prop("disabled", true);
-              stripe.confirmCardPayment(
-                settings.clientSecret,
-                {
-                  payment_method: settings.paymentMethod
-                }
-              ).then(function (result) {
+              $primaryButton.prop('disabled', true);
+              let stripeConfirm = stripe.confirmPayment;
+              if (settings.intentType === 'setup') {
+                stripeConfirm = stripe.confirmSetup;
+              }
+              stripeConfirm({
+                clientSecret: settings.clientSecret,
+                confirmParams: {
+                  return_url: settings.returnUrl,
+                },
+                redirect: 'always',
+              }).then((result) => {
                 if (result.error) {
                   Drupal.commerceStripe.displayError(result.error.message);
-                  $form.find(':input.button--primary').prop('disabled', false);
-                }
-                else {
+                  $primaryButton.prop('disabled', false);
+                } else {
                   allowSubmit = true;
-                  $form.submit();
+                  $primaryButton.prop('disabled', false);
+                  $form.get(0).requestSubmit($primaryButton.get(0));
                 }
               });
               return false;
@@ -77,18 +97,23 @@
             return true;
           });
         }
-      });
+      }
+      $(once('stripe-processed', `#${settings.elementId}`, context)).each(
+        processStripeForm,
+      );
     },
-    detach: function detach(context, settings, trigger) {
-      if (trigger !== "unload") {
+    detach: (context, settings, trigger) => {
+      if (trigger !== 'unload') {
         return;
       }
-      var $form = $("[id^=" + drupalSettings.commerceStripePaymentElement.elementId + "]", context).closest("form");
+      const $form = $(
+        `[id^=${drupalSettings.commerceStripePaymentElement.elementId}]`,
+        context,
+      ).closest('form');
       if ($form.length === 0) {
         return;
       }
-      $form.off("submit.stripe_payment_element");
-    }
+      $form.off('submit.stripe_payment_element');
+    },
   };
-
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal, drupalSettings, window.Stripe);

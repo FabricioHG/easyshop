@@ -1,0 +1,8 @@
+# Custom module library for general purposes.
+ws_mercado_libre.callajax:
+  js:
+    js/mercado_libre.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+    

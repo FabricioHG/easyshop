@@ -2,8 +2,8 @@
 
 namespace Drupal\better_exposed_filters\Plugin\better_exposed_filters\filter;
 
-use Drupal\better_exposed_filters\BetterExposedFiltersHelper;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\better_exposed_filters\BetterExposedFiltersHelper;
 
 /**
  * Default widget implementation.

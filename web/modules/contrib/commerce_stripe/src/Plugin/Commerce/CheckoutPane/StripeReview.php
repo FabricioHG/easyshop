@@ -5,15 +5,17 @@ namespace Drupal\commerce_stripe\Plugin\Commerce\CheckoutPane;
 use Drupal\commerce_checkout\Plugin\Commerce\CheckoutPane\CheckoutPaneBase;
 use Drupal\commerce_checkout\Plugin\Commerce\CheckoutPane\CheckoutPaneInterface;
 use Drupal\commerce_payment\Entity\PaymentMethodInterface;
+use Drupal\commerce_stripe\ErrorHelper;
+use Drupal\commerce_stripe\Plugin\Commerce\PaymentGateway\StripeInterface;
 use Drupal\commerce_stripe\Plugin\Commerce\PaymentGateway\StripePaymentElementInterface;
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use Psr\Log\LoggerInterface;
 use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
-use Drupal\commerce_stripe\Plugin\Commerce\PaymentGateway\StripeInterface;
-use Drupal\commerce_stripe\ErrorHelper;
-use Drupal\Core\Url;
-use Drupal\Component\Utility\Html;
+use Stripe\SetupIntent;
 
 /**
  * Adds payment intent confirmation for Stripe.
@@ -21,7 +23,7 @@ use Drupal\Component\Utility\Html;
  * This checkout pane is required. It ensures that the last step in the checkout
  * performs authentication and confirmation of the payment intent. If the
  * customer's card is not enrolled in 3DS then the form will submit as normal.
- * Otherwise a modal will appear for the customer to authenticate and approve
+ * Otherwise, a modal will appear for the customer to authenticate and approve
  * of the charge.
  *
  * @CommerceCheckoutPane(
@@ -38,7 +40,7 @@ class StripeReview extends CheckoutPaneBase {
    *
    * @var \Psr\Log\LoggerInterface
    */
-  protected $logger;
+  protected LoggerInterface $logger;
 
   /**
    * {@inheritdoc}
@@ -137,7 +139,7 @@ class StripeReview extends CheckoutPaneBase {
     if ($gateway->isEmpty() || empty($gateway->entity)) {
       return FALSE;
     }
-    if ($this->order->isPaid() || $this->order->getTotalPrice()->isZero()) {
+    if ($this->order->isPaid() || $this->order->getTotalPrice()?->isZero()) {
       // The order total might have been changed to zero, do not add the review
       // pane as that might lead to an incorrect payment confirmation.
       return FALSE;
@@ -160,46 +162,56 @@ class StripeReview extends CheckoutPaneBase {
     }
 
     $intent_id = $this->order->getData('stripe_intent');
-    /** @var \Drupal\commerce_stripe\Plugin\Commerce\PaymentGateway\StripeInterface $stripe_plugin */
+    /** @var \Drupal\commerce_stripe\Plugin\Commerce\PaymentGateway\StripeInterface|\Drupal\commerce_stripe\Plugin\Commerce\PaymentGateway\StripePaymentElementInterface $stripe_plugin */
     $stripe_plugin = $this->order->get('payment_gateway')->entity->getPlugin();
 
+    if (!$stripe_plugin instanceof StripePaymentElementInterface && !$stripe_plugin instanceof StripeInterface) {
+      return $pane_form;
+    }
+
+    $intent = NULL;
     if ($intent_id !== NULL) {
       try {
-        $intent = PaymentIntent::retrieve($intent_id);
+        if ($stripe_plugin instanceof StripeInterface) {
+          $intent = PaymentIntent::retrieve($intent_id);
+        }
+        else {
+          $intent = $stripe_plugin->getIntent($intent_id);
+        }
       }
       catch (ApiErrorException $e) {
         ErrorHelper::handleException($e);
       }
     }
-    else {
-      $payment_process_pane = $this->checkoutFlow->getPane('payment_process');
-      assert($payment_process_pane instanceof CheckoutPaneInterface);
-      $intent_attributes = [
-        'capture_method' => $payment_process_pane->getConfiguration()['capture'] ? 'automatic' : 'manual',
-      ];
-      // Set the setup_future_usage parameter for the Stripe Card Element.
-      if (
-        $stripe_plugin instanceof StripeInterface &&
-        !empty($this->getConfiguration()['setup_future_usage'])
-      ) {
-        $intent_attributes['setup_future_usage'] = $this->getConfiguration()['setup_future_usage'];
+    if ($intent === NULL) {
+      if ($stripe_plugin instanceof StripeInterface) {
+        $intent_attributes = [];
+        $payment_process_pane = $this->checkoutFlow->getPane('payment_process');
+        assert($payment_process_pane instanceof CheckoutPaneInterface);
+        $intent_attributes['capture_method'] = $payment_process_pane->getConfiguration()['capture'] ? 'automatic' : 'manual';
+        if (!empty($this->getConfiguration()['setup_future_usage'])) {
+          $intent_attributes['setup_future_usage'] = $this->getConfiguration()['setup_future_usage'];
+        }
+        $intent = $stripe_plugin->createPaymentIntent($this->order, $intent_attributes);
       }
-      // Set the setup_future_usage parameter for the Stripe Payment Element.
-      if ($stripe_plugin instanceof StripePaymentElementInterface) {
-        $intent_attributes['setup_future_usage'] = $stripe_plugin->getPaymentMethodUsage();
+      else {
+        $intent = $stripe_plugin->createIntent($this->order);
       }
-      $intent = $stripe_plugin->createPaymentIntent($this->order, $intent_attributes);
     }
-    if (
-      !$this->order->get('payment_method')->isEmpty() &&
-      $intent->status === PaymentIntent::STATUS_REQUIRES_PAYMENT_METHOD
-    ) {
+    if (!$this->order->get('payment_method')->isEmpty()) {
       $payment_method = $this->order->get('payment_method')->entity;
       assert($payment_method instanceof PaymentMethodInterface);
       $payment_method_remote_id = $payment_method->getRemoteId();
-      $intent = PaymentIntent::update($intent->id, [
-        'payment_method' => $payment_method_remote_id,
-      ]);
+      if (($intent instanceof PaymentIntent) && ($intent->status === PaymentIntent::STATUS_REQUIRES_PAYMENT_METHOD)) {
+        $intent = PaymentIntent::update($intent->id, [
+          'payment_method' => $payment_method_remote_id,
+        ]);
+      }
+      elseif (($intent instanceof SetupIntent) && ($intent->status === SetupIntent::STATUS_REQUIRES_PAYMENT_METHOD)) {
+        $intent = SetupIntent::update($intent->id, [
+          'payment_method' => $payment_method_remote_id,
+        ]);
+      }
     }
 
     // To display validation errors.
@@ -235,8 +247,9 @@ class StripeReview extends CheckoutPaneBase {
         'autoSubmitReviewForm' => $auto_submit,
       ];
       $profiles = $this->order->collectProfiles();
-      if (isset($profiles['shipping']) && !$profiles['shipping']->get('address')->isEmpty()) {
-        $pane_form['#attached']['drupalSettings']['commerceStripe']['shipping'] = $profiles['shipping']->get('address')->first()->toArray();
+      $formatted_address = isset($profiles['shipping']) ? $stripe_plugin->getFormattedAddress($profiles['shipping'], 'shipping') : NULL;
+      if (!empty($formatted_address)) {
+        $pane_form['#attached']['drupalSettings']['commerceStripe']['shipping'] = $formatted_address;
       }
     }
 
@@ -249,7 +262,6 @@ class StripeReview extends CheckoutPaneBase {
       $pane_form['#attached']['drupalSettings']['commerceStripePaymentElement'] = [
         'publishableKey' => $stripe_plugin->getPublishableKey(),
         'clientSecret' => $intent->client_secret,
-        'paymentMethod' => !empty($intent->payment_method) ? $intent->payment_method : NULL,
         'returnUrl' => Url::fromRoute('commerce_payment.checkout.return', [
           'commerce_order' => $this->order->id(),
           'step' => 'review',
@@ -267,19 +279,9 @@ class StripeReview extends CheckoutPaneBase {
         ],
       ];
       $profiles = $this->order->collectProfiles();
-      if (isset($profiles['billing']) && !$profiles['billing']->get('address')->isEmpty()) {
-        $billing_address = $profiles['billing']->get('address')->first()->toArray();
-        $pane_form['#attached']['drupalSettings']['commerceStripePaymentElement']['paymentElementOptions']['defaultValues']['billingDetails'] = [
-          'name' => $billing_address['given_name'] . ' ' . $billing_address['family_name'],
-          'address' => [
-            'city' => $billing_address['locality'],
-            'country' => $billing_address['country_code'],
-            'line1' => $billing_address['address_line1'],
-            'line2' => $billing_address['address_line2'],
-            'postal_code' => $billing_address['postal_code'],
-            'state' => $billing_address['administrative_area'],
-          ],
-        ];
+      $formatted_address = isset($profiles['billing']) ? $stripe_plugin->getFormattedAddress($profiles['billing']) : NULL;
+      if (!empty($formatted_address)) {
+        $pane_form['#attached']['drupalSettings']['commerceStripePaymentElement']['paymentElementOptions']['defaultValues']['billingDetails'] = $formatted_address;
       }
 
       $pane_form['stripe_payment_element'] = [
@@ -289,6 +291,9 @@ class StripeReview extends CheckoutPaneBase {
           'id' => $element_id,
         ],
       ];
+      // We load the button disabled. We do not enable it until
+      // the stripe payment element has loaded.
+      $complete_form['actions']['next']['#attributes']['disabled'] = 'disabled';
     }
 
     $cacheability = new CacheableMetadata();

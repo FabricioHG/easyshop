@@ -2,20 +2,27 @@
 
 namespace Drupal\commerce_stripe\EventSubscriber;
 
+use Drupal\commerce\Utility\Error;
+use Drupal\commerce_order\Entity\OrderInterface;
+use Drupal\commerce_order\Event\OrderAssignEvent;
 use Drupal\commerce_order\Event\OrderEvent;
 use Drupal\commerce_order\Event\OrderEvents;
 use Drupal\commerce_payment\Entity\PaymentGatewayInterface;
 use Drupal\commerce_price\MinorUnitsConverterInterface;
+use Drupal\commerce_stripe\ErrorHelper;
 use Drupal\commerce_stripe\Plugin\Commerce\PaymentGateway\StripeInterface;
+use Drupal\commerce_stripe\Plugin\Commerce\PaymentGateway\StripePaymentElement;
 use Drupal\commerce_stripe\Plugin\Commerce\PaymentGateway\StripePaymentElementInterface;
 use Drupal\Core\DestructableInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Stripe\Exception\ApiErrorException as StripeError;
+use Psr\Log\LoggerInterface;
+use Stripe\Exception\ApiErrorException;
 use Stripe\PaymentIntent;
+use Stripe\PaymentMethod;
+use Stripe\SetupIntent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Subscribes to order events to syncronize orders with their payment intents.
+ * Subscribes to order events to synchronize orders with their payment intents.
  *
  * Payment intents contain the amount which should be charged during a
  * transaction. When a payment intent is confirmed server or client side, that
@@ -25,37 +32,44 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class OrderPaymentIntentSubscriber implements EventSubscriberInterface, DestructableInterface {
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * The minor units converter.
    *
    * @var \Drupal\commerce_price\MinorUnitsConverterInterface
    */
-  protected $minorUnitsConverter;
+  protected MinorUnitsConverterInterface $minorUnitsConverter;
+
+  /**
+   * The stripe logger.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected LoggerInterface $logger;
 
   /**
    * The intent IDs that need updating.
    *
    * @var int[]
    */
-  protected $updateList = [];
+  protected array $updateList = [];
 
   /**
-   * Constructs a new OrderEventsSubscriber object.
+   * The intent IDs that need canceling.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
+   * @var int[]
+   */
+  protected array $cancelList = [];
+
+  /**
+   * Constructs a new OrderPaymentIntentSubscriber object.
+   *
    * @param \Drupal\commerce_price\MinorUnitsConverterInterface $minor_units_converter
    *   The minor units converter.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   The logger.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MinorUnitsConverterInterface $minor_units_converter) {
-    $this->entityTypeManager = $entity_type_manager;
+  public function __construct(MinorUnitsConverterInterface $minor_units_converter, LoggerInterface $logger) {
     $this->minorUnitsConverter = $minor_units_converter;
+    $this->logger = $logger;
   }
 
   /**
@@ -63,7 +77,9 @@ class OrderPaymentIntentSubscriber implements EventSubscriberInterface, Destruct
    */
   public static function getSubscribedEvents() {
     return [
+      OrderEvents::ORDER_PRESAVE => 'onOrderPreSave',
       OrderEvents::ORDER_UPDATE => 'onOrderUpdate',
+      OrderEvents::ORDER_ASSIGN => ['onOrderAssign', -200],
     ];
   }
 
@@ -73,18 +89,27 @@ class OrderPaymentIntentSubscriber implements EventSubscriberInterface, Destruct
   public function destruct() {
     foreach ($this->updateList as $intent_id => $amount) {
       try {
-        $intent = PaymentIntent::retrieve($intent_id);
-        // You may only update the amount of a PaymentIntent with one of the
+        $intent = $this->getIntent($intent_id);
+        // Only update an intent amount with one of the
         // following statuses: requires_payment_method, requires_confirmation.
-        if (in_array($intent->status, [
+        if (($intent instanceof PaymentIntent) && in_array($intent->status, [
           PaymentIntent::STATUS_REQUIRES_PAYMENT_METHOD,
           PaymentIntent::STATUS_REQUIRES_CONFIRMATION,
         ], TRUE)) {
           PaymentIntent::update($intent_id, ['amount' => $amount]);
         }
       }
-      catch (StripeError $e) {
-        // Allow sync errors to silently fail.
+      catch (ApiErrorException $e) {
+        ErrorHelper::handleException($e);
+      }
+    }
+    foreach ($this->cancelList as $intent_id) {
+      try {
+        $intent = $this->getIntent($intent_id);
+        $intent?->cancel();
+      }
+      catch (\Throwable $throwable) {
+        Error::logException($this->logger, $throwable);
       }
     }
   }
@@ -97,10 +122,12 @@ class OrderPaymentIntentSubscriber implements EventSubscriberInterface, Destruct
    */
   public function onOrderUpdate(OrderEvent $event) {
     $order = $event->getOrder();
+
     $gateway = $order->get('payment_gateway');
     if ($gateway->isEmpty() || !$gateway->entity instanceof PaymentGatewayInterface) {
       return;
     }
+
     $plugin = $gateway->entity->getPlugin();
     if (
       !($plugin instanceof StripeInterface) &&
@@ -108,15 +135,170 @@ class OrderPaymentIntentSubscriber implements EventSubscriberInterface, Destruct
     ) {
       return;
     }
+
     $intent_id = $order->getData('stripe_intent');
     if ($intent_id === NULL) {
       return;
     }
-    $total_price = $order->getTotalPrice();
-    if ($total_price !== NULL) {
-      $amount = $this->minorUnitsConverter->toMinorUnits($order->getTotalPrice());
-      $this->updateList[$intent_id] = $amount;
+
+    if ($total_price = $this->getChangedOrderTotalPrice($order)) {
+      $this->updateList[$intent_id] = $this->minorUnitsConverter->toMinorUnits($total_price);
     }
+  }
+
+  /**
+   * On order presave.
+   *
+   * Ensures the Stripe payment intent is cancelled and a new one is created
+   * if the payment method is changed.
+   *
+   * @param \Drupal\commerce_order\Event\OrderEvent $event
+   *   The event.
+   *
+   * @throws \Drupal\Core\TypedData\Exception\MissingDataException
+   */
+  public function onOrderPreSave(OrderEvent $event) {
+    $order = $event->getOrder();
+
+    $gateway = $order->get('payment_gateway');
+    if ($gateway->isEmpty() || !$gateway->entity instanceof PaymentGatewayInterface) {
+      return;
+    }
+
+    $plugin = $gateway->entity->getPlugin();
+    if (
+      !($plugin instanceof StripeInterface) &&
+      !($plugin instanceof StripePaymentElementInterface)
+    ) {
+      return;
+    }
+
+    $intent_id = $order->getData('stripe_intent');
+    if ($intent_id === NULL) {
+      return;
+    }
+
+    $payment_method = $order->get('payment_method')->getString();
+    $original_payment_method = $order->original->get('payment_method')->getString();
+    if ($payment_method !== $original_payment_method) {
+      $cancel = TRUE;
+      if ($original_payment_method === '') {
+        // This might be the creation of a new payment method.
+        // Double-check the intent status.
+        $intent = $this->getIntent($intent_id);
+        if ($intent instanceof PaymentIntent && in_array($intent->status, [
+          PaymentIntent::STATUS_SUCCEEDED,
+          PaymentIntent::STATUS_PROCESSING,
+          PaymentIntent::STATUS_REQUIRES_CAPTURE,
+        ], TRUE)) {
+          $cancel = FALSE;
+        }
+        elseif ($intent instanceof SetupIntent && in_array($intent->status, [
+          SetupIntent::STATUS_SUCCEEDED,
+          SetupIntent::STATUS_PROCESSING,
+        ], TRUE)) {
+          $cancel = FALSE;
+        }
+      }
+      if ($cancel) {
+        $this->cancelList[$intent_id] = $intent_id;
+        $order->unsetData('stripe_intent');
+      }
+    }
+  }
+
+  /**
+   * Gets the changed total price of the order.
+   *
+   * @param \Drupal\commerce_order\Entity\OrderInterface $order
+   *   The order.
+   *
+   * @return \Drupal\commerce_price\Price|null
+   *   Changed total price of the order.
+   */
+  protected function getChangedOrderTotalPrice(OrderInterface $order) {
+    $total_price = $order->getTotalPrice();
+    $original_price = isset($order->original) ? $order->original->getTotalPrice() : NULL;
+
+    // When the cart is empty, but the order refresh is triggered.
+    if (!$total_price && !$original_price) {
+      return NULL;
+    }
+
+    // The product has been added to an empty cart.
+    if ($total_price && !$original_price) {
+      return $total_price;
+    }
+
+    // Do not update the payment intent when the last product is removed
+    // from the cart, as it will be updated the next time the order is updated.
+    if (!$total_price && $original_price) {
+      return NULL;
+    }
+
+    // The total price of the order has changed.
+    if (!$original_price->equals($total_price)) {
+      return $total_price;
+    }
+
+    return NULL;
+  }
+
+  /**
+   * React to an order being assigned.
+   *
+   * @param \Drupal\commerce_order\Event\OrderAssignEvent $event
+   *   The Order Assignment event.
+   */
+  public function onOrderAssign(OrderAssignEvent $event): void {
+    try {
+      $order = $event->getOrder();
+      $payment_gateway = $order->get('payment_gateway')->entity;
+      if ($payment_gateway instanceof PaymentGatewayInterface) {
+        $plugin = $payment_gateway->getPlugin();
+        if ($plugin instanceof StripePaymentElement) {
+          /** @var \Drupal\commerce_payment\Entity\PaymentMethodInterface $payment_method */
+          $payment_method = $order->get('payment_method')->entity;
+          if ($payment_method !== NULL) {
+            $stripe_payment_method_id = $payment_method->getRemoteId();
+            if (!empty($stripe_payment_method_id)) {
+              $stripe_payment_method = PaymentMethod::retrieve($stripe_payment_method_id);
+              $payment_details = ['stripe_payment_method' => $stripe_payment_method, 'commerce_order' => $order];
+              $plugin->doCreatePaymentMethod($payment_method, $payment_details);
+            }
+          }
+        }
+      }
+    }
+    catch (\Throwable $throwable) {
+      Error::logException($this->logger, $throwable);
+    }
+
+  }
+
+  /**
+   * Get the intent.
+   *
+   * @param string $intent_id
+   *   The intent id.
+   *
+   * @return \Stripe\PaymentIntent|\Stripe\SetupIntent|null
+   *   The intent.
+   */
+  protected function getIntent(string $intent_id): PaymentIntent|SetupIntent|null {
+    $intent = NULL;
+    try {
+      if (str_starts_with($intent_id, 'pi_')) {
+        $intent = PaymentIntent::retrieve($intent_id);
+      }
+      elseif (str_starts_with($intent_id, 'seti_')) {
+        $intent = SetupIntent::retrieve($intent_id);
+      }
+    }
+    catch (\Throwable $throwable) {
+      Error::logException($this->logger, $throwable);
+    }
+    return $intent;
   }
 
 }

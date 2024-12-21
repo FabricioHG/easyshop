@@ -1,63 +1,25 @@
 :root {
-  --beo-body-bg: #fff;
-  --beo-body-color: #333;
-  --beo-primary: #41449f;
-  --beo-primary-hover: #373a87;
-  --beo-light: #f8f9fa;
-  --beo-dark: #272727;
-}
-
-body {
-  background-color: var(--beo-body-bg);
-  color: var(--beo-body-color);
-}
-
-.text-primary {
-  color: #41449f !important;
-}
-
-.bg-primary {
-  background-color: #41449f !important;
-}
-
-.text-primary-hover {
-  color: #373a87 !important;
-}
-
-.bg-primary-hover {
-  background-color: #373a87 !important;
-}
-
-.text-light {
-  color: #f8f9fa !important;
-}
-
-.bg-light {
-  background-color: #f8f9fa !important;
-}
-
-.text-dark {
-  color: #272727 !important;
-}
-
-.bg-dark {
-  background-color: #272727 !important;
+  --beo-primary-hover: color-mix(in srgb, var(--beo-primary) 80%, black);
+  --beo-link-color: var(--beo-primary);
+  --beo-link-color-rgb: var(--beo-primary-rgb);
+  --beo-link-hover-color: var(--beo-primary-hover);
+  --beo-link-hover-color-rgb: var(--beo-primary-hover);
 }
 
 .btn-primary {
-  --beo-btn-bg: #41449f;
-  --beo-btn-border-color: #41449f;
-  --beo-btn-hover-bg: #373a87;
-  --beo-btn-hover-border-color: #373a87;
+  --beo-btn-bg: var(--beo-primary);
+  --beo-btn-border-color: var(--beo-primary);
+  --beo-btn-hover-bg: var(--beo-primary-hover);
+  --beo-btn-hover-border-color: var(--beo-primary-hover);
 }
 
 .btn-outline-primary,
 .btn-outline-primary:focus {
-  --beo-btn-color: #41449f;
-  --beo-btn-border-color: #41449f;
-  --beo-btn-hover-color: #fff;
-  --beo-btn-hover-bg: #373a87;
-  --beo-btn-hover-border-color: #373a87;
+  --beo-btn-color:var(--beo-primary);
+  --beo-btn-border-color:var(--beo-primary);
+  --beo-btn-hover-color: var(--beo-white);
+  --beo-btn-hover-bg: var(--beo-primary-hover);
+  --beo-btn-hover-border-color: var(--beo-primary-hover);
 }
 
 .btn-check:focus + .btn-primary,

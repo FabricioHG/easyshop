@@ -40,21 +40,135 @@ function belgrade_form_system_theme_settings_alter(&$form, FormStateInterface $f
   );
 
   // General settings
-  $form['settings'] = array(
+  $form['belgrade_settings'] = array(
     '#type' => 'details',
     '#title' => t('General'),
     '#group' => 'belgrade',
   );
 
-  $form['settings']['general'] = array(
+  $form['belgrade_settings']['general'] = array(
     '#type' => 'details',
     '#title' => 'General',
     '#collapsible' => true,
     '#open' => true,
   );
 
+  // Colors
+  $form['#attached']['library'][] = 'belgrade/color-picker';
+
+  $color_config = [
+    'colors' => [
+      'base_primary_color' => 'Primary base color',
+      'base_light_color' => 'Light base color',
+      'base_dark_color' => 'Dark base color',
+      'body_text_color' => 'Body text color',
+      'body_background_color' => 'Body background color',
+    ],
+    'schemes' => [
+      'default' => [
+        'label' => 'Belgrade',
+        'colors' => [
+          'base_primary_color' => '#41449f',
+          'base_light_color' => '#E9E9f2',
+          'base_dark_color' => '#272727',
+          'body_text_color' => '#333333',
+          'body_background_color' => '#FFFFFF',
+        ],
+      ],
+      'apple_blossom' => [
+        'label' => 'Apple Blossom',
+        'colors' => [
+          'base_primary_color' => '#9F4143',
+          'base_light_color' => '#F2E9E9',
+          'base_dark_color' => '#592750',
+          'body_text_color' => '#212121',
+          'body_background_color' => '#FFFFFF',
+        ],
+      ],
+      'marine' => [
+        'label' => 'Marine',
+        'colors' => [
+          'base_primary_color' => '#437A9E',
+          'base_light_color' => '#D0E5F1',
+          'base_dark_color' => '#555B5E',
+          'body_text_color' => '#333333',
+          'body_background_color' => '#FFFFFF',
+        ],
+      ],
+      'khaki' => [
+        'label' => 'Khaki',
+        'colors' => [
+          'base_primary_color' => '#9F6941',
+          'base_light_color' => '#ECE4DB',
+          'base_dark_color' => '#272727',
+          'body_text_color' => '#272727',
+          'body_background_color' => '#FFFFFF',
+        ],
+      ],
+    ],
+  ];
+
+  $form['#attached']['drupalSettings']['belgrade']['colorSchemes'] = $color_config['schemes'];
+
+  $form['belgrade_settings']['general']['belgrade_enable_color'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Enable Color Scheme'),
+    '#default_value' => theme_get_setting('belgrade_enable_color'),
+  ];
+
+
+  $form['belgrade_settings']['general']['belgrade_color_scheme'] = [
+    '#type' => 'fieldset',
+    '#title' => t('Color Scheme Settings'),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="belgrade_enable_color"]' => array('checked' => TRUE),
+      ),
+    ),
+  ];
+
+  $form['belgrade_settings']['general']['belgrade_color_scheme']['description'] = [
+    '#type' => 'html_tag',
+    '#tag' => 'p',
+    '#value' => t('These settings adjust the look and feel of the Belgrade theme. Changing the color below will change the base hue, saturation, and lightness values the Belgrade theme uses to determine its internal colors.'),
+  ];
+
+  $form['belgrade_settings']['general']['belgrade_color_scheme']['color_scheme'] = [
+    '#type' => 'select',
+    '#title' => t('Belgrade Color Scheme'),
+    '#empty_option' => t('Custom'),
+    '#empty_value' => '',
+    '#options' => [
+      'default' => t('Belgrade (Default)'),
+      'apple_blossom' => t('Apple Blossom'),
+      'marine' => t('Marine'),
+      'khaki' => t('Khaki'),
+    ],
+    '#input' => FALSE,
+    '#wrapper_attributes' => [
+      'style' => 'display:none;',
+    ],
+  ];
+
+  foreach ($color_config['colors'] as $key => $title) {
+    $form['belgrade_settings']['general']['belgrade_color_scheme'][$key] = [
+      '#type' => 'textfield',
+      '#maxlength' => 7,
+      '#size' => 10,
+      '#title' => t($title),
+      '#description' => t('Enter color in full hexadecimal format (#abc123).') . '<br/>' . t('Derivatives will be formed from this color.'),
+      '#default_value' => theme_get_setting($key),
+      '#attributes' => [
+        'pattern' => '^#[a-fA-F0-9]{6}',
+      ],
+      '#wrapper_attributes' => [
+        'data-drupal-selector' => 'belgrade-color-picker',
+      ],
+    ];
+  }
+
   // Inline SVG logo
-  $form['settings']['general']['inline_logo'] = array(
+  $form['belgrade_settings']['general']['inline_logo'] = array(
     '#type' => 'checkbox',
     '#title' => t('Inline SVG logo'),
     '#description' => t('Place the logo SVG code in the DOM.'),
@@ -62,7 +176,7 @@ function belgrade_form_system_theme_settings_alter(&$form, FormStateInterface $f
   );
 
   // Input submit button.
-  $form['settings']['general']['belgrade_submit_button'] = [
+  $form['belgrade_settings']['general']['belgrade_submit_button'] = [
     '#type' => 'checkbox',
     '#title' => t('Convert input submit to button element'),
     '#default_value' => theme_get_setting('belgrade_submit_button'),
@@ -70,7 +184,7 @@ function belgrade_form_system_theme_settings_alter(&$form, FormStateInterface $f
   ];
 
   // Fieldset accordions
-  $form['settings']['general']['fieldset_accordion'] = array(
+  $form['belgrade_settings']['general']['fieldset_accordion'] = array(
     '#type' => 'checkbox',
     '#title' => t('Collapsible Fieldsets'),
     '#description' => t('Display Fieldsets as collapsible accordions on checkout and user form pages.'),
@@ -78,7 +192,7 @@ function belgrade_form_system_theme_settings_alter(&$form, FormStateInterface $f
   );
 
   // Messages.
-  $form['settings']['general']['message_type'] = [
+  $form['belgrade_settings']['general']['message_type'] = [
     '#type' => 'select',
     '#title' => t('Messages type'),
     '#default_value' => theme_get_setting('message_type'),
@@ -89,7 +203,7 @@ function belgrade_form_system_theme_settings_alter(&$form, FormStateInterface $f
     ],
   ];
 
-  $form['settings']['general']['toast_placement'] = array(
+  $form['belgrade_settings']['general']['toast_placement'] = array(
     '#type' => 'select',
     '#title' => t('Toast placement'),
     '#default_value' => theme_get_setting('toast_placement'),
@@ -116,14 +230,14 @@ function belgrade_form_system_theme_settings_alter(&$form, FormStateInterface $f
   );
 
 
-  $form['settings']['commerce'] = array(
+  $form['belgrade_settings']['commerce'] = array(
     '#type' => 'details',
     '#title' => 'Commerce',
     '#collapsible' => true,
     '#open' => true,
   );
 
-  $form['settings']['commerce']['product_teaser'] = [
+  $form['belgrade_settings']['commerce']['product_teaser'] = [
     '#type' => 'select',
     '#title' => t('Product teaser'),
     '#empty_option' => t('None'),
@@ -190,6 +304,7 @@ function belgrade_form_system_theme_settings_alter(&$form, FormStateInterface $f
     '#options' => [
       'start' => t('Default (Left)'),
       'end' => t('Right'),
+      'top' => t('Top'),
       'bottom' => t('Bottom'),
     ],
     '#default_value' => theme_get_setting('navigation_position'),

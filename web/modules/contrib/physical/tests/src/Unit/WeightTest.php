@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\physical\Unit;
 
-use Drupal\physical\Weight;
 use Drupal\Tests\UnitTestCase;
+use Drupal\physical\Weight;
 
 /**
  * Tests the weight class.

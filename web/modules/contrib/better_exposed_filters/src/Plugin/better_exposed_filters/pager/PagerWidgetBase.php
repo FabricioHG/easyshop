@@ -2,10 +2,10 @@
 
 namespace Drupal\better_exposed_filters\Plugin\better_exposed_filters\pager;
 
-use Drupal\better_exposed_filters\Plugin\BetterExposedFiltersWidgetBase;
-use Drupal\better_exposed_filters\Plugin\BetterExposedFiltersWidgetInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\better_exposed_filters\Plugin\BetterExposedFiltersWidgetBase;
+use Drupal\better_exposed_filters\Plugin\BetterExposedFiltersWidgetInterface;
 
 /**
  * Base class for Better exposed pager widget plugins.

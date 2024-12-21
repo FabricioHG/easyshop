@@ -2,12 +2,12 @@
 
 namespace Drupal\better_exposed_filters\Plugin\better_exposed_filters\filter;
 
-use Drupal\better_exposed_filters\BetterExposedFiltersHelper;
-use Drupal\better_exposed_filters\Plugin\BetterExposedFiltersWidgetBase;
-use Drupal\better_exposed_filters\Plugin\BetterExposedFiltersWidgetInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\better_exposed_filters\BetterExposedFiltersHelper;
+use Drupal\better_exposed_filters\Plugin\BetterExposedFiltersWidgetBase;
+use Drupal\better_exposed_filters\Plugin\BetterExposedFiltersWidgetInterface;
 use Drupal\views\Plugin\views\filter\NumericFilter;
 use Drupal\views\Plugin\views\filter\StringFilter;
 
@@ -263,10 +263,6 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
         '#collapsible_disable_automatic_open' => $collapsible_disable_automatic_open,
       ];
 
-      if ($is_secondary) {
-        // Move secondary elements.
-        $this->addElementToGroup($form, $form_state, $field_id . '_collapsible', 'secondary');
-      }
       // Retain same weight as the original fields for details.
       $pos = array_search($field_id, array_keys($form));
       $form = array_merge(array_slice($form, 0, $pos), $details, array_slice($form, $pos));
@@ -314,6 +310,16 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
         }
       }
 
+      // Handle secondary elements first.
+      if ($is_secondary) {
+        if ($is_collapsible) {
+          $this->addElementToGroup($form, $form_state, $field_id . '_collapsible', 'secondary');
+        }
+        else {
+          $this->addElementToGroup($form, $form_state, $element, 'secondary');
+        }
+      }
+
       // Move collapsible elements.
       if ($is_collapsible) {
         $this->addElementToGroup($form, $form_state, $element, $field_id . '_collapsible');
@@ -321,11 +327,6 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
       else {
         $form[$element]['#title'] = $exposed_label;
         $form[$element]['#description'] = $exposed_description;
-
-        // Move secondary elements.
-        if ($is_secondary) {
-          $this->addElementToGroup($form, $form_state, $element, 'secondary');
-        }
       }
 
       // Finally, add some metadata to the form element.

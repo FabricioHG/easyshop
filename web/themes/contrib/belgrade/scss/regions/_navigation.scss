@@ -30,8 +30,8 @@ $offnav-vertical-menu-social-spacing: $spacer * 2;
   &.offcanvas-start,
   &.offcanvas-end {
 
-    > div:first-child {
-      margin-top: $top-bar-height;
+    >div:first-child {
+      margin-top: var(--beo-region-top-bar-height);
     }
 
     // Logo spacing.
@@ -59,20 +59,42 @@ $offnav-vertical-menu-social-spacing: $spacer * 2;
   }
 
   // Horizontal navigation.
+  &.offcanvas-top,
   &.offcanvas-bottom {
+
     .offcanvas-header,
     .nav {
       justify-content: center;
     }
+
     // Adjust header-spacing
     .offcanvas-header {
       padding-bottom: 0;
     }
+
     // Adjust close btn
     .btn-close {
       position: absolute;
       top: 1rem;
       right: 1rem;
     }
+  }
+}
+
+
+.region-navigation.offcanvas-top {
+
+  .toolbar-horizontal &,
+  .toolbar-vertical &,
+  .toolbar-vertical.toolbar-tray-open & {
+    top: 40px;
+  }
+
+  .toolbar-horizontal.toolbar-tray-open & {
+    top: 79px;
+  }
+
+  .region-top-bar~& {
+    margin-top: var(--beo-region-top-bar-height);
   }
 }

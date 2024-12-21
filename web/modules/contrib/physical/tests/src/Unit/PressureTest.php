@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\physical\Unit;
 
-use Drupal\physical\Pressure;
 use Drupal\Tests\UnitTestCase;
+use Drupal\physical\Pressure;
 
 /**
  * Tests the pressure class.

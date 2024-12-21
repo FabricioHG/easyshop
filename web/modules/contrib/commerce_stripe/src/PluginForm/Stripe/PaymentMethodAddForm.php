@@ -8,11 +8,28 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\user\UserInterface;
 use Stripe\SetupIntent;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides payment form for Stripe.
  */
 class PaymentMethodAddForm extends BasePaymentMethodAddForm implements TrustedCallbackInterface {
+
+  /**
+   * The route match service.
+   *
+   * @var \Drupal\Core\Routing\RouteMatchInterface
+   */
+  protected $routeMatch;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    $instance = parent::create($container);
+    $instance->routeMatch = $container->get('current_route_match');
+    return $instance;
+  }
 
   /**
    * {@inheritdoc}
@@ -31,9 +48,8 @@ class PaymentMethodAddForm extends BasePaymentMethodAddForm implements TrustedCa
     // @todo Simplify check after https://www.drupal.org/project/commerce/issues/3073942.
     $client_secret = NULL;
     if ($payment_method_owner instanceof UserInterface && $payment_method_owner->isAuthenticated()) {
-      $route_match = \Drupal::routeMatch();
       // @todo Use context passed by parent element after https://www.drupal.org/project/commerce/issues/3077783.
-      if ($route_match->getRouteName() === 'entity.commerce_payment_method.add_form') {
+      if ($this->routeMatch->getRouteName() === 'entity.commerce_payment_method.add_form') {
         // A SetupIntent is required if this is being created for off-session
         // usage (for instance, outside of checkout where there is no payment
         // intent that will be authenticated.)
@@ -158,15 +174,27 @@ class PaymentMethodAddForm extends BasePaymentMethodAddForm implements TrustedCa
    */
   public static function addAddressAttributes(array $element, FormStateInterface $form_state) {
     if (isset($element['address'])) {
-      $element['address']['widget'][0]['address']['given_name']['#attributes']['data-stripe'] = 'name.1';
-      $element['address']['widget'][0]['address']['family_name']['#attributes']['data-stripe'] = 'name.2';
-      $element['address']['widget'][0]['address']['address_line1']['#attributes']['data-stripe'] = 'address.line1';
-      $element['address']['widget'][0]['address']['address_line2']['#attributes']['data-stripe'] = 'address.line2';
-      $element['address']['widget'][0]['address']['locality']['#attributes']['data-stripe'] = 'address.city';
-      $element['address']['widget'][0]['address']['administrative_area']['#attributes']['data-stripe'] = 'address.state';
-      $element['address']['widget'][0]['address']['postal_code']['#attributes']['data-stripe'] = 'address.postal_code';
+      $field_attribute_map = [
+        'given_name' => 'name.1',
+        'family_name' => 'name.2',
+        'address_line1' => 'address.line1',
+        'address_line2' => 'address.line2',
+        'locality' => 'address.city',
+        'administrative_area' => 'address.state',
+        'postal_code' => 'address.postal_code',
+      ];
+      foreach ($field_attribute_map as $field_name => $attribute_value) {
+        if (!empty($element['address']['widget'][0]['address'][$field_name])) {
+          $element['address']['widget'][0]['address'][$field_name]['#attributes']['data-stripe'] = $attribute_value;
+        }
+      }
       // Country code is a sub-element and needs another callback.
-      $element['address']['widget'][0]['address']['country_code']['#pre_render'][] = [get_called_class(), 'addCountryCodeAttributes'];
+      if (!empty($element['address']['widget'][0]['address']['country_code'])) {
+        $element['address']['widget'][0]['address']['country_code']['#pre_render'][] = [
+          static::class,
+          'addCountryCodeAttributes',
+        ];
+      }
     }
 
     return $element;

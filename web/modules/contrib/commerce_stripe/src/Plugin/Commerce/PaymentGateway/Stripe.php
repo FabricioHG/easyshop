@@ -3,42 +3,35 @@
 namespace Drupal\commerce_stripe\Plugin\Commerce\PaymentGateway;
 
 use Drupal\commerce_order\Entity\OrderInterface;
-use Drupal\commerce_payment\Exception\InvalidRequestException;
-use Drupal\commerce_payment\Exception\SoftDeclineException;
-use Drupal\commerce_price\MinorUnitsConverterInterface;
-use Drupal\commerce_stripe\ErrorHelper;
 use Drupal\commerce_payment\CreditCard;
 use Drupal\commerce_payment\Entity\PaymentInterface;
 use Drupal\commerce_payment\Entity\PaymentMethodInterface;
 use Drupal\commerce_payment\Exception\HardDeclineException;
+use Drupal\commerce_payment\Exception\InvalidRequestException;
 use Drupal\commerce_payment\Exception\PaymentGatewayException;
-use Drupal\commerce_payment\PaymentMethodTypeManager;
-use Drupal\commerce_payment\PaymentTypeManager;
+use Drupal\commerce_payment\Exception\SoftDeclineException;
 use Drupal\commerce_payment\Plugin\Commerce\PaymentGateway\OnsitePaymentGatewayBase;
 use Drupal\commerce_price\Price;
+use Drupal\commerce_stripe\ErrorHelper;
 use Drupal\commerce_stripe\Event\PaymentIntentEvent;
-use Drupal\commerce_stripe\Event\TransactionDataEvent;
 use Drupal\commerce_stripe\Event\PaymentMethodCreateEvent;
 use Drupal\commerce_stripe\Event\StripeEvents;
-use Drupal\Component\Datetime\TimeInterface;
+use Drupal\commerce_stripe\Event\TransactionDataEvent;
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Component\Uuid\UuidInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\profile\Entity\ProfileInterface;
+use Stripe\ApiRequestor;
 use Stripe\Balance;
 use Stripe\Charge;
 use Stripe\Customer;
 use Stripe\Exception\ApiErrorException;
-use Stripe\PaymentIntent;
-use Stripe\ApiRequestor;
 use Stripe\HttpClient\CurlClient;
+use Stripe\PaymentIntent;
 use Stripe\PaymentMethod;
 use Stripe\Refund;
 use Stripe\Stripe as StripeLibrary;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Provides the Stripe payment gateway.
@@ -52,7 +45,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *   },
  *   payment_method_types = {"credit_card"},
  *   credit_card_types = {
- *     "amex", "dinersclub", "discover", "jcb", "maestro", "mastercard", "visa", "unionpay"
+ *     "amex", "dinersclub", "discover", "jcb", "maestro", "mastercard",
+ *   "visa", "unionpay"
  *   },
  *   js_library = "commerce_stripe/form",
  *   requires_billing_information = FALSE,
@@ -85,41 +79,18 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('entity_type.manager'),
-      $container->get('plugin.manager.commerce_payment_type'),
-      $container->get('plugin.manager.commerce_payment_method_type'),
-      $container->get('datetime.time'),
-      $container->get('commerce_price.minor_units_converter'),
-      $container->get('event_dispatcher'),
-      $container->get('extension.list.module'),
-      $container->get('uuid')
-    );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, PaymentTypeManager $payment_type_manager, PaymentMethodTypeManager $payment_method_type_manager, TimeInterface $time, MinorUnitsConverterInterface $minor_units_converter, EventDispatcherInterface $event_dispatcher, ModuleExtensionList $module_extension_list, UuidInterface $uuid = NULL) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $payment_type_manager, $payment_method_type_manager, $time, $minor_units_converter);
-
-    if (!$uuid) {
-      @trigger_error('Calling ' . __METHOD__ . '() without the $uuid argument is deprecated in commerce_stripe:8.x-1.0-rc7 and is removed from commerce_stripe:1.0.');
-      $uuid = \Drupal::service('uuid');
-    }
-    $this->eventDispatcher = $event_dispatcher;
-    $this->moduleExtensionList = $module_extension_list;
-    $this->uuidService = $uuid;
-    $this->init();
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->eventDispatcher = $container->get('event_dispatcher');
+    $instance->moduleExtensionList = $container->get('extension.list.module');
+    $instance->uuidService = $container->get('uuid');
+    $instance->init();
+    return $instance;
   }
 
   /**
    * Re-initializes the SDK after the plugin is unserialized.
    */
-  public function __wakeup() {
+  public function __wakeup(): void {
     parent::__wakeup();
 
     $this->init();
@@ -208,7 +179,7 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
     if (!$form_state->getErrors()) {
       $values = $form_state->getValue($form['#parents']);
       // Validate the secret key.
-      $expected_livemode = $values['mode'] == 'live';
+      $expected_livemode = $values['mode'] === 'live';
       if (!empty($values['secret_key']) && $values['validate_api_keys']) {
         try {
           StripeLibrary::setApiKey($values['secret_key']);
@@ -245,7 +216,6 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
     $this->assertPaymentState($payment, ['new']);
     $payment_method = $payment->getPaymentMethod();
     assert($payment_method instanceof PaymentMethodInterface);
-    $this->assertPaymentMethod($payment_method);
     $order = $payment->getOrder();
     assert($order instanceof OrderInterface);
     $intent_id = $order->getData('stripe_intent');
@@ -269,7 +239,7 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
         $intent = $intent->confirm();
       }
       if ($intent->status === PaymentIntent::STATUS_REQUIRES_ACTION) {
-        throw new SoftDeclineException('The payment intent requires action by the customer for authentication');
+        throw SoftDeclineException::createForPayment($payment, 'The payment intent requires action by the customer for authentication');
       }
       if (!in_array($intent->status, [PaymentIntent::STATUS_REQUIRES_CAPTURE, PaymentIntent::STATUS_SUCCEEDED], TRUE)) {
         $order->set('payment_method', NULL);
@@ -285,10 +255,10 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
         else {
           $decline_message = $intent->last_payment_error;
         }
-        throw new HardDeclineException($decline_message);
+        throw HardDeclineException::createForPayment($payment, $decline_message);
       }
       if (count($intent->charges->data) === 0) {
-        throw new HardDeclineException(sprintf('The payment intent %s did not have a charge object.', $intent->id));
+        throw HardDeclineException::createForPayment($payment, sprintf('The payment intent %s did not have a charge object.', $intent->id));
       }
       $next_state = $capture ? 'completed' : 'authorization';
       $payment->setState($next_state);
@@ -296,7 +266,9 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
       $payment->save();
 
       // Add metadata and extra transaction data where required.
+      // @phpstan-ignore-next-line
       $event = new TransactionDataEvent($payment);
+      // @phpstan-ignore-next-line
       $this->eventDispatcher->dispatch($event, StripeEvents::TRANSACTION_DATA);
 
       // Update the transaction data from additional information added through
@@ -312,7 +284,7 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
       $order->save();
     }
     catch (ApiErrorException $e) {
-      ErrorHelper::handleException($e);
+      ErrorHelper::handleException($e, $payment);
     }
   }
 
@@ -327,7 +299,7 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
     try {
       $remote_id = $payment->getRemoteId();
       $intent = NULL;
-      if (strpos($remote_id, "pi_") === 0) {
+      if (str_starts_with($remote_id, "pi_")) {
         $intent = PaymentIntent::retrieve($remote_id);
         $intent_id = $intent->id;
         $charge = Charge::retrieve($intent['charges']['data'][0]->id);
@@ -342,15 +314,15 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
         if (empty($intent)) {
           $intent = PaymentIntent::retrieve($intent_id);
         }
-        if ($intent->status == 'requires_capture') {
+        if ($intent->status === PaymentIntent::STATUS_REQUIRES_CAPTURE) {
           $intent->capture(['amount_to_capture' => $amount_to_capture]);
         }
-        if ($intent->status == 'succeeded') {
+        if ($intent->status === PaymentIntent::STATUS_SUCCEEDED) {
           $payment->setState('completed');
           $payment->save();
         }
         else {
-          throw new PaymentGatewayException('Only requires_capture PaymentIntents can be captured.');
+          throw PaymentGatewayException::createForPayment($payment, 'Only requires_capture PaymentIntents can be captured.');
         }
       }
       else {
@@ -362,7 +334,7 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
       }
     }
     catch (ApiErrorException $e) {
-      ErrorHelper::handleException($e);
+      ErrorHelper::handleException($e, $payment);
     }
 
     $payment->setState('completed');
@@ -379,7 +351,7 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
     try {
       $remote_id = $payment->getRemoteId();
       $intent = NULL;
-      if (strpos($remote_id, "pi_") === 0) {
+      if (str_starts_with($remote_id, "pi_")) {
         $intent = PaymentIntent::retrieve($remote_id);
         $intent_id = $intent->id;
       }
@@ -393,13 +365,13 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
           $intent = PaymentIntent::retrieve($intent_id);
         }
         $statuses_to_void = [
-          'requires_payment_method',
-          'requires_capture',
-          'requires_confirmation',
-          'requires_action',
+          PaymentIntent::STATUS_REQUIRES_PAYMENT_METHOD,
+          PaymentIntent::STATUS_REQUIRES_CAPTURE,
+          PaymentIntent::STATUS_REQUIRES_CONFIRMATION,
+          PaymentIntent::STATUS_REQUIRES_ACTION,
         ];
         if (!in_array($intent->status, $statuses_to_void)) {
-          throw new PaymentGatewayException('The PaymentIntent cannot be voided.');
+          throw PaymentGatewayException::createForPayment($payment, 'The PaymentIntent cannot be voided.');
         }
         $intent->cancel();
         $data['payment_intent'] = $intent->id;
@@ -410,11 +382,11 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
         ];
         // Voiding an authorized payment is done by creating a refund.
         $release_refund = Refund::create($data);
-        ErrorHelper::handleErrors($release_refund);
+        ErrorHelper::handleErrors($release_refund, $payment);
       }
     }
     catch (ApiErrorException $e) {
-      ErrorHelper::handleException($e);
+      ErrorHelper::handleException($e, $payment);
     }
 
     $payment->setState('authorization_voided');
@@ -435,7 +407,7 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
       $minor_units_amount = $this->minorUnitsConverter->toMinorUnits($amount);
       $data = ['amount' => $minor_units_amount];
 
-      if (strpos($remote_id, "pi_") === 0) {
+      if (str_starts_with($remote_id, "pi_")) {
         $data['payment_intent'] = $remote_id;
       }
       else {
@@ -445,10 +417,10 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
       $refund = Refund::create($data, [
         'idempotency_key' => $this->uuidService->generate(),
       ]);
-      ErrorHelper::handleErrors($refund);
+      ErrorHelper::handleErrors($refund, $payment);
     }
     catch (ApiErrorException $e) {
-      ErrorHelper::handleException($e);
+      ErrorHelper::handleException($e, $payment);
     }
 
     $old_refunded_amount = $payment->getRefundedAmount();
@@ -475,7 +447,7 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
     ];
     foreach ($required_keys as $required_key) {
       if (empty($payment_details[$required_key])) {
-        throw new InvalidRequestException(sprintf('$payment_details must contain the %s key.', $required_key));
+        throw InvalidRequestException::createForPayment($payment_method, sprintf('$payment_details must contain the %s key.', $required_key));
       }
     }
 
@@ -483,14 +455,7 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
     $event = new PaymentMethodCreateEvent($payment_method, $payment_details);
     $this->eventDispatcher->dispatch($event, StripeEvents::PAYMENT_METHOD_CREATE);
 
-    $remote_payment_method = $this->doCreatePaymentMethod($payment_method, $payment_details);
-    $payment_method->card_type = $this->mapCreditCardType($remote_payment_method['brand']);
-    $payment_method->card_number = $remote_payment_method['last4'];
-    $payment_method->card_exp_month = $remote_payment_method['exp_month'];
-    $payment_method->card_exp_year = $remote_payment_method['exp_year'];
-    $expires = CreditCard::calculateExpirationTimestamp($remote_payment_method['exp_month'], $remote_payment_method['exp_year']);
-    $payment_method->setRemoteId($payment_details['stripe_payment_method_id']);
-    $payment_method->setExpiresTime($expires);
+    $this->doCreatePaymentMethod($payment_method, $payment_details);
     $payment_method->save();
   }
 
@@ -507,7 +472,7 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
       }
     }
     catch (ApiErrorException $e) {
-      ErrorHelper::handleException($e);
+      ErrorHelper::handleException($e, $payment_method);
     }
     $payment_method->delete();
   }
@@ -525,7 +490,6 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
 
     /** @var \Drupal\commerce_payment\Entity\PaymentMethodInterface $payment_method */
     $payment_method = $payment ? $payment->getPaymentMethod() : $order->get('payment_method')->entity;
-    /** @var \Drupal\commerce_price\Price */
     $amount = $payment ? $payment->getAmount() : $order->getTotalPrice();
 
     $default_intent_attributes = [
@@ -560,7 +524,7 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
       $order->setData('stripe_intent', $intent->id)->save();
     }
     catch (ApiErrorException $e) {
-      ErrorHelper::handleException($e);
+      ErrorHelper::handleException($e, $payment);
     }
     return $intent;
   }
@@ -573,7 +537,7 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
    * @param array $payment_details
    *   The gateway-specific payment details.
    *
-   * @return array
+   * @return \Stripe\StripeObject
    *   The payment method information returned by the gateway. Notable keys:
    *   - token: The remote ID.
    *   Credit card specific keys:
@@ -581,6 +545,8 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
    *   - last4: The last 4 digits of the credit card number.
    *   - expiration_month: The expiration month.
    *   - expiration_year: The expiration year.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   protected function doCreatePaymentMethod(PaymentMethodInterface $payment_method, array $payment_details) {
     $stripe_payment_method_id = $payment_details['stripe_payment_method_id'];
@@ -591,6 +557,16 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
     }
     try {
       $stripe_payment_method = PaymentMethod::retrieve($stripe_payment_method_id);
+
+      // Update payment method with information from Stripe.
+      $payment_method->set('card_type', $this->mapCreditCardType($stripe_payment_method->card['brand']));
+      $payment_method->set('card_number', $stripe_payment_method->card['last4']);
+      $payment_method->set('card_exp_month', $stripe_payment_method->card['exp_month']);
+      $payment_method->set('card_exp_year', $stripe_payment_method->card['exp_year']);
+      $payment_method->setRemoteId($payment_details['stripe_payment_method_id']);
+      $expires = CreditCard::calculateExpirationTimestamp($stripe_payment_method->card['exp_month'], $stripe_payment_method->card['exp_year']);
+      $payment_method->setExpiresTime($expires);
+
       if ($customer_id) {
         $stripe_payment_method->attach(['customer' => $customer_id]);
         $email = $owner->getEmail();
@@ -601,6 +577,7 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
         $email = $owner->getEmail();
         $customer = Customer::create([
           'email' => $email,
+          'name' => $owner->getDisplayName(),
           'description' => $this->t('Customer for :mail', [':mail' => $email]),
           'payment_method' => $stripe_payment_method_id,
         ]);
@@ -616,29 +593,16 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
         $payment_method_data = [
           'email' => $email,
         ];
-        if ($billing_profile = $payment_method->getBillingProfile()) {
-          $billing_address = $billing_profile->get('address')->first()->toArray();
-          $payment_method_data['address'] = [
-            'city' => $billing_address['locality'] ?? '',
-            'country' => $billing_address['country_code'] ?? '',
-            'line1' => $billing_address['address_line1'] ?? '',
-            'line2' => $billing_address['address_line2'] ?? '',
-            'postal_code' => $billing_address['postal_code'] ?? '',
-            'state' => $billing_address['administrative_area'] ?? '',
-          ];
-          $name_parts = [];
-          foreach (['given_name', 'family_name'] as $name_key) {
-            if (!empty($billing_address[$name_key])) {
-              $name_parts[] = $billing_address[$name_key];
-            }
-          }
-          $payment_method_data['name'] = implode(' ', $name_parts);
+        $billing_profile = $payment_method->getBillingProfile();
+        $formatted_address = $billing_profile ? $this->getFormattedAddress($billing_profile) : NULL;
+        if (!empty($formatted_address)) {
+          $payment_method_data = array_merge($payment_method_data, $formatted_address);
         }
         PaymentMethod::update($stripe_payment_method_id, ['billing_details' => $payment_method_data]);
       }
     }
     catch (ApiErrorException $e) {
-      ErrorHelper::handleException($e);
+      ErrorHelper::handleException($e, $payment_method);
     }
     return $stripe_payment_method->card;
   }
@@ -667,6 +631,45 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
     }
 
     return $map[$card_type];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormattedAddress(ProfileInterface $profile, $type = 'billing'): ?array {
+    if ($profile->get('address')->isEmpty()) {
+      return NULL;
+    }
+
+    $formatted_address = [];
+    /** @var \Drupal\address\Plugin\Field\FieldType\AddressItem $address */
+    $address = $profile->get('address')->first();
+    // Format the name.
+    $full_name = array_filter([
+      $address->getGivenName(),
+      $address->getFamilyName(),
+    ]);
+    if (!empty($full_name)) {
+      $formatted_address['name'] = implode(' ', $full_name);
+    }
+    // Convert the address to Stripe format.
+    $address_parts = array_filter([
+      'city' => $address->getLocality(),
+      'country' => $address->getCountryCode(),
+      'line1' => $address->getAddressLine1(),
+      'line2' => $address->getAddressLine2(),
+      'postal_code' => $address->getPostalCode(),
+      'state' => $address->getAdministrativeArea(),
+    ]);
+    if (!empty($address_parts)) {
+      $formatted_address['address'] = $address_parts;
+      // The name field is required if an address is provided.
+      if ($type === 'shipping' && !isset($formatted_address['name'])) {
+        $formatted_address['name'] = '';
+      }
+    }
+
+    return !empty($formatted_address) ? $formatted_address : NULL;
   }
 
 }

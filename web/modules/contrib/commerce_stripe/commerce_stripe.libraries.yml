@@ -1,19 +1,20 @@
 messages:
-  version: VERSION
   js:
-    js/commerce_stripe.messages.js: {}
+    js/commerce_stripe.messages.js:
+      attributes:
+        defer: true
   dependencies:
-    - classy/messages
     - core/jquery
     - core/drupal
 
 form:
-  version: VERSION
   css:
     theme:
       css/commerce_stripe.form.css: {}
   js:
-    js/commerce_stripe.form.js: {}
+    js/commerce_stripe.form.js:
+      attributes:
+        defer: true
   dependencies:
     - core/jquery
     - core/drupal
@@ -22,12 +23,13 @@ form:
     - commerce_stripe/stripe
 
 checkout_review:
-  version: VERSION
   css:
     theme:
       css/commerce_stripe.review.css: {}
   js:
-    js/commerce_stripe.review.js: {}
+    js/commerce_stripe.review.js:
+      attributes:
+        defer: true
   dependencies:
     - core/jquery
     - core/drupal
@@ -36,12 +38,13 @@ checkout_review:
     - commerce_stripe/stripe
 
 payment_element:
-  version: VERSION
   css:
     theme:
       css/commerce_stripe.form.css: { }
   js:
-    js/commerce_stripe.payment_element.js: {}
+    js/commerce_stripe.payment_element.js:
+      attributes:
+        defer: true
   dependencies:
     - core/jquery
     - core/drupal
@@ -50,7 +53,6 @@ payment_element:
     - commerce_stripe/stripe
 
 credit_card_icons:
-  version: VERSION
   css:
     theme:
       css/commerce_stripe.credit_card_icons.css: {}
