@@ -1,2 +1,7 @@
+<<<<<<< HEAD
+web/sites/default/settings.php
+**.DS_Store
+=======
 /web/sites/default/settings.php
 .DS_Store
+>>>>>>> master
