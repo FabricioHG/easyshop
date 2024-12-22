@@ -160,7 +160,7 @@ class UserMercadoLibre
     }
 
     public function refreshToken()
-    {
+    { 
     	$token = $this->userEntity->get('field_mercadolibre_access_token')->getValue()[0]['value'];
     	$refresh_token = $this->userEntity->get('field_mercadolibre_refresh_token')->getValue()[0]['value'];
     	
