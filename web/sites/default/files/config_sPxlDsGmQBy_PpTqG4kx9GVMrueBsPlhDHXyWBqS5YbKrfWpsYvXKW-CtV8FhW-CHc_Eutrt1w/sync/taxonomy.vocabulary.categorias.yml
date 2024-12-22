@@ -1,9 +1,0 @@
-uuid: 3112c5ba-c166-400e-aaf9-d88fc0b41931
-langcode: es
-status: true
-dependencies: {  }
-name: Categorias
-vid: categorias
-description: 'Categorias de productos'
-weight: 0
-new_revision: false
