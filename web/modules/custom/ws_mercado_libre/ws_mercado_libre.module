@@ -100,28 +100,40 @@ function ws_mercado_libre_form_alter(&$form, \Drupal\Core\Form\FormStateInterfac
 					/* Obtener atributos obligatorios de la categoria seleccionada */
 					$service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
 					$atributos_obligatorios = $service_ml->obtener_attr_obligatorios($codigo_cat);
-					
+						
+
 					//De los atributos implicitos que vienen con la categoria, comparar si alguno son obligatorios y agregarles el valor
-					foreach (array_keys($atributos_obligatorios) as $key) {
-						foreach ($atributos_cat_selecionada as $attribute) {
-							if($attribute['id'] == $key){
-								$form['cont_datos_ml']['cont_atributos_ml'][$key] = [
-									'#type' => 'textfield',	
-									'#title' => $atributos_obligatorios[$key],
-									'#default_value' => $attribute['value_name'],
-									'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $key],
-								];
-								break;
-							}
-							else{
-								$form['cont_datos_ml']['cont_atributos_ml'][$key] = [
-									'#type' => 'textfield',	
-									'#title' => $atributos_obligatorios[$key],
-									'#default_value' => 'sin valor',
-									'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $key],
-								];
+					foreach (array_keys($atributos_obligatorios) as $key=>$value) {
+						if ( count($atributos_cat_selecionada)>0) {
+							foreach ($atributos_cat_selecionada as $attribute) {
+								if($attribute['id'] == $key){
+									$form['cont_datos_ml']['cont_atributos_ml'][$key] = [
+										'#type' => 'textfield',	
+										'#title' => $atributos_obligatorios[$value],
+										'#default_value' => $attribute['value_name'],
+										'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $key],
+									];
+									break;
+								}
+								else{
+									$form['cont_datos_ml']['cont_atributos_ml'][$key] = [
+										'#type' => 'textfield',	
+										'#title' => $atributos_obligatorios[$value],
+										'#default_value' => 'sin valor',
+										'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $key],
+									];
+								}
 							}
 						}
+						else{
+							$form['cont_datos_ml']['cont_atributos_ml'][$key] = [
+								'#type' => 'textfield',	
+								'#title' => $atributos_obligatorios[$value],
+								'#default_value' => "Agregar $atributos_obligatorios[$value]",
+								'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $key],
+							];
+						}
+						
 							
 					}
 					//\Drupal::logger('debud')->notice('Atributos de categoria seleccionada %valores',['%valores'=> print_r($atributos_cat_selecionada, true)]);
