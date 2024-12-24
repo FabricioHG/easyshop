@@ -126,15 +126,13 @@ function ws_mercado_libre_form_alter(&$form, \Drupal\Core\Form\FormStateInterfac
 							}
 						}
 						else{
-							$form['cont_datos_ml']['cont_atributos_ml'][$key] = [
+							$form['cont_datos_ml']['cont_atributos_ml'][$value] = [
 								'#type' => 'textfield',	
 								'#title' => $atributos_obligatorios[$value],
 								'#default_value' => "Agregar $atributos_obligatorios[$value]",
-								'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $key],
+								'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $value],
 							];
-						}
-						
-							
+						}	
 					}
 					//\Drupal::logger('debud')->notice('Atributos de categoria seleccionada %valores',['%valores'=> print_r($atributos_cat_selecionada, true)]);
 					//\Drupal::logger('debud')->notice('Atributos obligatorios %atributos',['%atributos'=> print_r($atributos_obligatorios, true)]);
@@ -217,12 +215,10 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 			'value_name' => $attr,
 		];
 	}
-	if (!empty($atributos)) {
-		$atributos_ajustados = array_reverse( $atributos );
-	}else{
-		$atributos_ajustados = array();
+	if (empty($atributos)) {
+		$atributos = array();
 	}	
-	
+
         		/*obtener datos del formulario y hacer el array con los datos para enviar a la funcion*/
 				$data_product['title'] = $form_state->getValue('title')[0]['value'];
 				$data_product['category_id'] = $form_state->getValue('cont_datos_ml')['cont_categoria_ml']['categoria_ml'];
@@ -234,7 +230,7 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 				$data_product['description'] = $form_state->getValue('body')[0]['value'];;
 				$data_product['listing_type_id'] = 'gold_special';
 				$data_product['pictures'] = $ulrs_img;
-				$data_product['attributes'] = $atributos_ajustados;
+				$data_product['attributes'] = $atributos;
 
         		/*Llamar al servicio de mercado libre para apublicar pasando un array con los datos del producto*/
         		
