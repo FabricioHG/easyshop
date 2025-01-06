@@ -261,8 +261,8 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 		$atributos = array();
 	}	
 
-	kint($atributos);
-	exit;
+	// kint($atributos);
+	// exit;
 
         		/*obtener datos del formulario y hacer el array con los datos para enviar a la funcion*/
 				$data_product['title'] = $form_state->getValue('title')[0]['value'];
