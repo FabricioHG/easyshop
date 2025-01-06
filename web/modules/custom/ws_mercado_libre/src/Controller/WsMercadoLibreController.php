@@ -135,8 +135,7 @@ final class WsMercadoLibreController extends ControllerBase {
 
     $categorias = $mercado_libre_service->predecir_categoria("cafetera");
 
-    kint($categorias);
-    exit;
+    
 
     if (!empty($atributos_obligatorios) ) {
       $res = "Token actualizado";

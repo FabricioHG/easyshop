@@ -100,42 +100,84 @@ function ws_mercado_libre_form_alter(&$form, \Drupal\Core\Form\FormStateInterfac
 					/* Obtener atributos obligatorios de la categoria seleccionada */
 					$service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
 					$atributos_obligatorios = $service_ml->obtener_attr_obligatorios($codigo_cat);
-						
-
-					//De los atributos implicitos que vienen con la categoria, comparar si alguno son obligatorios y agregarles el valor
-					foreach (array_keys($atributos_obligatorios) as $key=>$value) {
-						if ( count($atributos_cat_selecionada)>0) {
-							foreach ($atributos_cat_selecionada as $attribute) {
-								if($attribute['id'] == $key){
-									$form['cont_datos_ml']['cont_atributos_ml'][$key] = [
-										'#type' => 'textfield',	
-										'#title' => $atributos_obligatorios[$value],
-										'#default_value' => $attribute['value_name'],
-										'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $key],
-									];
+					$atributos_finales = [];
+					/*Hacer un solo array de atributos obligatorios, predictores, conditional_required con sus valores en caso de que los requieran */
+					//Comenzamos a recorrer el array de atributos obligatorios para ver si existe un valor obligatorio en los predecidos y dejar el valor predecido
+					if (count($atributos_cat_selecionada) > 0) {
+						foreach ($atributos_obligatorios as $key => $value) {
+						//Revisar si el campo obligatorio existe en los atributos predecidos
+							foreach ($atributos_cat_selecionada as $key => $value_cat_selec) {
+								if ($value['id'] === $value_cat_selec['id']) {
+									//hacer campo con atributo obligatorio relleno con el valor predecido
+									array_push($atributos_finales, $value_cat_selec);
 									break;
-								}
-								else{
-									$form['cont_datos_ml']['cont_atributos_ml'][$key] = [
-										'#type' => 'textfield',	
-										'#title' => $atributos_obligatorios[$value],
-										'#default_value' => 'sin valor',
-										'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $key],
-									];
+								}else{
+									//hacer campo con atributo obligatorio sin relleno
+									array_push($atributos_finales, $value);
+									break;
+								}	
+							}
+						}
+					}else{
+						$atributos_finales = $atributos_obligatorios;
+					}
+					//Recorremos el array de $atributos_finales revisando si hizo falta uno de los atributos predecidos
+					if (count($atributos_cat_selecionada) > 0) {
+						foreach ($atributos_cat_selecionada as $value) {
+							foreach ($atributos_finales as $value_attr_finales) {
+								if ($atributos_cat_selecionada['id'] === $value_attr_finales['id'] ) {
+									break;
+								}else{
+									array_push($atributos_finales, $value);
+									break;
 								}
 							}
 						}
-						else{
-							$form['cont_datos_ml']['cont_atributos_ml'][$value] = [
-								'#type' => 'textfield',	
-								'#title' => $atributos_obligatorios[$value],
-								'#default_value' => "Agregar $atributos_obligatorios[$value]",
-								'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $value],
-							];
-						}	
 					}
-					//\Drupal::logger('debud')->notice('Atributos de categoria seleccionada %valores',['%valores'=> print_r($atributos_cat_selecionada, true)]);
-					//\Drupal::logger('debud')->notice('Atributos obligatorios %atributos',['%atributos'=> print_r($atributos_obligatorios, true)]);
+					//Eliminar los array Repetidos
+					$temp = [];
+					$atributos_finales_sin_repetir = [];
+					foreach ($atributos_finales as $item) {
+						if (!isset($temp[$item['id']])) {
+							$temp[$item['id']] = true; // Marca el ID como procesado
+							$atributos_finales_sin_repetir[] = $item;         // Agrega el elemento al resultado
+						}
+					}
+
+					//Hacer campos del formulario segun los datos obtenidos de mercado libre
+					foreach ($atributos_finales_sin_repetir as $atributo_sin_rep) {
+						//Revisar si tiene values para hacer un select sino solo hacer campo de texto
+						if (isset($atributo_sin_rep['values']) && !empty($atributo_sin_rep['values'])) {
+							//hacer campo select
+							$form['cont_datos_ml']['cont_atributos_ml'][$atributo_sin_rep['id']] = [
+								'#type' => 'select',
+								'#title' => $atributo_sin_rep['name'],
+								'#options' => ['' => '- Select an option -'],
+								'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $atributo_sin_rep['id']],
+								'#required' => (isset($atributo_sin_rep['required']) && $atributo_sin_rep['required'] === "required") ? TRUE : FALSE,
+
+							  ];
+							  //Con esto llenamos los valores del select
+							  foreach ($atributo_sin_rep['values'] as $val_sel) {
+								$form['cont_datos_ml']['cont_atributos_ml'][$atributo_sin_rep['id']]['#options'][$val_sel['id']] = $val_sel['name'];
+							  }
+						}else{
+							$form['cont_datos_ml']['cont_atributos_ml'][$atributo_sin_rep['id']] = [
+								'#type' => 'textfield',	
+								'#title' => $atributo_sin_rep['name'],
+								'#default_value' => $atributo_sin_rep['value_name'],
+								'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $atributo_sin_rep['id']],
+								'#required' => (isset($atributo_sin_rep['required']) && $atributo_sin_rep['required'] === "required") ? TRUE : FALSE,
+
+							];
+						}
+						
+					}
+					// \Drupal::logger('debug')->notice('atributos predictor: %attr_pre',['%attr_pre'=>print_r(json_encode($atributos_cat_selecionada), true)]);
+					// \Drupal::logger('debug')->notice('atributos obligatorios: %attr_obl',['%attr_obl'=>print_r(json_encode($atributos_obligatorios), true)]);
+					// \Drupal::logger('debug')->notice('codigo de categoria seleccionada : %codigo_cat',['%codigo_cat'=>print_r(json_encode($codigo_cat), true)]);
+					// \Drupal::logger('debug')->notice('Atributos finales : %attr_fin',['%attr_fin'=>print_r(json_encode($atributos_finales), true)]);
+					// \Drupal::logger('debug')->notice('Atributos finales sin repetir : %attr_fin',['%attr_fin'=>print_r(json_encode($atributos_finales_sin_repetir), true)]);
 				}
 					
 			}
@@ -218,6 +260,9 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 	if (empty($atributos)) {
 		$atributos = array();
 	}	
+
+	kint($atributos);
+	exit;
 
         		/*obtener datos del formulario y hacer el array con los datos para enviar a la funcion*/
 				$data_product['title'] = $form_state->getValue('title')[0]['value'];
