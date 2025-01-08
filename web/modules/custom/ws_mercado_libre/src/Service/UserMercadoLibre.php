@@ -71,6 +71,7 @@ class UserMercadoLibre
 
 		$body = [
 			"title" => $data_product['title'],
+			"description" => $data_product['description'],
 			"category_id" => $data_product['category_id'],
 			"price" => $data_product['price'],
 			"currency_id" => $data_product['currency_id'],
@@ -118,9 +119,9 @@ class UserMercadoLibre
 				$data = json_decode($body, TRUE);
 				$error = $data['error'];
 				$cause = $data['cause'];
-				\Drupal::logger('ws_mercado_libre')->notice('Error al tratar de publicar el articulo en Mercado Libre, detalles del error %error', ['%error' => print_r($error, true)]);
-				//\Drupal::logger('ws_mercado_libre')->notice('Detalle del error: %detalle', ['%detalle' => print_r($cause, true)]);
-				$this->messenger->addMessage('Error al tratar de publicar el articulo en Mercado Libre: %causa', ['%causa' => print_r($cause,true)]);
+				\Drupal::logger('ws_mercado_libre')->notice('Array de error: %error_completo', ['%error_completo' => print_r($data, true)]);
+				//\Drupal::logger('ws_mercado_libre')->notice('Error al tratar de publicar el articulo en Mercado Libre, detalles del error %error', ['%error' => print_r($error, true)]);
+				$this->messenger->addMessage('Error al tratar de publicar el articulo en Mercado Libre');
 				return false;
 			}
 		}
