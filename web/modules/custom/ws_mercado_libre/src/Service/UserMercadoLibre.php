@@ -130,7 +130,7 @@ class UserMercadoLibre
 				$this->messenger->addMessage('Error al tratar de publicar el articulo en Mercado Libre', 'error');
 				
 				foreach ($mensajesDeError as $key => $mensaje) {
-					$this->messenger->addMessage($this->t('Error: @message', ['@message' => $mensaje]), 'error');
+					$this->messenger->addMessage('Error: @message', ['@message' => $mensaje], 'error');
 				}
 
 				return false;
