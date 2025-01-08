@@ -159,7 +159,7 @@ function ws_mercado_libre_form_alter(&$form, \Drupal\Core\Form\FormStateInterfac
 							  ];
 							  //Con esto llenamos los valores del select
 							  foreach ($atributo_sin_rep['values'] as $val_sel) {
-								$form['cont_datos_ml']['cont_atributos_ml'][$atributo_sin_rep['id']]['#options'][$val_sel['id']] = $val_sel['name'];
+								$form['cont_datos_ml']['cont_atributos_ml'][$atributo_sin_rep['id']]['#options'][$val_sel['name']] = $val_sel['name'];
 							  }
 						}else{
 							$form['cont_datos_ml']['cont_atributos_ml'][$atributo_sin_rep['id']] = [
@@ -261,8 +261,8 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 		$atributos = array();
 	}	
 
-	// kint($atributos);
-	// exit;
+	 kint($atributos);
+	 exit;
 
         		/*obtener datos del formulario y hacer el array con los datos para enviar a la funcion*/
 				$data_product['title'] = $form_state->getValue('title')[0]['value'];
