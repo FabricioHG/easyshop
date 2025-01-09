@@ -140,13 +140,78 @@ class UserMercadoLibre
 		if ($response->getStatusCode() == 201) {
 			/*Revisando si hay respuesta*/
 			$data = json_decode($response->getBody(), true);
-			$this->messenger->addMessage('Se publico el articulo en Mercado Libre.');
-			\Drupal::logger('ws_mercado_libre')->notice('Se publico el articulo %articulo en Mercado libre', ["%articulo" => $data_product['title']]);
+			
+			// if($this->agregarDescripcion($texto, $item_id)){
+			// 	$this->messenger->addMessage('Se publico el articulo en Mercado Libre.');
+			// 	\Drupal::logger('ws_mercado_libre')->notice('Se publico el articulo %articulo en Mercado libre', ["%articulo" => $data_product['title']]);
+			// }
+			// else{
+			// 	$this->messenger->addMessage('Se publico el articulo en Mercado Libre sin descripción.');
+			// 	\Drupal::logger('ws_mercado_libre')->notice('Se publico el articulo %articulo en Mercado libre sin descripción.', ["%articulo" => $data_product['title']]);
+			// }
+			
+			\Drupal::logger('debug')->notice('Respuesta de publicacion. %resp', ["%resp" => print_r($data, true)]);
 			return true;
 		}
 
 		\Drupal::logger('ws_mercado_libre')->notice('Error, se obtuvo una respuesta inesperada al publicar el producto: %respuesta', ["%articulo" => $response->getReasonPhrase()]);
 		return false;
+	}
+
+	public function agregarDescripcion($texto, $item_id){
+		/*
+			curl -X POST -H 'Authorization: Bearer $ACCESS_TOKEN' -H "Content-Type: application/json" -d
+			{
+			"plain_text":"Descripción con Texto Plano  \n"
+			}
+			https://api.mercadolibre.com/items/$ITEM_ID/description
+		*/
+		
+		$item_id = $item_id;
+		$jsonBody = json_encode($texto);
+		$service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
+		$token_user = $service_ml->getToken();
+	
+		$client = new Client();
+		try {
+			$response = $client->post('https://api.mercadolibre.com/items/'.$item_id.'/description', [
+				'body' => json_encode(['plain_text' => 'prueba de descripcion']),
+				'headers' => [
+					'Content-Type' => 'application/json',
+					'Authorization' => "Bearer $token_user",
+				],
+			]);
+		} catch (ClientException $e) {
+			$response = $e->getResponse();
+				if ($response) {
+					$body = $response->getBody()->getContents();
+					$data = json_decode($body, TRUE);
+					//$error = $data['error'];
+					//$errores = $data['cause'];
+					//Buscar en el array de errores si existe alguno con type=>error porque tambien existen type=>warning pero esos no nos interesan
+					// $mensajesDeError = array_map(function ($item) {
+					// 	return $item['message'];
+					// }, array_filter($errores, function ($item) {
+					// 	return isset($item['type']) && $item['type'] === 'error';
+					// }));
+	
+					\Drupal::logger('debug')->notice('Error descripcion: %error_completo', ['%error_completo' => print_r($data, true)]);
+					//$this->messenger->addMessage('Error al tratar de publicar el articulo en Mercado Libre', 'error');
+					
+					// foreach ($mensajesDeError as $key => $mensaje) {
+					// 	$this->messenger->addMessage($mensaje, 'error');
+					// }
+	
+					return false;
+				}
+		}
+		if ($response->getStatusCode() /*== 201*/) {
+			/*Revisando si hay respuesta*/
+			$data = json_decode($response->getBody(), true);
+			//$this->messenger->addMessage('Se publico el articulo en Mercado Libre.');
+			\Drupal::logger('ws_mercado_libre')->notice('Respuesta al agregar la descripcion %respuesta', ["%respuesta" => $data]);
+			return true;
+		}
 	}
 
 	public function isTokenActive()

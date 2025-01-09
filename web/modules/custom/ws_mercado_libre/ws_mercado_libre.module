@@ -4,10 +4,6 @@ use Drupal\devel\Plugin\Devel\Dumper\Kint;
 use Drupal\Component\Utility\Html;
 use Drupal\file\Entity\File;
 
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Client;
-use GuzzleHttp\ClientInterface;
-
 
 /**
  * @file
@@ -295,7 +291,7 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 				$data_product['available_quantity'] = 20;
 				$data_product['buying_mode'] = 'buy_it_now';
 				$data_product['condition'] = 'new';
-				$data_product['description'] = ['plain_text'=> $form_state->getValue('body')[0]['value']];
+				$data_product['description'] = $form_state->getValue('body')[0]['value'];
 				$data_product['listing_type_id'] = 'gold_special';
 				$data_product['pictures'] = $ulrs_img;
 				$data_product['attributes'] = $atributos;
@@ -303,70 +299,8 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
         		/*Llamar al servicio de mercado libre para apublicar pasando un array con los datos del producto*/
         		
 				$service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
-        		if ($item_id = $service_ml->publicarArticulo($data_product)) {
-        			\Drupal::logger('ws_mercado_libre')->notice('Se publico el producto en Mercado Libre.');
-					\Drupal::logger('ws_mercado_libre')->notice('Id del producto %id_product',['%id_product'=>$item_id['id']]);
-					//Agregar la descripcion
-					if(agregarDescripcion($data_product['description'], $item_id['id'])){
-						\Drupal::logger('ws_mercado_libre')->notice('Se Agrego la descripcion del producto en Mercado Libre.');
-					}
-        		}
+        		$service_ml->publicarArticulo($data_product);
 }
 
-function agregarDescripcion($texto, $item_id){
-	/*
-		curl -X POST -H 'Authorization: Bearer $ACCESS_TOKEN' -H "Content-Type: application/json" -d
-		{
-		"plain_text":"Descripción con Texto Plano  \n"
-		}
-		https://api.mercadolibre.com/items/$ITEM_ID/description
-	*/
-	
-	$item_id = $item_id;
-	$jsonBody = json_encode($texto);
-	$service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
-	$token_user = $service_ml->getToken();
-
-	$client = new Client();
-	try {
-		$response = $client->post('https://api.mercadolibre.com/items/'.$item_id.'/description', [
-			'body' => json_encode(['plain_text' => 'prueba de descripcion']),
-			'headers' => [
-				'Content-Type' => 'application/json',
-				'Authorization' => "Bearer $token_user",
-			],
-		]);
-	} catch (ClientException $e) {
-		$response = $e->getResponse();
-			if ($response) {
-				$body = $response->getBody()->getContents();
-				$data = json_decode($body, TRUE);
-				//$error = $data['error'];
-				//$errores = $data['cause'];
-				//Buscar en el array de errores si existe alguno con type=>error porque tambien existen type=>warning pero esos no nos interesan
-				// $mensajesDeError = array_map(function ($item) {
-				// 	return $item['message'];
-				// }, array_filter($errores, function ($item) {
-				// 	return isset($item['type']) && $item['type'] === 'error';
-				// }));
-
-				\Drupal::logger('debug')->notice('Error descripcion: %error_completo', ['%error_completo' => print_r($data, true)]);
-				//$this->messenger->addMessage('Error al tratar de publicar el articulo en Mercado Libre', 'error');
-				
-				// foreach ($mensajesDeError as $key => $mensaje) {
-				// 	$this->messenger->addMessage($mensaje, 'error');
-				// }
-
-				return false;
-			}
-	}
-	if ($response->getStatusCode() /*== 201*/) {
-		/*Revisando si hay respuesta*/
-		$data = json_decode($response->getBody(), true);
-		//$this->messenger->addMessage('Se publico el articulo en Mercado Libre.');
-		\Drupal::logger('ws_mercado_libre')->notice('Respuesta al agregar la descripcion %respuesta', ["%respuesta" => $data]);
-		return true;
-	}
-}
 
 
