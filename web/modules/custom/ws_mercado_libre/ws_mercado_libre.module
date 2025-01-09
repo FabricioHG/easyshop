@@ -262,10 +262,19 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 	$atributos_array = $form_state->getValue('cont_datos_ml')['cont_atributos_ml'];
 	unset($atributos_array["atributos_impli"]);
 	foreach ($atributos_array as $key => $attr) {
-		$atributos[] = [
-			'id' => $key,
-			'value_name' => $attr,
-		];
+		//si el atributo es EMPTY_GTIN_REASON, cambiar la clave 'value_name' por value_id 
+		if($key==='EMPTY_GTIN_REASON'){
+			$atributos[] = [
+				'id' => $key,
+				'value_id' => $attr,
+			];
+		}else{
+			//Si es otro atributo diferente dejar la clave como value_name
+			$atributos[] = [
+				'id' => $key,
+				'value_name' => $attr,
+			];
+		}
 	}
 	if (empty($atributos)) {
 		$atributos = array();
