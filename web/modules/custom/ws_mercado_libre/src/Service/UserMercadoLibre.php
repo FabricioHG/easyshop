@@ -168,7 +168,7 @@ class UserMercadoLibre
 		$item_id = $item_id;
 		$token_user = $this->getToken();
 		$jsonBody = json_encode([
-			'plain_text' => $texto,
+			'plain_text' => 'Prueba de descripcion',
 		]);
 		
 		
