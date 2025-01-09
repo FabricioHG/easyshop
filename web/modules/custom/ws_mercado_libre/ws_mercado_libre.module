@@ -148,7 +148,7 @@ function ws_mercado_libre_form_alter(&$form, \Drupal\Core\Form\FormStateInterfac
 					foreach ($atributos_finales_sin_repetir as $atributo_sin_rep) {
 						//Revisar si tiene values para hacer un select sino solo hacer campo de texto
 						if (isset($atributo_sin_rep['values']) && !empty($atributo_sin_rep['values'])) {
-							//hacer campo select
+							//hacer campo select con los nombres como valores
 							$form['cont_datos_ml']['cont_atributos_ml'][$atributo_sin_rep['id']] = [
 								'#type' => 'select',
 								'#title' => $atributo_sin_rep['name'],
@@ -156,12 +156,22 @@ function ws_mercado_libre_form_alter(&$form, \Drupal\Core\Form\FormStateInterfac
 								'#parents' => ['cont_datos_ml', 'cont_atributos_ml', $atributo_sin_rep['id']],
 								'#required' => (isset($atributo_sin_rep['required']) && $atributo_sin_rep['required'] === "required") ? TRUE : FALSE,
 
-							  ];
-							  //Con esto llenamos los valores del select
-							  foreach ($atributo_sin_rep['values'] as $val_sel) {
-								$form['cont_datos_ml']['cont_atributos_ml'][$atributo_sin_rep['id']]['#options'][$val_sel['name']] = $val_sel['name'];
-							  }
+							];
+							
+							//si el campo es EMPTY_GTIN_REASON llenar los valores con los 'Id' como valores a enviar
+							if($atributo_sin_rep['id']==="EMPTY_GTIN_REASON"){
+								foreach ($atributo_sin_rep['values'] as $val_sel) {
+									$form['cont_datos_ml']['cont_atributos_ml'][$atributo_sin_rep['id']]['#options'][$val_sel['id']] = $val_sel['name'];
+								}
+							}else{
+								//Con esto llenamos los valores del select con los 'nombres' como valores a enviar
+								foreach ($atributo_sin_rep['values'] as $val_sel) {
+									$form['cont_datos_ml']['cont_atributos_ml'][$atributo_sin_rep['id']]['#options'][$val_sel['name']] = $val_sel['name'];
+								}
+							}
+							  
 						}else{
+							//Hacer campo de texto
 							$form['cont_datos_ml']['cont_atributos_ml'][$atributo_sin_rep['id']] = [
 								'#type' => 'textfield',	
 								'#title' => $atributo_sin_rep['name'],
