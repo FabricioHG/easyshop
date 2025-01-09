@@ -292,8 +292,8 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 				$data_product['pictures'] = $ulrs_img;
 				$data_product['attributes'] = $atributos;
 
-				// kint($data_product['description']);
-				// exit;
+				//kint($data_product['description']);
+				//exit;
 
         		/*Llamar al servicio de mercado libre para apublicar pasando un array con los datos del producto*/
         		

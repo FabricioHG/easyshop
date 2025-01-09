@@ -159,10 +159,21 @@ class UserMercadoLibre
 	public function agregarDescripcion($texto, $item_id){
 		$item_id = $item_id;
 		$token_user = $this->getToken();
-		$jsonBody = json_encode([
-			'plain_text' => strip_tags($texto),
-		]);
+
+		//Formatear a texto plano para la descripcion
+		// 1. Reemplazar etiquetas <br> por saltos de línea.
+		$text_with_newlines = str_replace('<br>', "\n", $texto);
+		// 2. Reemplazar etiquetas de párrafo <p> y </p> por saltos de línea.
+		$text_with_newlines = str_replace(['<p>', '</p>'], "\n", $text_with_newlines);
+		// 3. Eliminar cualquier etiqueta HTML restante.
+		$text_plain = strip_tags($text_with_newlines);
+		// 4. Eliminar espacios en blanco adicionales al inicio o final.
+		$text_plain = trim($text_plain);
 		
+		$jsonBody = json_encode([
+			'plain_text' => strip_tags($text_plain),
+		]);
+
 		$client = new Client();
 		try {
 			$response = $client->post('https://api.mercadolibre.com/items/'.$item_id.'/description', [
