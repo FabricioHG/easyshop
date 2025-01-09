@@ -322,7 +322,7 @@ function agregarDescripcion($texto, $item_id){
 	*/
 	
 	$item_id = $item_id;
-	$jsonBody = $texto;
+	$jsonBody = json_encode($texto);
 	$service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
 	$token_user = $service_ml->getToken();
 
