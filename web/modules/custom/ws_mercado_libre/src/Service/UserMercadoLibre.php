@@ -71,7 +71,6 @@ class UserMercadoLibre
 
 		$body = [
 			"title" => $data_product['title'],
-			"description" => $data_product['description'],
 			"category_id" => $data_product['category_id'],
 			"price" => $data_product['price'],
 			"currency_id" => $data_product['currency_id'],
@@ -140,17 +139,16 @@ class UserMercadoLibre
 		if ($response->getStatusCode() == 201) {
 			/*Revisando si hay respuesta*/
 			$data = json_decode($response->getBody(), true);
+			if($this->agregarDescripcion($data_product['description'], $data['id'])){
+				$this->messenger->addMessage('Se publico el articulo en Mercado Libre.');
+				\Drupal::logger('ws_mercado_libre')->notice('Se publico el articulo %articulo en Mercado libre', ["%articulo" => $data_product['title']]);
+			}
+			else{
+				$this->messenger->addMessage('Se publico el articulo en Mercado Libre sin descripción.');
+				\Drupal::logger('ws_mercado_libre')->notice('Se publico el articulo %articulo en Mercado libre sin descripción.', ["%articulo" => $data_product['title']]);
+			}
 			
-			// if($this->agregarDescripcion($texto, $item_id)){
-			// 	$this->messenger->addMessage('Se publico el articulo en Mercado Libre.');
-			// 	\Drupal::logger('ws_mercado_libre')->notice('Se publico el articulo %articulo en Mercado libre', ["%articulo" => $data_product['title']]);
-			// }
-			// else{
-			// 	$this->messenger->addMessage('Se publico el articulo en Mercado Libre sin descripción.');
-			// 	\Drupal::logger('ws_mercado_libre')->notice('Se publico el articulo %articulo en Mercado libre sin descripción.', ["%articulo" => $data_product['title']]);
-			// }
-			
-			\Drupal::logger('debug')->notice('Respuesta de publicacion. %resp', ["%resp" => print_r($data, true)]);
+			//\Drupal::logger('debug')->notice('Respuesta de publicacion. %resp', ["%resp" => print_r($data, true)]);
 			return true;
 		}
 
@@ -168,14 +166,16 @@ class UserMercadoLibre
 		*/
 		
 		$item_id = $item_id;
-		$jsonBody = json_encode($texto);
-		$service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
-		$token_user = $service_ml->getToken();
-	
+		$token_user = $this->getToken();
+		$jsonBody = json_encode([
+			'plain_text' => $texto,
+		]);
+		
+		
 		$client = new Client();
 		try {
 			$response = $client->post('https://api.mercadolibre.com/items/'.$item_id.'/description', [
-				'body' => json_encode(['plain_text' => 'prueba de descripcion']),
+				'body' => $jsonBody,
 				'headers' => [
 					'Content-Type' => 'application/json',
 					'Authorization' => "Bearer $token_user",
