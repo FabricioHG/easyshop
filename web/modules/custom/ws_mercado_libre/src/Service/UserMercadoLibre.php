@@ -157,20 +157,11 @@ class UserMercadoLibre
 	}
 
 	public function agregarDescripcion($texto, $item_id){
-		/*
-			curl -X POST -H 'Authorization: Bearer $ACCESS_TOKEN' -H "Content-Type: application/json" -d
-			{
-			"plain_text":"Descripción con Texto Plano  \n"
-			}
-			https://api.mercadolibre.com/items/$ITEM_ID/description
-		*/
-		
 		$item_id = $item_id;
 		$token_user = $this->getToken();
 		$jsonBody = json_encode([
-			'plain_text' => 'Prueba de descripcion',
+			'plain_text' => strip_tags($texto),
 		]);
-		
 		
 		$client = new Client();
 		try {

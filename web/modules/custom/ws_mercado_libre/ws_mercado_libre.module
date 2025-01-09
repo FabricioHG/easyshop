@@ -279,10 +279,6 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 	if (empty($atributos)) {
 		$atributos = array();
 	}	
-
-	 //kint($atributos);
-	 //exit;
-
         		/*obtener datos del formulario y hacer el array con los datos para enviar a la funcion*/
 				$data_product['title'] = $form_state->getValue('title')[0]['value'];
 				$data_product['category_id'] = $form_state->getValue('cont_datos_ml')['cont_categoria_ml']['categoria_ml'];
@@ -295,6 +291,9 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 				$data_product['listing_type_id'] = 'gold_special';
 				$data_product['pictures'] = $ulrs_img;
 				$data_product['attributes'] = $atributos;
+
+				kint($data_product['description']);
+				exit;
 
         		/*Llamar al servicio de mercado libre para apublicar pasando un array con los datos del producto*/
         		
