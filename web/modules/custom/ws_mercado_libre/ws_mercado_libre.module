@@ -305,6 +305,7 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 				$service_ml = \Drupal::service('ws_mercado_libre.mercadolibre_service');
         		if ($item_id = $service_ml->publicarArticulo($data_product)) {
         			\Drupal::logger('ws_mercado_libre')->notice('Se publico el producto en Mercado Libre.');
+					\Drupal::logger('ws_mercado_libre')->notice('Id del producto %id_product',['%id_product'=>$item_id['id']]);
 					//Agregar la descripcion
 					if(agregarDescripcion($data_product['description'], $item_id['id'])){
 						\Drupal::logger('ws_mercado_libre')->notice('Se Agrego la descripcion del producto en Mercado Libre.');
@@ -329,7 +330,7 @@ function agregarDescripcion($texto, $item_id){
 	$client = new Client();
 	try {
 		$response = $client->post('https://api.mercadolibre.com/items/'.$item_id.'/description', [
-			'body' => $jsonBody,
+			'body' => json_encode(['plain_text' => 'prueba de descripcion']),
 			'headers' => [
 				'Content-Type' => 'application/json',
 				'Authorization' => "Bearer $token_user",
