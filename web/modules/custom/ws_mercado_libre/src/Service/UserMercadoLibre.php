@@ -198,6 +198,7 @@ class UserMercadoLibre
 			$data = json_decode($response->getBody(), true);
 			//$this->messenger->addMessage('Se publico el articulo en Mercado Libre.');
 			\Drupal::logger('ws_mercado_libre')->notice('Respuesta al agregar la descripcion %respuesta', ["%respuesta" => print_r($data, true)]);
+			\Drupal::logger('ws_mercado_libre')->notice('Codigo de respuesta', ["%codigo" => $response->getStatusCode()]);
 			return true;
 		}
 	}
