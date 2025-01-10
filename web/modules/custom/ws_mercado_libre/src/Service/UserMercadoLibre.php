@@ -169,7 +169,7 @@ class UserMercadoLibre
 		$text_plain = strip_tags($text_with_newlines);
 		// 4. Eliminar espacios en blanco adicionales al inicio o final.
 		$text_plain = trim($text_plain);
-		
+
 		$jsonBody = json_encode([
 			'plain_text' => strip_tags($text_plain),
 		]);
@@ -188,22 +188,8 @@ class UserMercadoLibre
 				if ($response) {
 					$body = $response->getBody()->getContents();
 					$data = json_decode($body, TRUE);
-					//$error = $data['error'];
-					//$errores = $data['cause'];
-					//Buscar en el array de errores si existe alguno con type=>error porque tambien existen type=>warning pero esos no nos interesan
-					// $mensajesDeError = array_map(function ($item) {
-					// 	return $item['message'];
-					// }, array_filter($errores, function ($item) {
-					// 	return isset($item['type']) && $item['type'] === 'error';
-					// }));
-	
+
 					\Drupal::logger('debug')->notice('Error descripcion: %error_completo', ['%error_completo' => print_r($data, true)]);
-					//$this->messenger->addMessage('Error al tratar de publicar el articulo en Mercado Libre', 'error');
-					
-					// foreach ($mensajesDeError as $key => $mensaje) {
-					// 	$this->messenger->addMessage($mensaje, 'error');
-					// }
-	
 					return false;
 				}
 		}
@@ -211,7 +197,7 @@ class UserMercadoLibre
 			/*Revisando si hay respuesta*/
 			$data = json_decode($response->getBody(), true);
 			//$this->messenger->addMessage('Se publico el articulo en Mercado Libre.');
-			\Drupal::logger('ws_mercado_libre')->notice('Respuesta al agregar la descripcion %respuesta', ["%respuesta" => $data]);
+			\Drupal::logger('ws_mercado_libre')->notice('Respuesta al agregar la descripcion %respuesta', ["%respuesta" => print_r($data, true)]);
 			return true;
 		}
 	}
