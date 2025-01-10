@@ -288,7 +288,7 @@ function enviar_producto_ml(&$form, \Drupal\Core\Form\FormStateInterface $form_s
 				$data_product['buying_mode'] = 'buy_it_now';
 				$data_product['condition'] = 'new';
 				$data_product['description'] = $form_state->getValue('body')[0]['value'];
-				$data_product['listing_type_id'] = 'gold_special';
+				$data_product['listing_type_id'] = 'gold_pro';
 				$data_product['pictures'] = $ulrs_img;
 				$data_product['attributes'] = $atributos;
 

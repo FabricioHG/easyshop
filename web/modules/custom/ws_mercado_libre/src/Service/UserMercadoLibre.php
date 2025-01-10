@@ -66,9 +66,6 @@ class UserMercadoLibre
 			}
 		}
 
-		/*Obtener los atributos del producto*/
-		$atributos = [];
-
 		$body = [
 			"title" => $data_product['title'],
 			"category_id" => $data_product['category_id'],
@@ -81,24 +78,9 @@ class UserMercadoLibre
 			"pictures" => $data_product['pictures'],
 			"attributes" => $data_product['attributes'],
 		];
-		// $body_2 = [
-		//     "title" => $data_product['title'],
-		//     "category_id" => $data_product['category_id'],
-		//     "price" => $data_product['price'],
-		//     "currency_id" => $data_product['currency_id'],
-		//     "available_quantity" => $data_product['available_quantity'],
-		//     "buying_mode" => $data_product['buying_mode'],
-		//     "condition" => $data_product['condition'],
-		//     "listing_type_id" => $data_product['listing_type_id'],
-		//     "pictures" => $data_product['pictures'],
-		//     "attributes" => $data_product['attributes'],
-		// ];
-
+		
 		$jsonBody = json_encode($body);
-		//$jsonBody_2 = json_encode($body_2);
-
 		//kint($jsonBody);
-		// kint($jsonBody_2);
 		// exit;
 
 		$client = new Client();
@@ -116,7 +98,6 @@ class UserMercadoLibre
 			if ($response) {
 				$body = $response->getBody()->getContents();
 				$data = json_decode($body, TRUE);
-				$error = $data['error'];
 				$errores = $data['cause'];
 				//Buscar en el array de errores si existe alguno con type=>error porque tambien existen type=>warning pero esos no nos interesan
 				$mensajesDeError = array_map(function ($item) {
@@ -125,7 +106,7 @@ class UserMercadoLibre
 					return isset($item['type']) && $item['type'] === 'error';
 				}));
 
-				\Drupal::logger('ws_mercado_libre')->notice('Array de error: %error_completo', ['%error_completo' => print_r($data, true)]);
+				//\Drupal::logger('ws_mercado_libre')->notice('Array de error: %error_completo', ['%error_completo' => print_r($data, true)]);
 				$this->messenger->addMessage('Error al tratar de publicar el articulo en Mercado Libre', 'error');
 				
 				foreach ($mensajesDeError as $key => $mensaje) {
@@ -196,9 +177,9 @@ class UserMercadoLibre
 		if ($response->getStatusCode() /*== 201*/) {
 			/*Revisando si hay respuesta*/
 			$data = json_decode($response->getBody(), true);
-			//$this->messenger->addMessage('Se publico el articulo en Mercado Libre.');
-			\Drupal::logger('ws_mercado_libre')->notice('Respuesta al agregar la descripcion %respuesta', ["%respuesta" => print_r($data, true)]);
-			\Drupal::logger('ws_mercado_libre')->notice('Codigo de respuesta', ["%codigo" => $response->getStatusCode()]);
+			if( isset($data['plain_text']) ){
+				//\Drupal::logger('ws_mercado_libre')->notice('Respuesta al agregar la descripcion %respuesta', ["%respuesta" => print_r($data, true)]);
+			}			
 			return true;
 		}
 	}
