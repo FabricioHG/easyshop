@@ -101,6 +101,10 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
 
     // Enter value in email field.
     $field_bef_email = $page->find('css', '.form-item-field-bef-email-value input');
+    /* Assert exposed operator field does not have attribute to exclude it from
+    auto-submit. */
+    $field_bef_exposed_operator_email = $page->find('css', '.form-item-field-bef-email-value-1 input');
+    $this->assertFalse($field_bef_exposed_operator_email->hasAttribute('data-bef-auto-submit-exclude'));
     $field_bef_email->setValue('1');
     // Verify that auto submit didn't run, due to less than 4 characters.
     $html = $page->getHtml();
@@ -156,6 +160,10 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
     // Enter value in email field.
     $field_bef_email = $page->find('css', '.form-item-field-bef-email-value input');
     $field_bef_email->setValue('qwerty@test.com');
+
+    // Enter value in exposed operator email field.
+    $field_bef_exposed_operator_email = $page->find('css', '.form-item-field-bef-email-value-1 input');
+    $field_bef_exposed_operator_email->setValue('qwerty@test.com');
 
     // Verify nothing has changed.
     $html = $page->getHtml();
@@ -214,6 +222,10 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
     $field_bef_email = $page->find('css', '.form-item-field-bef-email-value input');
     $field_bef_email->setValue('qwerty@test.com');
 
+    // Enter value in exposed operator email field.
+    $field_bef_exposed_operator_email = $page->find('css', '.form-item-field-bef-email-value-1 input');
+    $field_bef_exposed_operator_email->setValue('qwerty@test.com');
+
     // Verify nothing has changed.
     $html = $page->getHtml();
     $this->assertStringContainsString('Page One', $html);
@@ -235,11 +247,11 @@ class BetterExposedFiltersTest extends WebDriverTestBase {
   public function testSecondaryOptions(): void {
     $view = Views::getView('bef_test');
 
-    // Enable auto-submit, but disable for text fields.
     $this->setBetterExposedOptions($view, [
       'general' => [
         'allow_secondary' => TRUE,
         'secondary_label' => 'Secondary Options TEST',
+        'autosubmit' => FALSE,
       ],
       'sort' => [
         'plugin_id' => 'default',

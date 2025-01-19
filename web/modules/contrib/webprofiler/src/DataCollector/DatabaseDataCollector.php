@@ -33,7 +33,7 @@ class DatabaseDataCollector extends DataCollector implements HasPanelInterface {
   /**
    * {@inheritdoc}
    */
-  public function collect(Request $request, Response $response, \Throwable $exception = NULL): void {
+  public function collect(Request $request, Response $response, ?\Throwable $exception = NULL): void {
     $options = $this->database->getConnectionOptions();
 
     // Remove password for security.
@@ -154,6 +154,16 @@ class DatabaseDataCollector extends DataCollector implements HasPanelInterface {
    */
   public function getQueryHighlightThreshold(): int {
     return $this->configFactory->get('webprofiler.settings')->get('query_highlight');
+  }
+
+  /**
+   * Returns the number of queries after which detailed output is disabled.
+   *
+   * @return int
+   *   The number of queries after which detailed output is disabled.
+   */
+  public function getQueryDetailedOutputThreshold(): int {
+    return $this->configFactory->get('webprofiler.settings')->get('query_detailed_output_threshold');
   }
 
 }

@@ -2,7 +2,6 @@
 
 namespace Drupal\entity_usage\Controller;
 
-use Drupal\block_content\BlockContentInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerBase;
@@ -13,6 +12,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Pager\PagerManagerInterface;
+use Drupal\block_content\BlockContentInterface;
 use Drupal\entity_usage\EntityUsageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -100,7 +100,7 @@ class ListUsageController extends ControllerBase {
    * @param \Drupal\entity_usage\EntityUsageInterface $entity_usage
    *   The EntityUsage service.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   * The config factory service.
+   *   The config factory service.
    * @param \Drupal\Core\Pager\PagerManagerInterface $pager_manager
    *   The pager manager.
    */
@@ -143,7 +143,10 @@ class ListUsageController extends ControllerBase {
     $all_rows = $this->getRows($entity_type, $entity_id);
     if (empty($all_rows)) {
       return [
-        '#markup' => $this->t('There are no recorded usages for entity of type: @type with id: @id', ['@type' => $entity_type, '@id' => $entity_id]),
+        '#markup' => $this->t(
+          'There are no recorded usages for entity of type: @type with id: @id',
+          ['@type' => $entity_type, '@id' => $entity_id]
+        ),
       ];
     }
 
@@ -238,10 +241,11 @@ class ListUsageController extends ControllerBase {
           continue;
         }
         $field_definitions = $this->entityFieldManager->getFieldDefinitions($source_type, $source_entity->bundle());
+        $default_langcode = $source_entity->language()->getId();
+        $used_in = [];
+        $revisions = [];
         if ($source_entity instanceof RevisionableInterface) {
           $default_revision_id = $source_entity->getRevisionId();
-          $default_langcode = $source_entity->language()->getId();
-          $revisions = [];
           foreach (array_reverse($records) as $record) {
             [
               'source_vid' => $source_vid,
@@ -254,7 +258,6 @@ class ListUsageController extends ControllerBase {
             $revisions[$revision_group][$source_langcode] = $field_name;
           }
 
-          $used_in = [];
           foreach ($revision_groups as $index => $label) {
             if (!empty($revisions[$index])) {
               $used_in[] = $this->summariseRevisionGroup($default_langcode, $label, $revisions[$index]);

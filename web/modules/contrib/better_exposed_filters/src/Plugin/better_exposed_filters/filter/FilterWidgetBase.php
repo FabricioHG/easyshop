@@ -222,7 +222,7 @@ abstract class FilterWidgetBase extends BetterExposedFiltersWidgetBase implement
     }
 
     // Visually hidden label.
-    if (!empty($this->configuration['advanced']['hide_label'])) {
+    if (!empty($this->configuration['advanced']['hide_label']) && !empty($form[$field_id])) {
       $form[$field_id]['#title_display'] = 'invisible';
     }
 

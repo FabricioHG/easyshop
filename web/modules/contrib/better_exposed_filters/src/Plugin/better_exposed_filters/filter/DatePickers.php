@@ -21,11 +21,11 @@ class DatePickers extends FilterWidgetBase {
   /**
    * {@inheritdoc}
    */
-  public static function isApplicable(mixed $handler = NULL, array $options = []): bool {
-    /** @var \Drupal\views\Plugin\views\filter\FilterPluginBase $handler */
+  public static function isApplicable(mixed $filter = NULL, array $filter_options = []): bool {
+    /** @var \Drupal\views\Plugin\views\filter\FilterPluginBase $filter */
     $is_applicable = FALSE;
 
-    if ((is_a($handler, 'Drupal\views\Plugin\views\filter\Date') || !empty($handler->date_handler)) && !$handler->isAGroup()) {
+    if ((is_a($filter, 'Drupal\views\Plugin\views\filter\Date') || !empty($filter->date_handler)) && !$filter->isAGroup()) {
       $is_applicable = TRUE;
     }
 

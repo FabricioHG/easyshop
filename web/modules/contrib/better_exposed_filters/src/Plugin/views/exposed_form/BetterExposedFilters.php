@@ -755,17 +755,10 @@ class BetterExposedFilters extends InputRequired {
       ]);
       $form['actions']['submit']['#attributes']['data-bef-auto-submit-click'] = '';
       $form['#attached']['library'][] = 'better_exposed_filters/auto_submit';
-
-      if (!empty($bef_options['general']['autosubmit_exclude_textfield'])) {
-        $supported_types = ['entity_autocomplete', 'textfield'];
-        foreach ($form as &$element) {
-          $element_type = $element['#type'] ?? NULL;
-          if (in_array($element_type, $supported_types)) {
-            $element['#attributes']['data-bef-auto-submit-exclude'] = '';
-          }
-        }
-        unset($element);
-      }
+      /* There are text fields provided by other modules which have different
+      "type" attributes, so attach the autosubmit exclude config setting
+      so we can handle it with JS. */
+      $form['#attached']['drupalSettings']['better_exposed_filters']['autosubmit_exclude_textfield'] = $bef_options['general']['autosubmit_exclude_textfield'];
 
       if (!empty($bef_options['general']['autosubmit_hide'])) {
         $form['actions']['submit']['#attributes']['class'][] = 'js-hide';
@@ -925,7 +918,7 @@ class BetterExposedFilters extends InputRequired {
             // Reset exposed sorts filter elements if they exist.
             if ($type === 'sort') {
               foreach (['sort_bef_combine', 'sort_by', 'sort_order'] as $sort_el) {
-                if (isset($this->view->exposed_data[$sort_el])) {
+                if (isset($this->view->exposed_data[$sort_el]) && isset($form[$sort_el])) {
                   $this->request->query->remove($sort_el);
                   $form_state->setValue($sort_el, $form[$sort_el]['#default_value']);
                 }

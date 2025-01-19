@@ -28,6 +28,7 @@ class ComposerStaticInit8a4ffb2f7ffb4671b2a17c2c471c1590
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         '3917c79c5052b270641b5a200963dbc2' => __DIR__ . '/..' . '/kint-php/kint/init.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
+        'b6ec61354e97f32c0ae683041c78392a' => __DIR__ . '/..' . '/scrivo/highlight.php/HighlightUtilities/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -459,8 +460,8 @@ class ComposerStaticInit8a4ffb2f7ffb4671b2a17c2c471c1590
         ),
         'Doctrine\\Common\\' => 
         array (
-            0 => __DIR__ . '/..' . '/doctrine/common/src',
-            1 => __DIR__ . '/..' . '/doctrine/event-manager/src',
+            0 => __DIR__ . '/..' . '/doctrine/event-manager/src',
+            1 => __DIR__ . '/..' . '/doctrine/common/src',
         ),
         'Dflydev\\DotAccessData\\' => 
         array (
@@ -517,6 +518,17 @@ class ComposerStaticInit8a4ffb2f7ffb4671b2a17c2c471c1590
     );
 
     public static $prefixesPsr0 = array (
+        'H' => 
+        array (
+            'Highlight\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/scrivo/highlight.php',
+            ),
+            'HighlightUtilities\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/scrivo/highlight.php',
+            ),
+        ),
         'C' => 
         array (
             'Console' => 

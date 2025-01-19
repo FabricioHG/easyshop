@@ -10,7 +10,7 @@ dependencies:
 tags:
   - developer
 
-# Information added by Drupal.org packaging script on 2024-08-12
-version: '10.1.10'
+# Information added by Drupal.org packaging script on 2024-12-31
+version: '10.3.0'
 project: 'webprofiler'
-datestamp: 1723465179
+datestamp: 1735649353

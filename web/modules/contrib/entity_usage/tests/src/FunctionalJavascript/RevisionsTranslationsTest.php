@@ -3,10 +3,10 @@
 namespace Drupal\Tests\entity_usage\FunctionalJavascript;
 
 use Drupal\Core\Entity\RevisionableInterface;
+use Drupal\Tests\entity_usage\Traits\EntityUsageLastEntityQueryTrait;
 use Drupal\entity_test\Entity\EntityTest;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\node\Entity\Node;
-use Drupal\Tests\entity_usage\Traits\EntityUsageLastEntityQueryTrait;
 use Drupal\user\Entity\Role;
 
 /**
@@ -28,7 +28,7 @@ class RevisionsTranslationsTest extends EntityUsageJavascriptTestBase {
     'content_translation',
     // To test entities which implement RevisionableInterface but do have
     // revisions.
-    'entity_test'
+    'entity_test',
   ];
 
   /**
