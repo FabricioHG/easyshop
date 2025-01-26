@@ -14,6 +14,7 @@ use \Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ClientException;
+use Drupal\Core\Cache\Cache;
 
 
 
@@ -53,6 +54,8 @@ final class WsMercadoLibreController extends ControllerBase {
   }
 
   public function notify(Request $request) {
+    Cache::invalidateTags(['route:ws_mercado_libre.notify']);
+    
     $user = \Drupal::currentUser();
 
     $auth_code = $request->query->get('code');
