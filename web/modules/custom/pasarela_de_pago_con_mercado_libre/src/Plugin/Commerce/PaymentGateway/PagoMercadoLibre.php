@@ -19,6 +19,7 @@ use MercadoPago\SDK;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
 
@@ -179,33 +180,14 @@ class PagoMercadoLibre extends OffsitePaymentGatewayBase {
                             $logger = \Drupal::logger('pasarela_de_pago_ws');
                             $logger->info('Se creo un pago nuevo con id remoto :@id',['@id' => $dataID]);
 
-                            /*Se crea este bloque por error de no avanza al pago en la misma pagina solo cambiabdo de pagina */
-                             // Obtener el servicio de gestión de entidades (entity type manager).
-                             $entityTypeManager = \Drupal::entityTypeManager();
 
-                             // Cargar la orden utilizando el almacenamiento de entidades.
-                             $orderStorage = $entityTypeManager->getStorage('commerce_order');
-                             $order = $orderStorage->load(intval($metadata_pago_id));
-                             
-                             // Verificar si la entidad cargada es una instancia de OrderInterface.
-                             if ($order instanceof OrderInterface) {
-                               // Verificar el estado actual de la orden.
-                               $currentState = $order->getState()->getId();
- 
-                               // Verificar si la orden está en el estado adecuado para realizar la transición.
-                               if ($currentState === 'draft' && $order->get('checkout_step')->value === 'payment') {
-                                 // Obtener el estado 'completed' que queremos aplicar a la orden.
-                                 $completedStateId = 'Validation';
- 
-                                 // Aplicar directamente el estado 'completed' a la orden.
-                                 $order->getState()->applyTransitionById('place');
-                                 $order->set('checkout_step','Validation');
- 
-                                 // Guardar la orden actualizada.
-                                 $order->save();
-                               }
-                             }
+                            /**************************** */
+                            // Cargar la orden utilizando el almacenamiento de entidades.
+                            $orderStorage = $entityTypeManager->getStorage('commerce_order');
+                            $order = $orderStorage->load(intval($metadata_pago_id));
+                            $order_id = $order->id();
 
+                            return new RedirectResponse('/checkout/' . $order_id . '/review');
                             return new JsonResponse();
                             
                     }else{
