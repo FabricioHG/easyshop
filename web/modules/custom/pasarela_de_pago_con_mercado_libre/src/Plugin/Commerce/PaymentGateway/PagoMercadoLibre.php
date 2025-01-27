@@ -183,8 +183,9 @@ class PagoMercadoLibre extends OffsitePaymentGatewayBase {
 
                             /**************************** */
                             // Cargar la orden utilizando el almacenamiento de entidades.
-                            $orderStorage = $entityTypeManager->getStorage('commerce_order');
-                            $order = $orderStorage->load(intval($metadata_pago_id));
+                            $entityTypeManager_orden = \Drupal::entityTypeManager();
+                            $orderStorage_orden = $entityTypeManager_orden->getStorage('commerce_order');
+                            $order = $orderStorage_orden->load(intval($metadata_pago_id));
                             $order_id = $order->id();
 
                             return new RedirectResponse('/checkout/' . $order_id . '/review');
