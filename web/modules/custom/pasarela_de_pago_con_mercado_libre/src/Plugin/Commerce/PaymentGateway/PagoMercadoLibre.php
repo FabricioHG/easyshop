@@ -179,6 +179,10 @@ class PagoMercadoLibre extends OffsitePaymentGatewayBase {
                             $logger = \Drupal::logger('pasarela_de_pago_ws');
                             $logger->info('Se creo un pago nuevo con id remoto :@id',['@id' => $dataID]);
 
+                            /*Se crea este bloque por error de no avanza al pago en la misma pagina solo cambiabdo de pagina */
+                             // Obtener el servicio de gestión de entidades (entity type manager).
+                             $entityTypeManager = \Drupal::entityTypeManager();
+
                              // Cargar la orden utilizando el almacenamiento de entidades.
                              $orderStorage = $entityTypeManager->getStorage('commerce_order');
                              $order = $orderStorage->load(intval($metadata_pago_id));
@@ -201,7 +205,7 @@ class PagoMercadoLibre extends OffsitePaymentGatewayBase {
                                  $order->save();
                                }
                              }
-                             
+
                             return new JsonResponse();
                             
                     }else{
