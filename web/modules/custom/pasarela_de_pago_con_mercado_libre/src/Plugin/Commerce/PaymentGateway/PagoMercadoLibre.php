@@ -19,7 +19,6 @@ use MercadoPago\SDK;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
-use Drupal\Core\Cache\Cache;
 
 
 
@@ -97,13 +96,11 @@ class PagoMercadoLibre extends OffsitePaymentGatewayBase {
      // }
 
     public function onNotify(Request $request) {
-
-        Cache::invalidateTags(['route:commerce_checkout.form']);
-        \Drupal::service('page_cache_kill_switch')->trigger();
-
         // Obtain params related to the request URL
         $request_body = Json::decode($request->getContent());
         $data = $request_body['data'];
+
+        \Drupal::logger('ws_mercado_libre')->notice('respuesta despues del pago $res',['%res'=>print_r($data)]);
         
         // Extract the "data.id" from the query params
         $dataID = isset($data['id']) ? $data['id'] : '';
