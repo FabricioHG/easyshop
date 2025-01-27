@@ -100,7 +100,7 @@ class PagoMercadoLibre extends OffsitePaymentGatewayBase {
         $request_body = Json::decode($request->getContent());
         $data = $request_body['data'];
 
-        \Drupal::logger('ws_mercado_libre')->notice('respuesta despues del pago $res',['%res'=>print_r($data)]);
+        \Drupal::logger('ws_mercado_libre')->notice('respuesta despues del pago %res',['%res'=>print_r($data)]);
         
         // Extract the "data.id" from the query params
         $dataID = isset($data['id']) ? $data['id'] : '';
@@ -150,7 +150,9 @@ class PagoMercadoLibre extends OffsitePaymentGatewayBase {
                     //comprovar si existe un pago con ese paiment id, si existe actualizarlo si no crear uno nuevo
                     $payment_storage = \Drupal::entityTypeManager()->getStorage('commerce_payment');
                     $pagos = $payment_storage->loadByProperties(['remote_id' => $dataID]);
-
+                    
+                    \Drupal::logger('ws_mercado_libre')->notice('Dentro de paiment %var',['%var'=>print_r($payment_remote)]);
+                    
                     $payment_currency = $payment_remote->currency_id;
                     $monto = new Price($payment_remote->transaction_amount, $payment_currency); 
                     $fecha_pago_creado =  strtotime ($payment_remote->date_created);
