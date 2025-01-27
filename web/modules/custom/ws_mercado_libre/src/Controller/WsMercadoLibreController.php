@@ -55,6 +55,7 @@ final class WsMercadoLibreController extends ControllerBase {
 
   public function notify(Request $request) {
     Cache::invalidateTags(['route:ws_mercado_libre.notify']);
+    \Drupal::service('page_cache_kill_switch')->trigger();
     
     $user = \Drupal::currentUser();
 

@@ -99,6 +99,7 @@ class PagoMercadoLibre extends OffsitePaymentGatewayBase {
     public function onNotify(Request $request) {
 
         Cache::invalidateTags(['route:commerce_checkout.form']);
+        \Drupal::service('page_cache_kill_switch')->trigger();
 
         // Obtain params related to the request URL
         $request_body = Json::decode($request->getContent());
