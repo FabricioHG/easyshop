@@ -20,8 +20,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Drupal\Core\Url;
-use Drupal\Core\Url\RedirectResponse;
+use Drupal\Core\Cache\Cache;
 
 
 
@@ -181,9 +180,6 @@ class PagoMercadoLibre extends OffsitePaymentGatewayBase {
                             $payment->save();
                             $logger = \Drupal::logger('pasarela_de_pago_ws');
                             $logger->info('Se creo un pago nuevo con id remoto :@id',['@id' => $dataID]);
-                            
-                            //$url = Url::fromRoute('commerce_checkout.complete', ['commerce_order' => $metadata_pago_id]);
-                            //return new RedirectResponse($url->toString());
                             
                             return new JsonResponse();
                             
