@@ -185,7 +185,7 @@ class PagoMercadoLibre extends OffsitePaymentGatewayBase {
                             //$url = Url::fromRoute('commerce_checkout.complete', ['commerce_order' => $metadata_pago_id]);
                             //return new RedirectResponse($url->toString());
                             
-                            //return new JsonResponse();
+                            return new JsonResponse();
                             
                     }else{
                         // Si el pago esta completado, actualizar pago y cambiar el estado de la orden
