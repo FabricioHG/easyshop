@@ -20,6 +20,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\State\StateInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Drupal\Core\Cache\Cache;
 
 
 
@@ -180,15 +181,8 @@ class PagoMercadoLibre extends OffsitePaymentGatewayBase {
                             $logger = \Drupal::logger('pasarela_de_pago_ws');
                             $logger->info('Se creo un pago nuevo con id remoto :@id',['@id' => $dataID]);
 
-
-                            /**************************** */
-                            // Cargar la orden utilizando el almacenamiento de entidades.
-                            $entityTypeManager_orden = \Drupal::entityTypeManager();
-                            $orderStorage_orden = $entityTypeManager_orden->getStorage('commerce_order');
-                            $order = $orderStorage_orden->load(intval($metadata_pago_id));
-                            $order_id = $order->id();
-
-                            return new RedirectResponse('/checkout/' . $order_id . '/review');
+                            Cache::invalidateTags(['route:commerce_checkout.form']);
+                            
                             return new JsonResponse();
                             
                     }else{
