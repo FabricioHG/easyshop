@@ -182,8 +182,8 @@ class PagoMercadoLibre extends OffsitePaymentGatewayBase {
                             $logger = \Drupal::logger('pasarela_de_pago_ws');
                             $logger->info('Se creo un pago nuevo con id remoto :@id',['@id' => $dataID]);
                             
-                            $url = Url::fromRoute('commerce_checkout.complete', ['commerce_order' => $metadata_pago_id]);
-                            return new RedirectResponse($url->toString());
+                            //$url = Url::fromRoute('commerce_checkout.complete', ['commerce_order' => $metadata_pago_id]);
+                            //return new RedirectResponse($url->toString());
                             
                             //return new JsonResponse();
                             
