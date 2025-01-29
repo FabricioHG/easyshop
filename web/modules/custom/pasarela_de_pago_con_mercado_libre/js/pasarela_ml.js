@@ -43,7 +43,7 @@
         // });
 
         //Inicio del checkout nuevo con brinks
-        mp.bricks().create("wallet", "#wallet_container", {
+        mp.bricks().create("wallet", "wallet_container", {
           initialization: {
               preferenceId: preference_Id,
           },
