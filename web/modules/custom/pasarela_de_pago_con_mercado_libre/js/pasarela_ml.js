@@ -12,13 +12,6 @@
     }
 }, false);   
 
-Object.defineProperty(window, 'top', {
-  get: function() {
-      return window;
-  }
-});
-
-
   Drupal.behaviors.pago_ws = {
     attach: function (context, settings) {
       let form_pago= "#commerce-checkout-flow-custom-checkout-flow";
