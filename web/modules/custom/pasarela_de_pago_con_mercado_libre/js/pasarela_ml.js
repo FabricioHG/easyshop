@@ -4,6 +4,14 @@
   // Variable para rastrear si el evento ya se ha agregado
   let formPagoEventAdded = false;
 
+  window.addEventListener("message", function(event) {
+    if (event.origin.includes("mercadopago.com")) {
+        if (event.data && event.data.redirect) {
+            window.location.href = event.data.redirect;
+        }
+    }
+}, false);    
+
   Drupal.behaviors.pago_ws = {
     attach: function (context, settings) {
       let form_pago= "#commerce-checkout-flow-custom-checkout-flow";
@@ -21,8 +29,6 @@
           preference:{
             id: preference_Id
           },
-          autoOpen: true,
-          iframe: false, 
           render:{
             container:'#wallet_container',
             label: 'Pagar',
