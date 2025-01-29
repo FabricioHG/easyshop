@@ -21,6 +21,8 @@
           preference:{
             id: preference_Id
           },
+          autoOpen: true,
+          iframe: false, 
           render:{
             container:'#wallet_container',
             label: 'Pagar',
