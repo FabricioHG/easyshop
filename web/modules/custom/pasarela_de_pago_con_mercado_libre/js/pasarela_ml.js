@@ -27,12 +27,13 @@
         //Crea el checkout
         const checkout = mp.checkout({
           preference:{
-            id: preference_Id
+            id: preference_Id,
           },
           render:{
             container:'#wallet_container',
             label: 'Pagar',
-          }
+          },
+          iframe: true,  // Agregar esta línea
         });
         //Escuchador del boton de mercado pago, cuando se presione se ejecuta la funcion 
         //handleSubmit para hacer el request
