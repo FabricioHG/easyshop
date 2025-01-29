@@ -5,18 +5,20 @@
   let formPagoEventAdded = false;
 
   window.addEventListener("message", function(event) {
-    console.log('Mensaje recibido:', event);  // Añadir log para ver todo el mensaje
-    if (event.origin.includes("mercadopago.com")) {
-      if (event.data && event.data.redirect) {
-        console.log('Redirección a:', event.data.redirect);  // Verifica si la URL de redirección se está recibiendo correctamente
-        window.location.href = event.data.redirect;  // Realiza la redirección
-      } else {
-        console.log('No se encontró propiedad redirect:', event.data);  // Verifica si el mensaje no contiene la URL
-      }
+    console.log("Mensaje recibido:", event.data);
+    if (event.origin === "https://www.mercadopago.com.mx") {
+        const data = event.data;
+        // Ajusta la estructura de los datos según lo que recibas
+        if (data && data.someKey && data.someKey.redirectUrl) {
+            window.location.href = data.someKey.redirectUrl;
+        } else {
+            console.log("No se encontró la URL de redirección.");
+        }
     } else {
-      console.log('Origen desconocido:', event.origin);  // Verifica si el origen es el correcto
+        console.log("Origen no válido");
     }
-  }, false);
+});
+
 
   Drupal.behaviors.pago_ws = {
     attach: function (context, settings) {
