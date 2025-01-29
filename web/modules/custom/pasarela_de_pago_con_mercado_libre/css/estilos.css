@@ -1,0 +1,10 @@
+/*Estilos del modulo mercado pago*/
+div#edit-payment-process-offsite-payment {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: self-start;
+    /* border: 1px solid; */
+}
+#edit-payment-process-offsite-payment a {
+    margin-top: 20px;
+}
