@@ -5,12 +5,18 @@
   let formPagoEventAdded = false;
 
   window.addEventListener("message", function(event) {
+    console.log('Mensaje recibido:', event);  // Añadir log para ver todo el mensaje
     if (event.origin.includes("mercadopago.com")) {
-        if (event.data && event.data.redirect) {
-            window.location.href = event.data.redirect;
-        }
+      if (event.data && event.data.redirect) {
+        console.log('Redirección a:', event.data.redirect);  // Verifica si la URL de redirección se está recibiendo correctamente
+        window.location.href = event.data.redirect;  // Realiza la redirección
+      } else {
+        console.log('No se encontró propiedad redirect:', event.data);  // Verifica si el mensaje no contiene la URL
+      }
+    } else {
+      console.log('Origen desconocido:', event.origin);  // Verifica si el origen es el correcto
     }
-}, false);   
+  }, false);
 
   Drupal.behaviors.pago_ws = {
     attach: function (context, settings) {
@@ -37,15 +43,7 @@
         });
 
 
-        // Intentar obtener acceso al almacenamiento si es necesario
-        if (checkout.requestStorageAccess) {
-          checkout.requestStorageAccess().then(() => {
-            console.log('Acceso al almacenamiento concedido.');
-          }).catch((err) => {
-            console.error('Error al solicitar acceso al almacenamiento: ', err);
-          });
-        }
-
+        
         //Escuchador del boton de mercado pago, cuando se presione se ejecuta la funcion 
         //handleSubmit para hacer el request
         $(form_pago, context).on('submit', handleSubmit);
