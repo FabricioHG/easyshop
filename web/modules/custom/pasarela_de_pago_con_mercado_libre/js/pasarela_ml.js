@@ -31,16 +31,29 @@
           locale: 'es-MX'
         });  
         //Crea el checkout
-        const checkout = mp.checkout({
-          preference:{
-            id: preference_Id,
+        // const checkout = mp.checkout({
+        //   preference:{
+        //     id: preference_Id,
+        //   },
+        //   render:{
+        //     container:'#wallet_container',
+        //     label: 'Pagar',
+        //   },
+        //   iframe: true,  // Agregar esta línea
+        // });
+
+        //Inicio del checkout nuevo con brinks
+        mp.bricks().create("wallet", "#wallet_container", {
+          initialization: {
+              preferenceId: preference_Id,
           },
-          render:{
-            container:'#wallet_container',
-            label: 'Pagar',
-          },
-          iframe: true,  // Agregar esta línea
+        customization: {
+        texts: {
+        valueProp: 'smart_option',
+        },
+        },
         });
+
 
 
         
