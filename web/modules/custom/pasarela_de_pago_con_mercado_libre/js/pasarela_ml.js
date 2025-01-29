@@ -10,7 +10,14 @@
             window.location.href = event.data.redirect;
         }
     }
-}, false);    
+}, false);   
+
+Object.defineProperty(window, 'top', {
+  get: function() {
+      return window;
+  }
+});
+
 
   Drupal.behaviors.pago_ws = {
     attach: function (context, settings) {
