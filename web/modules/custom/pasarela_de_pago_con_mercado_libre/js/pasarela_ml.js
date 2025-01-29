@@ -35,6 +35,17 @@
           },
           iframe: true,  // Agregar esta línea
         });
+
+
+        // Intentar obtener acceso al almacenamiento si es necesario
+        if (checkout.requestStorageAccess) {
+          checkout.requestStorageAccess().then(() => {
+            console.log('Acceso al almacenamiento concedido.');
+          }).catch((err) => {
+            console.error('Error al solicitar acceso al almacenamiento: ', err);
+          });
+        }
+
         //Escuchador del boton de mercado pago, cuando se presione se ejecuta la funcion 
         //handleSubmit para hacer el request
         $(form_pago, context).on('submit', handleSubmit);
