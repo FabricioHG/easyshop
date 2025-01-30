@@ -126,6 +126,13 @@ class MercadoLibreForm extends BasePaymentOffsiteForm {
     $preference->auto_return = 'approved';
     $preference->metadata = $metadata;
     $preference->items =  $productos ;
+
+    //Envio
+    $preference->shipments = [
+      "cost" => 50.0,  // Ajusta el costo del envío según tu lógica
+      "mode" => "not_specified"
+    ];
+
     $preference->save();
     //kint($preference);
     return $preference->id;

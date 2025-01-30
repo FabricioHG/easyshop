@@ -4,20 +4,6 @@
   // Variable para rastrear si el evento ya se ha agregado
   let formPagoEventAdded = false;
 
-  window.addEventListener("message", function(event) {
-    console.log('Mensaje recibido:', event);  // Añadir log para ver todo el mensaje
-    if (event.origin.includes("mercadopago.com")) {
-      if (event.data && event.data.redirect) {
-        console.log('Redirección a:', event.data.redirect);  // Verifica si la URL de redirección se está recibiendo correctamente
-        window.location.href = event.data.redirect;  // Realiza la redirección
-      } else {
-        console.log('No se encontró propiedad redirect:', event.data);  // Verifica si el mensaje no contiene la URL
-      }
-    } else {
-      console.log('Origen desconocido:', event.origin);  // Verifica si el origen es el correcto
-    }
-  }, false);
-
   Drupal.behaviors.pago_ws = {
     attach: function (context, settings) {
       let form_pago= "#commerce-checkout-flow-custom-checkout-flow";
