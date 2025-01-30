@@ -9,6 +9,7 @@ use Drupal\commerce_payment\PluginForm\PaymentOffsiteForm as BasePaymentOffsiteF
 use MercadoPago\Preference;
 use MercadoPago\Item;
 use MercadoPago\SDK;
+use Drupal\commerce_order\Entity\OrderInterface;
 
 
 class MercadoLibreForm extends BasePaymentOffsiteForm {
@@ -126,20 +127,36 @@ class MercadoLibreForm extends BasePaymentOffsiteForm {
     $preference->auto_return = 'approved';
     $preference->metadata = $metadata;
     $preference->items =  $productos ;
-
+    
     //Envio
+    $shipping_total = $this->getShippingTotal($order);
     $shipment = [
-      "cost" => 150,
+      "cost" => (float) $shipping_total,
       "mode" => "not_specified"
     ];
   
     $preference->shipments = json_decode(json_encode($shipment));
     
-
     $preference->save();
     //kint($preference);
     return $preference->id;
     
+  }
+
+  private function getShippingTotal(OrderInterface $order) {
+    $shipping_total = 0;
+    
+    // Si usas commerce_shipping, obtén los envíos asociados a la orden.
+    if (\Drupal::moduleHandler()->moduleExists('commerce_shipping')) {
+      $shipment_manager = \Drupal::service('commerce_shipping.order_manager');
+      $shipments = $shipment_manager->getShipments($order);
+
+      foreach ($shipments as $shipment) {
+        $shipping_total += $shipment->getAmount()->getNumber();
+      }
+    }
+    
+    return $shipping_total;
   }
 
 
