@@ -128,11 +128,13 @@ class MercadoLibreForm extends BasePaymentOffsiteForm {
     $preference->items =  $productos ;
 
     //Envio
-    $shipment = new stdClass();
-    $shipment->cost = 1000;  // Monto del envío
-    $shipment->mode = "not_specified";
+    $shipment = [
+      "cost" => 150,
+      "mode" => "not_specified"
+    ];
+  
+    $preference->shipments = json_decode(json_encode($shipment));
     
-    $preference->shipments = $shipment;
 
     $preference->save();
     //kint($preference);
