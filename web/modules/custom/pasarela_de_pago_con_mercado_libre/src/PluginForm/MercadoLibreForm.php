@@ -145,19 +145,24 @@ class MercadoLibreForm extends BasePaymentOffsiteForm {
 
   private function getShippingTotal(OrderInterface $order) {
     $shipping_total = 0;
-    
-    // Si usas commerce_shipping, obtén los envíos asociados a la orden.
+  
+    // Verifica si el módulo commerce_shipping está habilitado.
     if (\Drupal::moduleHandler()->moduleExists('commerce_shipping')) {
-      $shipment_manager = \Drupal::service('commerce_shipping.order_manager');
-      $shipments = $shipment_manager->getShipments($order);
-
+      // Obtén el almacenamiento de envíos.
+      $shipment_storage = \Drupal::entityTypeManager()->getStorage('commerce_shipment');
+      
+      // Cargar los envíos asociados a la orden.
+      $shipments = $shipment_storage->loadByProperties(['order_id' => $order->id()]);
+      
+      // Calcula el total de los envíos.
       foreach ($shipments as $shipment) {
         $shipping_total += $shipment->getAmount()->getNumber();
       }
     }
-    
+  
     return $shipping_total;
   }
+  
 
 
 }//fin de la clase
