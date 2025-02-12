@@ -5,7 +5,7 @@ core_version_requirement: ^9 || ^10 || ^11
 package: 'GA4 Google Analytics'
 configure: ga4_google_analytics.configure
 
-# Information added by Drupal.org packaging script on 2024-09-19
-version: '1.1.6'
+# Information added by Drupal.org packaging script on 2025-01-28
+version: '1.1.7'
 project: 'ga4_google_analytics'
-datestamp: 1726760144
+datestamp: 1738034905

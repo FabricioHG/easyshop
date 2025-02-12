@@ -2,12 +2,12 @@
 
 namespace Drupal\ga4_google_analytics\Form;
 
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Component\Plugin\Factory\FactoryInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\user\Entity\Role;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -23,18 +23,30 @@ class Ga4GoogleAnalyticsSettings extends ConfigFormBase {
   protected $condition;
 
   /**
-   * Constructs a \Drupal\adsense\Form\AdsenseManagedSettings object.
+   * The entity type manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * Constructs a Ga4GoogleAnalyticsSettings object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The factory for configuration objects.
    * @param \Drupal\Component\Plugin\Factory\FactoryInterface $plugin_factory
    *   The factory for condition plugin objects.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager service.
    */
   public function __construct(
-        ConfigFactoryInterface $config_factory,
-        FactoryInterface $plugin_factory
-    ) {
+    ConfigFactoryInterface $config_factory,
+    FactoryInterface $plugin_factory,
+    EntityTypeManagerInterface $entity_type_manager,
+  ) {
     $this->configFactory = $config_factory;
+    $this->entityTypeManager = $entity_type_manager;
+
     try {
       $this->condition = $plugin_factory->createInstance("request_path");
     }
@@ -50,7 +62,8 @@ class Ga4GoogleAnalyticsSettings extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
           $container->get("config.factory"),
-          $container->get("plugin.manager.condition")
+          $container->get("plugin.manager.condition"),
+          $container->get('entity_type.manager')
       );
   }
 
@@ -73,7 +86,8 @@ class Ga4GoogleAnalyticsSettings extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config("ga4_google_analytics.config");
-    $roles = Role::loadMultiple();
+    // Load roles using the entity type manager service.
+    $roles = $this->entityTypeManager->getStorage('user_role')->loadMultiple();
     $role_options = [];
     foreach ($roles as $role) {
       $role_options[$role->id()] = $role->label();

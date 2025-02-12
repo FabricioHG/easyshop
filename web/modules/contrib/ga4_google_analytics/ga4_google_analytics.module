@@ -66,9 +66,9 @@ function ga4_google_analytics_page_attachments(array &$attachments) {
 
       if ($visibility["negate"] xor $condition->evaluate()) {
         $script_attributes = $config->get("scripts_custom_attributes") ?? "";
-        //Sanitize the script attributes
+        // Sanitize the script attributes.
         $script_attributes = Xss::filter($script_attributes);
-        
+
         $attachments["#attached"]["html_head"][] = [
           [
             "#type" => "inline_template",

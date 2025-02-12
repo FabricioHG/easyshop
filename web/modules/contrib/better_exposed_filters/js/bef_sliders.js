@@ -146,7 +146,7 @@
               befUpdateSlider($(this), 0, slider);
             });
             $max.blur(function () {
-              befUpdateSlider($(this), 0, slider);
+              befUpdateSlider($(this), 1, slider);
             });
           }
         });
@@ -206,7 +206,7 @@
     // The slider's change event will then update the textfield again so that
     // they both have the same value.
     if (valIndex != null) {
-      slider.noUiSlider.setHandle(valIndex, val);
+      slider.noUiSlider.setHandle(valIndex, val, null, true);
     }
     else {
       slider.noUiSlider.set(val);

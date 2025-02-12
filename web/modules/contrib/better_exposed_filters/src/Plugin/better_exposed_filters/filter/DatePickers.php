@@ -94,9 +94,8 @@ class DatePickers extends FilterWidgetBase {
     $is_single_date = isset($element['value']['#type'])
       && 'date_text' == $element['value']['#type'];
     // Double Date-API-based input elements such as "in-between".
-    $is_double_date = isset($element['min']) && isset($element['max'])
-      && 'date_text' == $element['min']['#type']
-      && 'date_text' == $element['max']['#type'];
+    $is_double_date = isset($element['min']['#type']) && isset($element['max']['#type'])
+      && 'date_text' === $element['min']['#type'] && 'date_text' === $element['max']['#type'];
 
     if ($is_single_date || $is_double_date) {
       if (isset($element['value'])) {
