@@ -4,7 +4,14 @@
  */
 (function ($, Drupal) {
 
+ 
   'use strict';
+  //quitar el total de envio que aparece en el label
+  let texto = $('#edit-shipping-information-shipments-0-shipping-method-0 div label.form-check-label.form-label.option').text();
+  let nuevoTexto = texto.replace(/MXN\d+\.\d{2}/, '');
+  $('#edit-shipping-information-shipments-0-shipping-method-0 div label.form-check-label.form-label.option').text(nuevoTexto.trim()); 
+  console.log(texto);
+
 
   Drupal.behaviors.wsEcommerce = {
     attach: function (context, settings) {

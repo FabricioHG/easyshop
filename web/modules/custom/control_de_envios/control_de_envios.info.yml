@@ -1,0 +1,7 @@
+name: 'Control de envios'
+type: module
+description: 'Control de envios'
+package: Webs_systems
+core_version_requirement: ^10 || ^11
+dependencies:
+  - commerce_shipping:commerce_shipping

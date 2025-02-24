@@ -1,0 +1,6 @@
+services:
+  control_de_envios.shipping_event_subscriber:
+    class: '\Drupal\control_de_envios\EventSubscriber\ShippingEventSubscriber'
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: event_subscriber }
