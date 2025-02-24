@@ -32,8 +32,23 @@ $connection->insert('key_value')
   ->fields([
     'collection' => 'system.schema',
     'name' => 'entity_usage',
-    'value' => 'i:8205;',
+    'value' => 'i:8206;',
   ])
+  ->execute();
+
+// Add in removed post-update.
+$existing_updates = $connection->select('key_value')
+  ->fields('key_value', ['value'])
+  ->condition('collection', 'post_update')
+  ->condition('name', 'existing_updates')
+  ->execute()
+  ->fetchField();
+$existing_updates = unserialize($existing_updates, ['allowed_classes' => FALSE]);
+$existing_updates[] = 'entity_usage_post_update_regenerate_2x';
+$connection->update('key_value')
+  ->fields(['value' => serialize($existing_updates)])
+  ->condition('collection', 'post_update')
+  ->condition('name', 'existing_updates')
   ->execute();
 
 // Create the  {entity_usage} table but use the old schema, which was in place
@@ -51,7 +66,7 @@ $connection->schema()->createTable('entity_usage', [
     'target_id_string' => [
       'description' => 'The target ID, when the entity uses string IDs.',
       'type' => 'varchar_ascii',
-      'length' => 128,
+      'length' => 255,
       'not null' => TRUE,
       'default' => '',
     ],
@@ -72,7 +87,7 @@ $connection->schema()->createTable('entity_usage', [
     'source_id_string' => [
       'description' => 'The source ID, when the entity uses string IDs.',
       'type' => 'varchar_ascii',
-      'length' => 128,
+      'length' => 255,
       'not null' => FALSE,
     ],
     'source_type' => [
@@ -136,3 +151,14 @@ $connection->schema()->createTable('entity_usage', [
     'source_entity_string' => ['source_type', 'source_id_string'],
   ],
 ]);
+
+// Create a queue item to be removed by
+// entity_usage_post_update_clean_up_regenerate_queue().
+$connection->insert('queue')
+  ->fields([
+    'name' => 'entity_usage_regenerate_queue',
+    'data' => 'i:8205;',
+    'expire' => time() + 100000,
+    'created' => time() - 1000,
+  ])
+  ->execute();

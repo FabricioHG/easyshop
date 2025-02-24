@@ -87,19 +87,19 @@ function commerce_stripe_update_8103() {
     if (!Settings::get('commerce_stripe_skip_update_8103', FALSE)) {
       $database->query("INSERT INTO {commerce_payment_method__stripe_card_exp_month} SELECT * FROM {commerce_payment_method__card_exp_month} cem WHERE cem.bundle = 'credit_card' and EXISTS (SELECT * FROM {commerce_payment_method} pm WHERE cem.entity_id = pm.method_id and pm.type = 'stripe_card') and NOT EXISTS (SELECT * FROM {commerce_payment_method__stripe_card_exp_month} scem2 WHERE cem.entity_id = scem2.entity_id);");
       $database->query("UPDATE {commerce_payment_method__stripe_card_exp_month} SET bundle = 'stripe_card' WHERE bundle <> 'stripe_card';");
-      $database->query("DELETE FROM {commerce_payment_method__card_exp_month} WHERE bundle = 'credit_card' and EXISTS (SELECT * FROM {commerce_payment_method} WHERE commerce_payment_method__card_exp_month.entity_id = commerce_payment_method.method_id and commerce_payment_method.type = 'stripe_card');");
+      $database->query("DELETE FROM {commerce_payment_method__card_exp_month} WHERE bundle = 'credit_card' and EXISTS (SELECT * FROM {commerce_payment_method} WHERE {commerce_payment_method__card_exp_month}.entity_id = {commerce_payment_method}.method_id and {commerce_payment_method}.type = 'stripe_card');");
 
       $database->query("INSERT INTO {commerce_payment_method__stripe_card_exp_year} SELECT * FROM {commerce_payment_method__card_exp_year} cey WHERE cey.bundle = 'credit_card' and EXISTS (SELECT * FROM {commerce_payment_method} pm WHERE cey.entity_id = pm.method_id and pm.type = 'stripe_card') and NOT EXISTS (SELECT * FROM {commerce_payment_method__stripe_card_exp_year} scey2 WHERE cey.entity_id = scey2.entity_id);");
       $database->query("UPDATE {commerce_payment_method__stripe_card_exp_year} SET bundle = 'stripe_card' WHERE bundle <> 'stripe_card';");
-      $database->query("DELETE FROM {commerce_payment_method__card_exp_year} WHERE bundle = 'credit_card' and EXISTS (SELECT * FROM {commerce_payment_method} WHERE commerce_payment_method__card_exp_year.entity_id = commerce_payment_method.method_id and commerce_payment_method.type = 'stripe_card');");
+      $database->query("DELETE FROM {commerce_payment_method__card_exp_year} WHERE bundle = 'credit_card' and EXISTS (SELECT * FROM {commerce_payment_method} WHERE {commerce_payment_method__card_exp_year}.entity_id = {commerce_payment_method}.method_id and {commerce_payment_method}.type = 'stripe_card');");
 
       $database->query("INSERT INTO {commerce_payment_method__stripe_card_number} SELECT * FROM {commerce_payment_method__card_number} cn WHERE bundle = 'credit_card' and EXISTS (SELECT * FROM {commerce_payment_method} pm WHERE cn.entity_id = pm.method_id and pm.type = 'stripe_card') and NOT EXISTS (SELECT * FROM {commerce_payment_method__stripe_card_number} scn2 WHERE cn.entity_id = scn2.entity_id);");
       $database->query("UPDATE {commerce_payment_method__stripe_card_number} SET bundle = 'stripe_card' WHERE bundle <> 'stripe_card';");
-      $database->query("DELETE FROM {commerce_payment_method__card_number} WHERE bundle = 'credit_card' and EXISTS (SELECT * FROM {commerce_payment_method} WHERE commerce_payment_method__card_number.entity_id = commerce_payment_method.method_id and commerce_payment_method.type = 'stripe_card');");
+      $database->query("DELETE FROM {commerce_payment_method__card_number} WHERE bundle = 'credit_card' and EXISTS (SELECT * FROM {commerce_payment_method} WHERE {commerce_payment_method__card_number}.entity_id = {commerce_payment_method}.method_id and {commerce_payment_method}.type = 'stripe_card');");
 
       $database->query("INSERT INTO {commerce_payment_method__stripe_card_type} SELECT * FROM {commerce_payment_method__card_type} ct WHERE bundle = 'credit_card' and EXISTS (SELECT * FROM {commerce_payment_method} pm WHERE ct.entity_id = pm.method_id and pm.type = 'stripe_card') and NOT EXISTS (SELECT * FROM {commerce_payment_method__stripe_card_type} sct2 WHERE ct.entity_id = sct2.entity_id);");
       $database->query("UPDATE {commerce_payment_method__stripe_card_type} SET bundle = 'stripe_card' WHERE bundle <> 'stripe_card';");
-      $database->query("DELETE FROM {commerce_payment_method__card_type} WHERE bundle = 'credit_card' and EXISTS (SELECT * FROM {commerce_payment_method} WHERE commerce_payment_method__card_type.entity_id = commerce_payment_method.method_id and commerce_payment_method.type = 'stripe_card');");
+      $database->query("DELETE FROM {commerce_payment_method__card_type} WHERE bundle = 'credit_card' and EXISTS (SELECT * FROM {commerce_payment_method} WHERE {commerce_payment_method__card_type}.entity_id = {commerce_payment_method}.method_id and {commerce_payment_method}.type = 'stripe_card');");
     }
   }
 }
@@ -118,6 +118,9 @@ function commerce_stripe_update_8104() {
  * Detect capture, if possible.
  */
 function commerce_stripe_update_8105() {
+  if (!\Drupal::moduleHandler()->moduleExists('commerce_checkout')) {
+    return t('Skipped update commerce_stripe_update_8105() because the commerce_checkout module is not installed. Please note: Stripe "Capture Method" is now set on the Stripe payment element gateway, rather than inferred from the payment pane in the checkout flow.');
+  }
   $capture_options = [
     0 => 0,
     1 => 0,

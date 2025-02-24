@@ -38,6 +38,21 @@ class WebhookEvent {
   }
 
   /**
+   * Gets an array of raw statuses.
+   *
+   * @return array
+   *   An array of raw statuses.
+   */
+  public static function getStatusesRaw(): array {
+    return [
+      self::STATUS_UNPROCESSED => 'unprocessed',
+      self::STATUS_SUCCEEDED => 'succeeded',
+      self::STATUS_FAILED => 'failed',
+      self::STATUS_SKIPPED => 'skipped',
+    ];
+  }
+
+  /**
    * Gathers a list of uniquely defined webhook event types.
    *
    * @return array

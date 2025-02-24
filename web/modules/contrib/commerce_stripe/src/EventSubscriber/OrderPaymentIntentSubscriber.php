@@ -87,7 +87,8 @@ class OrderPaymentIntentSubscriber implements EventSubscriberInterface, Destruct
    * {@inheritdoc}
    */
   public function destruct() {
-    foreach ($this->updateList as $intent_id => $amount) {
+    /** @var array $balance */
+    foreach ($this->updateList as $intent_id => $balance) {
       try {
         $intent = $this->getIntent($intent_id);
         // Only update an intent amount with one of the
@@ -96,7 +97,10 @@ class OrderPaymentIntentSubscriber implements EventSubscriberInterface, Destruct
           PaymentIntent::STATUS_REQUIRES_PAYMENT_METHOD,
           PaymentIntent::STATUS_REQUIRES_CONFIRMATION,
         ], TRUE)) {
-          PaymentIntent::update($intent_id, ['amount' => $amount]);
+          PaymentIntent::update($intent_id, [
+            'amount' => $balance['amount'],
+            'currency' => $balance['currency'],
+          ]);
         }
       }
       catch (ApiErrorException $e) {
@@ -141,8 +145,11 @@ class OrderPaymentIntentSubscriber implements EventSubscriberInterface, Destruct
       return;
     }
 
-    if ($total_price = $this->getChangedOrderTotalPrice($order)) {
-      $this->updateList[$intent_id] = $this->minorUnitsConverter->toMinorUnits($total_price);
+    if ($balance = $this->getChangedOrderBalance($order)) {
+      $this->updateList[$intent_id] = [
+        'amount' => $this->minorUnitsConverter->toMinorUnits($balance),
+        'currency' => $balance->getCurrencyCode(),
+      ];
     }
   }
 
@@ -208,37 +215,42 @@ class OrderPaymentIntentSubscriber implements EventSubscriberInterface, Destruct
   }
 
   /**
-   * Gets the changed total price of the order.
+   * Gets the changed balance of the order.
    *
    * @param \Drupal\commerce_order\Entity\OrderInterface $order
    *   The order.
    *
    * @return \Drupal\commerce_price\Price|null
-   *   Changed total price of the order.
+   *   Changed balance of the order.
    */
-  protected function getChangedOrderTotalPrice(OrderInterface $order) {
-    $total_price = $order->getTotalPrice();
-    $original_price = isset($order->original) ? $order->original->getTotalPrice() : NULL;
+  protected function getChangedOrderBalance(OrderInterface $order) {
+    $balance = $order->getBalance();
+    $original_balance = isset($order->original) ? $order->original->getBalance() : NULL;
 
     // When the cart is empty, but the order refresh is triggered.
-    if (!$total_price && !$original_price) {
+    if (!$balance && !$original_balance) {
       return NULL;
     }
 
     // The product has been added to an empty cart.
-    if ($total_price && !$original_price) {
-      return $total_price;
+    if ($balance && !$original_balance) {
+      return $balance;
     }
 
     // Do not update the payment intent when the last product is removed
     // from the cart, as it will be updated the next time the order is updated.
-    if (!$total_price && $original_price) {
+    if (!$balance && $original_balance) {
       return NULL;
     }
 
-    // The total price of the order has changed.
-    if (!$original_price->equals($total_price)) {
-      return $total_price;
+    // The currency has changed.
+    if ($original_balance->getCurrencyCode() !== $balance->getCurrencyCode()) {
+      return $balance;
+    }
+
+    // The balance of the order has changed.
+    if (!$original_balance->equals($balance)) {
+      return $balance;
     }
 
     return NULL;

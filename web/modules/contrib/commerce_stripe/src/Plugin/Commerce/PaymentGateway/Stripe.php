@@ -17,6 +17,7 @@ use Drupal\commerce_stripe\Event\PaymentIntentEvent;
 use Drupal\commerce_stripe\Event\PaymentMethodCreateEvent;
 use Drupal\commerce_stripe\Event\StripeEvents;
 use Drupal\commerce_stripe\Event\TransactionDataEvent;
+use Drupal\commerce_stripe\IntentHelper;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Site\Settings;
@@ -260,9 +261,12 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
       if (count($intent->charges->data) === 0) {
         throw HardDeclineException::createForPayment($payment, sprintf('The payment intent %s did not have a charge object.', $intent->id));
       }
-      $next_state = $capture ? 'completed' : 'authorization';
+      $next_state = IntentHelper::getCapture($intent) ? 'completed' : 'authorization';
       $payment->setState($next_state);
       $payment->setRemoteId($intent->id);
+      if ($payment_intent_price = IntentHelper::getPrice($intent)) {
+        $payment->setAmount($payment_intent_price);
+      }
       $payment->save();
 
       // Add metadata and extra transaction data where required.
@@ -490,7 +494,7 @@ class Stripe extends OnsitePaymentGatewayBase implements StripeInterface {
 
     /** @var \Drupal\commerce_payment\Entity\PaymentMethodInterface $payment_method */
     $payment_method = $payment ? $payment->getPaymentMethod() : $order->get('payment_method')->entity;
-    $amount = $payment ? $payment->getAmount() : $order->getTotalPrice();
+    $amount = $payment ? $payment->getAmount() : $order->getBalance();
 
     $default_intent_attributes = [
       'amount' => $this->minorUnitsConverter->toMinorUnits($amount),

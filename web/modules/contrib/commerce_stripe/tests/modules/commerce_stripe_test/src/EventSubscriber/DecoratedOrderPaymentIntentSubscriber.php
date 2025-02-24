@@ -15,12 +15,23 @@ class DecoratedOrderPaymentIntentSubscriber extends OrderPaymentIntentSubscriber
    * {@inheritdoc}
    */
   public function destruct() {
-    foreach ($this->updateList as $intent_id => $amount) {
+    /** @var array $balance */
+    foreach ($this->updateList as $intent_id => $balance) {
       try {
-        PaymentIntent::update($intent_id, ['amount' => $amount]);
+        $intent = $this->getIntent($intent_id);
+        // Only update an intent amount with one of the
+        // following statuses: requires_payment_method, requires_confirmation.
+        if (($intent instanceof PaymentIntent) && in_array($intent->status, [
+          PaymentIntent::STATUS_REQUIRES_PAYMENT_METHOD,
+          PaymentIntent::STATUS_REQUIRES_CONFIRMATION,
+        ], TRUE)) {
+          PaymentIntent::update($intent_id, [
+            'amount' => $balance['amount'],
+            'currency' => $balance['currency'],
+          ]);
+        }
       }
       catch (StripeError $e) {
-        // Ensure all API exceptions throw during testing.
         throw $e;
       }
     }

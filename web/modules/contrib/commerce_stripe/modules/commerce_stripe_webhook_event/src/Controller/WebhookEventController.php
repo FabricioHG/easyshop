@@ -122,10 +122,12 @@ class WebhookEventController extends ControllerBase {
       ->execute();
 
     $statuses = WebhookEvent::getStatuses();
+    $statuses_raw = WebhookEvent::getStatusesRaw();
     foreach ($webhook_events as $webhook_event) {
       $link = Link::createFromRoute($webhook_event->stripe_event_id, 'commerce_stripe_webhook_event.event', ['webhook_event_id' => $webhook_event->webhook_event_id])->toString();
       $processed = ($webhook_event->processed > 0) ? $this->dateFormatter->format($webhook_event->processed, 'custom', 'Y-m-d H:i:s') : '';
       $status = $statuses[$webhook_event->status];
+      $status_raw = $statuses_raw[$webhook_event->status];
       $rows[] = [
         'data' => [
           // Cells.
@@ -139,7 +141,7 @@ class WebhookEventController extends ControllerBase {
         ],
         // Attributes for table row.
         'class' => [
-          Html::getClass('webhook-event-' . strtolower($statuses[$webhook_event->status])),
+          Html::getClass('webhook-event-' . $status_raw),
           Html::getClass($webhook_event->type),
         ],
       ];

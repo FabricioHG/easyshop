@@ -19,6 +19,7 @@ use Drupal\commerce_stripe\ErrorHelper;
 use Drupal\commerce_stripe\Event\PaymentIntentEvent;
 use Drupal\commerce_stripe\Event\PaymentMethodCreateEvent;
 use Drupal\commerce_stripe\Event\StripeEvents;
+use Drupal\commerce_stripe\IntentHelper;
 use Drupal\commerce_stripe\Plugin\Commerce\PaymentMethodType\StripePaymentMethodTypeInterface;
 use Drupal\commerce_stripe\WebhookEventState;
 use Drupal\commerce_stripe_webhook_event\WebhookEvent;
@@ -462,7 +463,7 @@ class StripePaymentElement extends OffsitePaymentGatewayBase implements StripePa
       }
       // Keep the payment in the new status if it has not yet been processed.
       if ($intent->status !== PaymentIntent::STATUS_PROCESSING) {
-        $next_state = in_array($this->getCaptureMethod(), ['automatic', 'automatic_async'], TRUE) ? 'completed' : 'authorization';
+        $next_state = IntentHelper::getCapture($intent) ? 'completed' : 'authorization';
         $payment->setState($next_state);
       }
       $payment->setRemoteId($intent->id);
@@ -511,18 +512,15 @@ class StripePaymentElement extends OffsitePaymentGatewayBase implements StripePa
       }
     }
 
-    $stripe_payment_method = $this->getStripePaymentMethod($order, $request);
+    $stripe_intent = $this->getStripeIntentFromRequest($order, $request);
+    $stripe_payment_method = $this->getStripePaymentMethod($stripe_intent->payment_method);
     $this->createPaymentMethodFromStripePaymentMethod($stripe_payment_method, $order);
-    $payment_storage = $this->entityTypeManager->getStorage('commerce_payment');
-    /** @var \Drupal\commerce_payment\Entity\PaymentInterface $payment */
-    $payment = $payment_storage->create([
-      'state' => 'new',
-      'amount' => $order->getBalance(),
-      'payment_gateway' => $this->parentEntity->id(),
-      'order_id' => $order->id(),
-      'payment_method' => $order->get('payment_method'),
-    ]);
-    $this->createPayment($payment);
+    if ($stripe_intent instanceof PaymentIntent) {
+      $this->handlePaymentIntent($order, $stripe_intent);
+    }
+    else {
+      $this->handleSetupIntent($order, $stripe_intent);
+    }
     // Indicate how the order was placed.
     $order->setData('order_placed_source', [
       'type' => 'return',
@@ -532,6 +530,42 @@ class StripePaymentElement extends OffsitePaymentGatewayBase implements StripePa
       'commerce_order' => $order->id(),
       'step' => $step_id,
     ])->toString());
+  }
+
+  /**
+   * React to the payment intent returned in the onReturn callback.
+   *
+   * @param \Drupal\commerce_order\Entity\OrderInterface $order
+   *   The order.
+   * @param \Stripe\PaymentIntent $payment_intent
+   *   The stripe payment intent.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected function handlePaymentIntent(OrderInterface $order, PaymentIntent $payment_intent): void {
+    $payment_storage = $this->entityTypeManager->getStorage('commerce_payment');
+    /** @var \Drupal\commerce_payment\Entity\PaymentInterface $payment */
+    $payment = $payment_storage->create([
+      'state' => 'new',
+      'amount' => IntentHelper::getPrice($payment_intent) ?? $order->getBalance(),
+      'payment_gateway' => $this->parentEntity->id(),
+      'order_id' => $order->id(),
+      'payment_method' => $order->get('payment_method')->getString(),
+    ]);
+    $this->createPayment($payment);
+  }
+
+  /**
+   * React to the setup intent returned in the onReturn callback.
+   *
+   * @param \Drupal\commerce_order\Entity\OrderInterface $order
+   *   The order.
+   * @param \Stripe\SetupIntent $setup_intent
+   *   The stripe setup intent.
+   */
+  protected function handleSetupIntent(OrderInterface $order, SetupIntent $setup_intent): void {
+
   }
 
   /**
@@ -585,12 +619,12 @@ class StripePaymentElement extends OffsitePaymentGatewayBase implements StripePa
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The request.
    *
-   * @return \Stripe\PaymentMethod
+   * @return \Stripe\PaymentIntent|\Stripe\SetupIntent
    *   The stripe payment method.
    *
    * @throws \Stripe\Exception\ApiErrorException
    */
-  protected function getStripePaymentMethod(OrderInterface $order, Request $request): PaymentMethod {
+  protected function getStripeIntentFromRequest(OrderInterface $order, Request $request): PaymentIntent|SetupIntent {
     $query = $request->query->all();
     $intent_id = $order->getData('stripe_intent');
 
@@ -617,8 +651,21 @@ class StripePaymentElement extends OffsitePaymentGatewayBase implements StripePa
       throw new PaymentGatewayException(sprintf('Unexpected setup intent status %s.', $intent->status));
     }
 
+    return $intent;
+  }
+
+  /**
+   * Get the Stripe payment method.
+   *
+   * @param string $payment_method_id
+   *   The payment method id.
+   *
+   * @return \Stripe\PaymentMethod
+   *   The stripe payment method.
+   */
+  protected function getStripePaymentMethod(string $payment_method_id): PaymentMethod {
     try {
-      $stripe_payment_method = PaymentMethod::retrieve($intent->payment_method);
+      $stripe_payment_method = PaymentMethod::retrieve($payment_method_id);
     }
     catch (ApiErrorException $e) {
       ErrorHelper::handleException($e);
@@ -824,16 +871,7 @@ class StripePaymentElement extends OffsitePaymentGatewayBase implements StripePa
             if ($order->getState()->getId() === 'draft') {
               $stripe_payment_method = PaymentMethod::retrieve($payment_intent->payment_method);
               $this->createPaymentMethodFromStripePaymentMethod($stripe_payment_method, $order);
-              $payment_storage = $this->entityTypeManager->getStorage('commerce_payment');
-              /** @var \Drupal\commerce_payment\Entity\PaymentInterface $payment */
-              $payment = $payment_storage->create([
-                'state' => 'new',
-                'amount' => $order->getBalance(),
-                'payment_gateway' => $this->parentEntity->id(),
-                'order_id' => $order->id(),
-                'payment_method' => $order->get('payment_method')->entity,
-              ]);
-              $this->createPayment($payment);
+              $this->handlePaymentIntent($order, $payment_intent);
               // Indicate how the order was placed.
               $order->setData('order_placed_source', [
                 'type' => 'notify',
@@ -1212,7 +1250,7 @@ class StripePaymentElement extends OffsitePaymentGatewayBase implements StripePa
     /** @var \Drupal\commerce_payment\Entity\PaymentMethodInterface $payment_method */
     $payment_method = $payment ? $payment->getPaymentMethod() : $order->get('payment_method')->entity;
     /** @var \Drupal\commerce_price\Price $amount */
-    $amount = $payment ? $payment->getAmount() : $order->getTotalPrice();
+    $amount = $payment ? $payment->getAmount() : $order->getBalance();
 
     $default_intent_attributes = [
       'amount' => $this->minorUnitsConverter->toMinorUnits($amount),

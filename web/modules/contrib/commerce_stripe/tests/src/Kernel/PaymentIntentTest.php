@@ -65,7 +65,7 @@ class PaymentIntentTest extends StripeIntegrationTestBase {
     $order->get('payment_method')->willReturn((object) [
       'entity' => $payment_method->reveal(),
     ]);
-    $order->getTotalPrice()->willReturn($payment_amount);
+    $order->getBalance()->willReturn($payment_amount);
     $order->getStoreId()->willReturn(1111);
     $order->id()->willReturn(9999);
     $order->getCustomer()->willReturn(User::getAnonymousUser());
@@ -106,7 +106,7 @@ class PaymentIntentTest extends StripeIntegrationTestBase {
     $order->get('payment_method')->willReturn((object) [
       'entity' => $order_payment_method->reveal(),
     ]);
-    $order->getTotalPrice()->willReturn(new Price('15.00', 'USD'));
+    $order->getBalance()->willReturn(new Price('15.00', 'USD'));
     $order->getStoreId()->willReturn(1111);
     $order->id()->willReturn(9999);
     $order->getCustomer()->willReturn(User::getAnonymousUser());
@@ -191,7 +191,7 @@ class PaymentIntentTest extends StripeIntegrationTestBase {
     // Flush pending updates.
     $this->container->get('commerce_stripe.order_events_subscriber')->destruct();
 
-    $this->assertEquals('5.50', $order->getTotalPrice()->getNumber());
+    $this->assertEquals('5.50', $order->getBalance()->getNumber());
     $intent = PaymentIntent::retrieve($intent->id);
     // If the payment gateway was deleted, the payment intent could not
     // be updated.
@@ -243,7 +243,7 @@ class PaymentIntentTest extends StripeIntegrationTestBase {
     // Flush pending updates.
     $this->container->get('commerce_stripe.order_events_subscriber')->destruct();
 
-    $this->assertEquals('5.50', $order->getTotalPrice()->getNumber());
+    $this->assertEquals('5.50', $order->getBalance()->getNumber());
     $intent = PaymentIntent::retrieve($intent->id);
     $this->assertEquals(550, $intent->amount);
 
@@ -253,7 +253,7 @@ class PaymentIntentTest extends StripeIntegrationTestBase {
     // Flush pending updates.
     $this->container->get('commerce_stripe.order_events_subscriber')->destruct();
 
-    $this->assertNull($order->getTotalPrice());
+    $this->assertNull($order->getBalance());
     $intent = PaymentIntent::retrieve($intent->id);
     $this->assertEquals(550, $intent->amount, 'Intent has the same previous value');
 
@@ -262,7 +262,7 @@ class PaymentIntentTest extends StripeIntegrationTestBase {
     // Flush pending updates.
     $this->container->get('commerce_stripe.order_events_subscriber')->destruct();
 
-    $this->assertEquals('10.50', $order->getTotalPrice()->getNumber());
+    $this->assertEquals('10.50', $order->getBalance()->getNumber());
     $intent = PaymentIntent::retrieve($intent->id);
     $this->assertEquals(1050, $intent->amount);
   }
