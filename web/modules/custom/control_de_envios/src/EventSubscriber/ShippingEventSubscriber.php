@@ -29,6 +29,7 @@ class ShippingEventSubscriber implements EventSubscriberInterface {
     // Obtener los métodos de envío disponibles
     $methods = $event->getShippingMethods();
     $envio = $event->getShipment();
+
     $rate_amount = $methods[1]->getPlugin()->getConfiguration()['rate_amount']['number'];
    
     // Variables para controlar si hay productos con envío gratis

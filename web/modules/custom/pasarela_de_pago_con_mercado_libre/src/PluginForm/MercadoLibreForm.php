@@ -143,23 +143,63 @@ class MercadoLibreForm extends BasePaymentOffsiteForm {
     
   }
 
-  private function getShippingTotal(OrderInterface $order) {
+  private function getShippingTotal(OrderInterface $orden) {
     $shipping_total = 0;
-  
-    // Verifica si el módulo commerce_shipping está habilitado.
-    if (\Drupal::moduleHandler()->moduleExists('commerce_shipping')) {
-      // Obtén el almacenamiento de envíos.
-      $shipment_storage = \Drupal::entityTypeManager()->getStorage('commerce_shipment');
-      
-      // Cargar los envíos asociados a la orden.
-      $shipments = $shipment_storage->loadByProperties(['order_id' => $order->id()]);
-      
-      // Calcula el total de los envíos.
-      foreach ($shipments as $shipment) {
-        $shipping_total += $shipment->getAmount()->getNumber();
-      }
+    
+    /* Calcular el envio */
+    
+    // Variables para controlar si hay productos con envío gratis
+    $total_envio = 0;
+
+    $shipment_storage = \Drupal::entityTypeManager()->getStorage('commerce_shipment');
+    $shipments =reset( $shipment_storage->loadByProperties(['order_id' => $orden->id()]) );
+    $rate_amount = $shipments->getAmount()->getNumber();
+
+    // Recorrer los productos de la orden para revisar la taxonomía "Envío gratis"
+    foreach ($orden->getItems() as $key => $item) {
+        // Obtener la entidad de variación y luego el ID del producto
+        $entity_variation_product = $item->getPurchasedEntity();
+        $product_id = $entity_variation_product->getProductId();
+        
+        // Cargar el storage de productos
+        $product_storage = \Drupal::entityTypeManager()->getStorage('commerce_product');
+        $product = $product_storage->load($product_id);
+
+        if ($product && $product->hasField('field_categoria')) {
+            // Obtener las taxonomías asociadas al producto
+            $terms = $product->get('field_categoria')->referencedEntities();
+
+            // Inicializar la variable para determinar si el producto tiene envío gratis
+            $has_free_shipping = FALSE;
+
+            // Revisar las taxonomías y determinar si el producto tiene envío gratis
+            foreach ($terms as $term) {
+                if ($term->label() === 'Envío gratis') {
+                    $has_free_shipping = TRUE;
+                    break; // Salir del bucle si se encuentra el envío gratis
+                }
+            }
+
+            // Si el producto tiene "Envío Gratis", actualizamos la variable
+            if ($has_free_shipping) {
+                $envio_gratis_disponible = TRUE;
+            } else {
+                $envio_pagado_necesario = TRUE;
+            }
+        }
+
+        //Sumar envio
+        $cantidad = $item->getQuantity();
+        if (!$has_free_shipping){
+            $total_envio += $cantidad * intval($rate_amount);
+
+        }
     }
   
+   
+    $shipping_total += $total_envio;
+    
+    
     return $shipping_total;
   }
   
