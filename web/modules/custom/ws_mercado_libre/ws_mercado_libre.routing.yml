@@ -4,7 +4,7 @@ ws_mercado_libre.user:
     _title: 'Sincronizar publicación de productos en mercado libre'
     _controller: '\Drupal\ws_mercado_libre\Controller\WsMercadoLibreController::page_config'
   requirements:
-    _permission: 'access content'
+    _role: 'vendedor'
   options:
     parameters:
       user:
