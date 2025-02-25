@@ -10,6 +10,7 @@ use MercadoPago\Preference;
 use MercadoPago\Item;
 use MercadoPago\SDK;
 use Drupal\commerce_order\Entity\OrderInterface;
+use Drupal\commerce_order\Entity\Order;
 
 
 class MercadoLibreForm extends BasePaymentOffsiteForm {
@@ -144,16 +145,14 @@ class MercadoLibreForm extends BasePaymentOffsiteForm {
   }
 
   private function getShippingTotal(OrderInterface $orden) {
-    $shipping_total = 0;
-    
-    /* Calcular el envio */
-    
     // Variables para controlar si hay productos con envío gratis
     $total_envio = 0;
 
     $shipment_storage = \Drupal::entityTypeManager()->getStorage('commerce_shipment');
     $shipments =reset( $shipment_storage->loadByProperties(['order_id' => $orden->id()]) );
-    $rate_amount = $shipments->getAmount()->getNumber();
+    $rate_amount = $shipments->getShippingMethod()->getPlugin()->getConfiguration()['rate_amount']['number'];
+   
+    
 
     // Recorrer los productos de la orden para revisar la taxonomía "Envío gratis"
     foreach ($orden->getItems() as $key => $item) {
@@ -179,28 +178,16 @@ class MercadoLibreForm extends BasePaymentOffsiteForm {
                     break; // Salir del bucle si se encuentra el envío gratis
                 }
             }
-
-            // Si el producto tiene "Envío Gratis", actualizamos la variable
-            if ($has_free_shipping) {
-                $envio_gratis_disponible = TRUE;
-            } else {
-                $envio_pagado_necesario = TRUE;
-            }
         }
 
         //Sumar envio
         $cantidad = $item->getQuantity();
+        
         if (!$has_free_shipping){
-            $total_envio += $cantidad * intval($rate_amount);
-
+            $total_envio += intval($cantidad) * intval($rate_amount);
         }
-    }
-  
-   
-    $shipping_total += $total_envio;
-    
-    
-    return $shipping_total;
+    }    
+    return $total_envio;
   }
   
 
