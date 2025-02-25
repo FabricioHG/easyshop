@@ -2,3 +2,5 @@ ws_mercado_libre.user:
   route_name: ws_mercado_libre.user
   title: Mercado libre
   base_route: entity.user.canonical
+  requirements:
+    _user_is_logged_in: 'TRUE'
