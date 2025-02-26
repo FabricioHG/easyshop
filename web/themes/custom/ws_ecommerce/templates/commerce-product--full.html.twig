@@ -100,10 +100,10 @@
                   <iframe width="400" height="400" src="{{videos_urls.0|replace({'https://www.youtube.com/watch?v=':'https://www.youtube.com/embed/'}) }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
               {% else %}
-                <div> <img src="{{image_url.url}}"> </div>
+                <div> <img alt="imagen de producto" src="{{image_url.url}}"> </div>
               {% endif%}
             {% else %}
-              <div> <img src="{{image_url.url}}"> </div>
+              <div> <img alt="imagen de producto" src="{{image_url.url}}"> </div>
             {% endif%}
             
           {% endfor%}
@@ -115,13 +115,13 @@
                 {# Obtener imagen del video #}
                 {% set img_video_part_1 = videos_urls.0|replace({'https://www.youtube.com/watch?v=':'https://i.ytimg.com/vi_webp/' }) %}
                 {% set img_video = img_video_part_1 ~ "/default.webp" %}
-                <div> <img src="{{img_video}}"> </div>
+                <div> <img alt="imagen de producto" src="{{img_video}}"> </div>
                 
               {% else %}
-                <div> <img src="{{image_url_thum.url_thum}}"> </div>
+                <div> <img alt="imagen de producto" src="{{image_url_thum.url_thum}}"> </div>
               {% endif%}
             {% else %}
-              <div> <img src="{{image_url_thum.url_thum}}"> </div>
+              <div> <img alt="imagen de producto" src="{{image_url_thum.url_thum}}"> </div>
             {% endif%}
           {% endfor%}
         </div>
