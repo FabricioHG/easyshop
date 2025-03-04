@@ -50,7 +50,7 @@
       /* Agregar SDK de login con facebook */
       window.fbAsyncInit = function() {
         FB.init({
-          appId      : '1144476250262343',
+          appId      : '620096173968475',
           xfbml      : true,
           version    : 'v22.0'
         });
