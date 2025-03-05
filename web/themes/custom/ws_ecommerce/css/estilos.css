@@ -342,13 +342,17 @@ header > section.py-5.mt-lg-4.region.region-header {
 #edit-form-comment-pane-comentario {
   height: 50px;
 }
+/*Bloque login*/
 div#block-ws-ecommerce-socialauthlogin {
   text-align: center;
 }
 a.social-auth.auth-link[href="/user/login/google"] img{
   width: 2.4em;
 }
-
+#block-ws-ecommerce-socialauthlogin h2{
+  font-size: 1rem;
+  font-weight: bold;
+}
 
 
 /*Pagina cart*/
