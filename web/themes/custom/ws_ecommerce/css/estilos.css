@@ -342,6 +342,15 @@ header > section.py-5.mt-lg-4.region.region-header {
 #edit-form-comment-pane-comentario {
   height: 50px;
 }
+div#block-ws-ecommerce-socialauthlogin {
+  text-align: center;
+}
+a.social-auth.auth-link[href="/user/login/google"] img{
+  width: 2.4em;
+}
+
+
+
 /*Pagina cart*/
 
 /*---------------------------------------Dispositivos mobiles ----------------------------------------*/
