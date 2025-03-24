@@ -353,8 +353,146 @@ a.social-auth.auth-link[href="/user/login/google"] img{
   font-size: 1rem;
   font-weight: bold;
 }
-
-
+/* blog */
+.view-display-id-blog_all.view-id-blog .view-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content:center;
+  margin: 30px;
+}
+.view-display-id-blog_all.view-id-blog .view-content > div.views-row:first-child {
+  flex-basis: 580px;
+  position: relative;
+  z-index: 1;
+  background: 
+    linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.7) 100%), 
+}
+.view-display-id-blog_all.view-id-blog .view-content > div.views-row:first-child::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%; /* Cubre la mitad inferior */
+  background: linear-gradient(to top,rgba(0,0,0,0.8) 28%,rgba(0,0,0,0.4) 65%,rgba(0,0,0,0) 85%);
+  pointer-events: none; /* Permite interactuar con el contenido debajo */
+  z-index: -1;
+}
+.view-display-id-blog_all.view-id-blog .view-content > div.views-row:first-child h5 a,
+.view-display-id-blog_all.view-id-blog .view-content > div.views-row:first-child .item_blog p {
+  color: #fff;
+}
+.view-display-id-blog_all.view-id-blog .view-content > div.views-row:first-child h5{
+  position: relative;
+  top: 12px;
+}
+.view-display-id-blog_all .img_blog_port {
+  width: 100%;
+  max-height: 162px;
+  overflow: hidden;
+}
+.view-display-id-blog_all.view-id-blog .view-content > div.views-row:first-child .img_blog_port img{
+  width: 100%;
+  height: auto;
+}
+.view-display-id-blog_all.view-id-blog .views-row {
+  border: 1px solid #d0d0d0;
+  margin: 5px;
+  border-radius: 10px;
+  flex-basis: 290px;
+  overflow: hidden;
+  box-shadow: 0px 2px 5px 0px rgba(0,0,0,.30);
+  margin-top: 15px;
+}
+.view-display-id-blog_all.view-id-blog .views-row h5, .view-id-blog .views-row p{
+  padding-left: 10px;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+.view-id-blog .views-row h5 a{
+  color: #000;
+  font-weight: bold;
+}
+.view-display-id-blog_all.view-id-blog .views-row p{
+  font-size: 14px;
+  font-weight: bold;
+  color: #686868;
+}
+/*Interior blog*/
+.field-imagen-blog{
+  text-align: center;
+  margin-bottom: 3rem !important;
+}
+footer {
+  margin-top: 50px;
+}
+.field-blog-tags {
+  border-right: 2px solid #d2d2d2;
+  display: inline-block;
+  padding: 2px 12px;
+  font-weight: bold;
+  font-style: italic;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+.field-blog-tags:first-child{
+  border-left: 2px solid #d2d2d2;
+}
+/* #block-ws-ecommerce-content article ul.links.inline.list-unstyled.mb-0 li:first-child{
+  display: none;
+} */
+/*Vista categorias*/
+ul.links.inline.list-unstyled.mb-0 a[href="/blog/1"] {
+  display: none;
+}
+.view-display-id-page_1 .views-row .cont_row_cat {
+  display: flex;
+  flex-wrap: wrap;
+}
+.view-display-id-page_1 .views-row .cont_img_row_cat {
+  
+  flex: 1;
+}
+.view-display-id-page_1 .views-row .cont_img_row_cat  img{
+  width: 100%;
+  height: auto;
+}
+.view-display-id-page_1 .views-row .cont_tit_body_cat {
+  flex: 4;
+  padding: 0px 20px;
+}
+.view-display-id-page_1 .views-row {
+  margin-top: 50px;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 10px 0px;
+}
+/*Vista entradas de blog recientes*/
+.view-display-id-blog_block  .views-row a{
+  margin-top: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  display: block;
+}
+/*Comentarios*/
+#edit-comment-body-0-format{
+  display: none;
+}
+.indented {
+  border-left: 1px solid #d7d7d7;
+  margin-left: 50px;
+  padding: 5px;
+}
+.indented article.js-comment footer{
+  margin-top: 10px;
+}
+.autor_comment {
+  font-weight: bold;
+}
+.fecha_comment {
+  font-weight: bold;
+  color: #7d7d7d;
+  font-size: 14px;
+}
 /*Pagina cart*/
 
 /*---------------------------------------Dispositivos mobiles ----------------------------------------*/
@@ -366,6 +504,12 @@ a.social-auth.auth-link[href="/user/login/google"] img{
     height: auto;
     width: 100%;
     padding: 25px;
+  }
+  .view-display-id-page_1 .views-row .cont_row_cat{
+    display: block;
+  }
+  .view-display-id-page_1 .views-row .cont_tit_body_cat{
+    margin-top: 20px;
   }
   #block-ws-ecommerce-pagoseguro img{
     width: 100%;
@@ -397,8 +541,17 @@ a.social-auth.auth-link[href="/user/login/google"] img{
     display: inline-block;
     text-align: center;
   }
+  
 }
-
+/*Este estilo es para en dispositivos mobiles agregar solo aqui y en al anterior*/
+@media only screen and (max-width: 768px) {
+  .view-display-id-page_1 .views-row .cont_row_cat{
+    display: block;
+  }
+  .view-display-id-page_1 .views-row .cont_tit_body_cat{
+    margin-top: 20px;
+  }
+}
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
 

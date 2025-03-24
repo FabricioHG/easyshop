@@ -65,6 +65,20 @@
       //    fjs.parentNode.insertBefore(js, fjs);
       //  }(document, 'script', 'facebook-jssdk'));
 
+      /*Dentro del atach tambien agregamos la funcionalidad para la vista del primer row del blog */
+      let url_img_blog = $('.view-display-id-blog_all.view-id-blog .view-content > div.views-row:first-child .img_blog_port img').attr("src");
+      let first_row = $('.view-display-id-blog_all.view-id-blog .view-content > div.views-row:first-child');
+
+      first_row.css({
+        'background-image': 'url('+url_img_blog+')',
+        'background-repeat': 'no-repeat',
+        'background-size': 'cover',
+      });
+
+
+      let nuevoSrc = url_img_blog.split("?")[0]; 
+
+      
       
     }
 

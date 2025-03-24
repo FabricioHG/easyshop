@@ -50,6 +50,8 @@
         "drupal/smtp": "^1.2",
         "drupal/social_auth_facebook": "^4.0",
         "drupal/social_auth_google": "^4.0",
+        "drupal/social_media": "^2.0",
+        "drupal/token": "^1.15",
         "drupal/tracer": "^1.0",
         "drupal/twig_tweak": "^3.2",
         "drupal/views_accordion": "^2.0",
