@@ -391,6 +391,10 @@ a.social-auth.auth-link[href="/user/login/google"] img{
   max-height: 162px;
   overflow: hidden;
 }
+.view-display-id-blog_all .img_blog_port img{
+  width: 100%;
+  height: auto;
+}
 .view-display-id-blog_all.view-id-blog .view-content > div.views-row:first-child .img_blog_port img{
   width: 100%;
   height: auto;
