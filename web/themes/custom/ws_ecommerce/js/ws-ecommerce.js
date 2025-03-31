@@ -75,10 +75,20 @@
         'background-size': 'cover',
       });
 
+      $('.view-display-id-blog_all.view-id-blog .view-content > div.views-row:first-child h5').css({
+        'position': 'absolute',
+        'bottom': '35px',
+        'top': 'unset',
+      });
+
+      $('.view-display-id-blog_all.view-id-blog .view-content > div.views-row:first-child p').css({
+        'font-size': '14px',
+        'font-weight': 'bold',
+        'position': 'absolute',
+        'bottom':'0px',
+      });
 
       let nuevoSrc = url_img_blog.split("?")[0]; 
-
-      
       
     }
 
