@@ -77,7 +77,7 @@
 
       $('.view-display-id-blog_all.view-id-blog .view-content > div.views-row:first-child h5').css({
         'position': 'absolute',
-        'bottom': '35px',
+        'bottom': '60px',
         'top': 'unset',
       });
 
@@ -85,7 +85,7 @@
         'font-size': '14px',
         'font-weight': 'bold',
         'position': 'absolute',
-        'bottom':'0px',
+        'bottom':'10px',
       });
 
       let nuevoSrc = url_img_blog.split("?")[0]; 
