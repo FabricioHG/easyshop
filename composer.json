@@ -46,6 +46,7 @@
         "drupal/rules": "^4.0",
         "drupal/selective_better_exposed_filters": "^3.0",
         "drupal/simple_sitemap": "^4.1",
+        "drupal/simplenews": "^4.1",
         "drupal/slick": "^3.0",
         "drupal/smtp": "^1.2",
         "drupal/social_auth_facebook": "^4.0",
