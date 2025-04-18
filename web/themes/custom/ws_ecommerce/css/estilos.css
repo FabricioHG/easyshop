@@ -505,9 +505,20 @@ ul.links.inline.list-unstyled.mb-0 a[href="/blog/1"] {
   color: #7d7d7d;
   font-size: 14px;
 }
-/*node blog*/
-
-
+/*Boletin formulario*/
+#block-ws-ecommerce-simplenewssubscription h2{
+  font-size: 1rem;
+  font-weight: bold;
+}
+#block-ws-ecommerce-simplenewssubscription  #simplenews-subscriptions-block-52d15f91-3674-4a98-9bdf-7995ef81f610 .form-label.js-form-required.form-required{
+  font-weight: normal;
+}
+#block-ws-ecommerce-simplenewssubscription  #simplenews-subscriptions-block-52d15f91-3674-4a98-9bdf-7995ef81f610 #edit-submit {
+  border: 1px solid #007bff;
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+}
 
 /*---------------------------------------Dispositivos mobiles ----------------------------------------*/
 
